@@ -9,7 +9,7 @@ A custom CLI built for the purpose of installing and managing SolidJS apps and p
 # Roadmap/Features
 
 - [ ] Templates
-  - [ ] Degit
+  - [ ] From Degit
 - [ ] Integrations
   - [ ] Auth.js
   - [ ] Tailwind
@@ -36,6 +36,8 @@ A custom CLI built for the purpose of installing and managing SolidJS apps and p
 
 The CLI will use `solid` as the initialiation keyword. The CLI commands will then cascade based on groupings determined baed on what the action does defined by higher level actions. The actions will be:
 
+- `version`: Displays a changelog of recent Solid versions
+  - `start`: Specific command for Start versions
 - `add`, `remove`: Used for adding and installing integrations/packages ie. `solid add tailwind`
 - `config`: For enabling a certain features ie. `solid config vite _____`
 - `start`: Special keyword for SolidStart commands
