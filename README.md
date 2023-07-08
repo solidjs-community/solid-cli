@@ -42,7 +42,9 @@ The CLI will use `solid` as the initialiation keyword. The CLI commands will the
   - `mode`: Changes the Start serving mode (ssr/csr/ssg) `solid mode ssr`
   - `route`: Creates a new route ie. `solid start route login`
 - `new`: Opens your browser to a new template via CSB/SB ie. `solid new bare --stackblitz` opens https://solid.new/bare
-- `ecosystem`: Initializes an ecosystem search result `solid ecosystem auth`
+- `ecosystem`
+  - `add`: Starts the process of submitting your current project to our ecosystem listing (Solidex) ie. `solid ecosystem publish`
+  - `search`: Initializes an ecosystem search result `solid ecosystem search auth`
 
 # Development Path
 
