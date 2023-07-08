@@ -55,6 +55,8 @@ We will need to decide what framework and language we will use to develop this u
 - [`Solid Ink`](https://github.com/devinxi/solid-ink) - Needs to be maintained but expands our ecosystem
 - [`Ink`](https://github.com/vadimdemedes/ink) - React-based and popular
 - [`Clack`](https://github.com/natemoo-re/clack) - Used by Astro
+- [`Tiny Bin`](https://github.com/fabiospampinato/tiny-bin) - By Fabio!
+- [`Prompts`](https://github.com/terkelg/prompts) - Popular and well maintained
 
 ## Rust
 
