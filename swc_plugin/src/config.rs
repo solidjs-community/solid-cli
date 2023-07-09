@@ -3,17 +3,12 @@ pub trait Testing {
     fn test() -> Self;
 }
 #[derive(Serialize, Deserialize)]
+#[derive(Default)]
 pub struct Config {
     pub additional_plugins: Vec<(String, String)>,
 }
 
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            additional_plugins: vec![],
-        }
-    }
-}
+
 impl Testing for Config {
     fn test() -> Self {
         Self {

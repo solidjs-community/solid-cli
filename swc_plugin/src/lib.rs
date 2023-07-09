@@ -4,17 +4,16 @@ pub mod config;
 use config::Config;
 use swc_core::common::DUMMY_SP;
 use swc_core::ecma::ast::{
-    ArrayLit, Callee, ExportDefaultExpr, ExprOrSpread, ImportDecl, ImportNamedSpecifier,
-    ImportSpecifier, KeyValueProp, Lit, Module, ModuleDecl, ModuleExportName, ModuleItem,
+    ArrayLit, Callee, ExprOrSpread, ImportDecl, ImportNamedSpecifier,
+    ImportSpecifier, KeyValueProp, Module, ModuleDecl, ModuleItem,
     ObjectLit, Prop, PropName, PropOrSpread, Str,
 };
 use swc_core::ecma::utils::{prepend_stmt, swc_common, ExprExt};
-use swc_core::ecma::visit::swc_ecma_ast;
+
 use swc_core::plugin::{plugin_transform, proxies::TransformPluginProgramMetadata};
 use swc_core::{
-    common::Spanned,
     ecma::{
-        ast::{op, BinExpr, CallExpr, Expr, Function, Ident, Program, Stmt},
+        ast::{CallExpr, Expr, Ident, Program},
         visit::{as_folder, FoldWith, VisitMut, VisitMutWith},
     },
 };
@@ -88,7 +87,7 @@ impl VisitMut for TransformVisitor {
                                                 })),
                                             }));
                                             // Add to imports
-                                            self.imports.insert(import_path.into(), Ident::new(name.into(), swc_common::DUMMY_SP));
+                                            self.imports.insert(import_path, Ident::new(name.into(), swc_common::DUMMY_SP));
                                         }
                                         // Building new prop
                                         let new_prop = PropOrSpread::Prop(Box::new(Prop::KeyValue(KeyValueProp {
