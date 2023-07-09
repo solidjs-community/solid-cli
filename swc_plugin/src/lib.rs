@@ -28,6 +28,7 @@ impl TransformVisitor {
     }
 }
 impl TransformVisitor {
+    // Taken almost verbatim from https://github.com/modderme123/swc-plugin-jsx-dom-expressions
     pub fn insert_imports(&mut self, module: &mut Module) {
         let mut entries = self.imports.drain().collect::<Vec<_>>();
         entries.sort_by(|(a, _), (b, _)| a.cmp(b));
