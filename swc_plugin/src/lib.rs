@@ -4,19 +4,16 @@ pub mod config;
 use config::Config;
 use swc_core::common::DUMMY_SP;
 use swc_core::ecma::ast::{
-    ArrayLit, Callee, ExprOrSpread, ImportDecl, ImportNamedSpecifier,
-    ImportSpecifier, KeyValueProp, Module, ModuleDecl, ModuleItem,
-    ObjectLit, Prop, PropName, PropOrSpread, Str,
+    ArrayLit, Callee, ExprOrSpread, ImportDecl, ImportNamedSpecifier, ImportSpecifier,
+    KeyValueProp, Module, ModuleDecl, ModuleItem, ObjectLit, Prop, PropName, PropOrSpread, Str,
 };
 use swc_core::ecma::utils::{prepend_stmt, swc_common, ExprExt};
 
-use swc_core::plugin::{plugin_transform, proxies::TransformPluginProgramMetadata};
-use swc_core::{
-    ecma::{
-        ast::{CallExpr, Expr, Ident, Program},
-        visit::{as_folder, FoldWith, VisitMut, VisitMutWith},
-    },
+use swc_core::ecma::{
+    ast::{CallExpr, Expr, Ident, Program},
+    visit::{as_folder, FoldWith, VisitMut, VisitMutWith},
 };
+use swc_core::plugin::{plugin_transform, proxies::TransformPluginProgramMetadata};
 
 pub struct TransformVisitor {
     imports: HashMap<String, Ident>,
