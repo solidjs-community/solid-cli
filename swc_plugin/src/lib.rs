@@ -101,12 +101,11 @@ fn update_argument(visitor: &mut TransformVisitor, arg: &mut ExprOrSpread) {
     if let Expr::Object(obj) = arg.expr.as_expr() {
         let mut new_props: Vec<PropOrSpread> = obj.props.clone();
         let mut mutated_existing = false;
-        for n in 0..new_props.len() {
-            let prop_spread = &new_props[n];
-            if let PropOrSpread::Prop(prop) = &prop_spread {
+        for prop_spread in new_props.iter_mut() {
+            if let PropOrSpread::Prop(prop) = prop_spread {
                 if let Prop::KeyValue(key_value_prop) = &**prop && let Some(i) = key_value_prop.key.as_ident() {
                     if i.sym.to_string() == "plugins" && let Expr::Array(arr_lit) = &*key_value_prop.value {
-                        new_props[n] = add_new_plugins(visitor, arr_lit);
+                        *prop_spread = add_new_plugins(visitor, arr_lit);
                         mutated_existing = true;
                     }
                 }
