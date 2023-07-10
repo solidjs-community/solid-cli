@@ -11,11 +11,11 @@ const resolvePluginConfig = (
 ): ResolvePluginConfigRet | null => {
 	switch (packageName.toLowerCase()) {
 		case "unocss":
-			return ["UnoCss", "unocss/vite", true];
+			return ["UnoCss", "unocss/vite", true, {}];
 		case "vitepwa":
-			return ["VitePWA", "vite-plugin-pwa", false];
+			return ["VitePWA", "vite-plugin-pwa", false, {}];
 		case "solid-devtools":
-			return ["devtools", "solid-devtools/vite", true];
+			return ["devtools", "solid-devtools/vite", true, {}];
 		default:
 			return null;
 	}

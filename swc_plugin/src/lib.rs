@@ -2,12 +2,14 @@
 use std::collections::HashMap;
 pub mod config;
 use config::Config;
+use serde_json::Value;
 use swc_core::common::DUMMY_SP;
 use swc_core::ecma::ast::{
-    ArrayLit, Callee, ExprOrSpread, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier,
-    ImportSpecifier, KeyValueProp, Module, ModuleDecl, ModuleItem, ObjectLit, Prop, PropName,
-    PropOrSpread, Str,
+    ArrayLit, Bool, Callee, ExprOrSpread, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier,
+    ImportSpecifier, KeyValueProp, Lit, Module, ModuleDecl, ModuleItem, Null, ObjectLit, Prop,
+    PropName, PropOrSpread, Str,
 };
+use swc_core::ecma::transforms::testing::parse_options;
 use swc_core::ecma::utils::{prepend_stmt, swc_common, ExprExt};
 
 use swc_core::ecma::{
@@ -26,6 +28,48 @@ impl TransformVisitor {
             imports: Default::default(),
             config,
         }
+    }
+}
+/**
+ * Converts from serde_json's `Value` format to an swc `Expr`, which can then just be passed
+ */
+fn to_expr(val: Value) -> Expr {
+    match val {
+        Value::Null => Expr::Lit(Lit::Null(Null { span: DUMMY_SP })),
+        Value::Number(n) => Expr::Lit(Lit::Num(n.as_f64().unwrap().into())),
+        Value::Bool(b) => Expr::Lit(Lit::Bool(Bool {
+            span: DUMMY_SP,
+            value: b,
+        })),
+        Value::String(s) => Expr::Lit(Lit::Str(Str {
+            span: DUMMY_SP,
+            value: s.into(),
+            raw: None,
+        })),
+        Value::Array(arr) => Expr::Array(ArrayLit {
+            span: DUMMY_SP,
+            elems: arr
+                .into_iter()
+                .map(|v| {
+                    Some(ExprOrSpread {
+                        spread: None,
+                        expr: Box::new(to_expr(v)),
+                    })
+                })
+                .collect(),
+        }),
+        Value::Object(obj) => Expr::Object(ObjectLit {
+            span: DUMMY_SP,
+            props: obj
+                .into_iter()
+                .map(|(k, v)| {
+                    PropOrSpread::Prop(Box::new(Prop::KeyValue(KeyValueProp {
+                        key: PropName::Ident(Ident::new(k.into(), DUMMY_SP)),
+                        value: Box::new(to_expr(v)),
+                    })))
+                })
+                .collect(),
+        }),
     }
 }
 impl TransformVisitor {
@@ -66,7 +110,9 @@ impl TransformVisitor {
 }
 fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOrSpread {
     let mut elems: Vec<Option<ExprOrSpread>> = arr_lit.elems.clone();
-    for (name, import_path, is_default_import) in visitor.config.additional_plugins.clone() {
+    for (name, import_path, is_default_import, extra_config) in
+        visitor.config.additional_plugins.clone()
+    {
         elems.push(Some(ExprOrSpread {
             spread: None,
             expr: Box::new(Expr::Call(CallExpr {
@@ -75,7 +121,10 @@ fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOr
                     name.clone().into(),
                     swc_common::DUMMY_SP,
                 )))),
-                args: vec![],
+                args: vec![ExprOrSpread {
+                    spread: None,
+                    expr: Box::new(to_expr(extra_config)),
+                }],
                 type_args: None,
             })),
         }));
