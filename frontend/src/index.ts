@@ -66,17 +66,15 @@ async function main() {
 	p.log.success("Updated config");
 	p.log.info("Detecting package manager");
 	const manager = await detect();
-	p.log.success(`Package manager detected as ${manager}`);
-	p.log.info("Updating packages...");
+	const s = p.spinner();
+	s.start(`Installing plugins via ${manager}`);
 	for (const plugin of extra_plugins) {
 		if (!plugin) continue;
 		const res = await new Promise((res) =>
 			exec(`${manager} i ${plugin[1].toLowerCase().split("/")[0]}`, res)
 		);
-		console.log(res);
-		p.log.info(`Installed ${plugin[0]}`);
 	}
-	p.log.success("Packages installed");
+	s.stop("Installed plugins");
 }
 
 main().catch(console.error);
