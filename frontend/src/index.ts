@@ -1,16 +1,15 @@
 import {
-	binary,
 	command,
 	oneOf,
-	positional,
+	restPositionals,
 	run,
-	string,
 	subcommands,
 } from "cmd-ts";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import {
 	ConfigTransform,
+	PluginType,
 	resolvePluginConfig,
 	supported,
 } from "./lib/ConfigTransform";
@@ -22,27 +21,33 @@ const add = command({
 	name: "add",
 	description: "Can add and install integration: `solid add unocss`",
 	args: {
-		package_name: positional({
+		package_name: restPositionals({
 			type: oneOf(supported),
 			displayName: "Package Name",
 		}),
 	},
 	handler: async ({ package_name }) => {
-		const config = resolvePluginConfig(package_name);
-		if (!config) {
-			p.log.error(
-				"Couldn't resolve your desired package. Maybe we don't support it"
-			);
-			return;
-		}
-		await transformer.add_plugins([config]);
+		const configs = package_name
+			.map((n) => {
+				const res = resolvePluginConfig(n);
+				if (res === null) {
+					p.log.error(
+						`Can't automatically configure ${n}: we don't support it`
+					);
+				}
+				return res;
+			})
+			.filter((p) => p !== null) as PluginType[];
+		await transformer.add_plugins(configs);
 		p.log.success("Config updated");
 		const pM = await detect();
 		const s = p.spinner();
 		s.start(`Installing packages via ${pM}`);
-		await new Promise((res) =>
-			exec(`${pM} i ${config[1].toLowerCase().split("/")[0]}`, res)
-		);
+		for (const config in configs) {
+			await new Promise((res) =>
+				exec(`${pM} i ${config[1].toLowerCase().split("/")[0]}`, res)
+			);
+		}
 		s.stop("Packages installed");
 	},
 });
