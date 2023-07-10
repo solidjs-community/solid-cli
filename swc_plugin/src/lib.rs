@@ -138,10 +138,8 @@ impl VisitMut for TransformVisitor {
         if let Expr::Call(call_expr) = e {
             if let Expr::Ident(i) = &**call_expr.callee.as_expr().unwrap() {
                 if i.sym.to_string() == "defineConfig" {
-                    let args = &mut call_expr.args;
-                    for arg in args {
-                        update_argument(self, arg);
-                    }
+                    let config_arg = &mut call_expr.args[0];
+                    update_argument(self, config_arg);
                 }
             }
         }
