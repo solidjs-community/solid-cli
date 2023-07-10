@@ -4,14 +4,18 @@ import { transform } from "@swc/core";
 import { readFile, writeFile } from "fs/promises";
 import { exec } from "child_process";
 import { detect } from "detect-package-manager";
+// [importName, importSource, isDefaultImport]
+type ResolvePluginConfigRet = [string, string, boolean];
 const resolvePluginConfig = (
 	packageName: string
-): [string, string, boolean] | null => {
+): ResolvePluginConfigRet | null => {
 	switch (packageName.toLowerCase()) {
 		case "unocss":
 			return ["UnoCss", "unocss/vite", true];
 		case "vitepwa":
 			return ["VitePWA", "vite-plugin-pwa", false];
+		case "solid-devtools":
+			return ["devtools", "solid-devtools/vite", true];
 		default:
 			return null;
 	}
@@ -22,14 +26,17 @@ async function main() {
 	const depsToAdd = (await p.multiselect({
 		options: [
 			{
-				value: "unocss",
-				label: "UnoCSS",
+				value: "UnoCSS",
 				hint: "Utility Class CSS library, similar to Tailwind",
 			},
 			{
-				value: "vitepwa",
-				label: "VitePWA",
+				value: "VitePWA",
 				hint: "Minimal config PWA utility",
+			},
+			{
+				value: "solid-devtools",
+				label: "Solid Devtools",
+				hint: "SolidJS Devtools",
 			},
 		],
 		message: "What would you like to add",
