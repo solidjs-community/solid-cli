@@ -10,8 +10,8 @@ const resolvePluginConfig = (
 	switch (packageName.toLowerCase()) {
 		case "unocss":
 			return ["UnoCss", "unocss/vite", true];
-		case "other_plugin":
-			return ["Other_Plugin", "other_plugin/vite", false];
+		case "vitepwa":
+			return ["VitePWA", "vite-plugin-pwa", false];
 		default:
 			return null;
 	}
@@ -27,9 +27,9 @@ async function main() {
 				hint: "Utility Class CSS library, similar to Tailwind",
 			},
 			{
-				value: "other_plugin",
-				label: "Other_Plugin",
-				hint: "Does a more different thing",
+				value: "vitepwa",
+				label: "VitePWA",
+				hint: "Minimal config PWA utility",
 			},
 		],
 		message: "What would you like to add",
@@ -37,9 +37,10 @@ async function main() {
 	})) as string[];
 	const configData = (await readFile("vite.config.ts")).toString();
 	// Windows path hack. Not sure if this'll work on other platforms
-	const wasm_path = new URL("test_plugin.wasm", import.meta.url).pathname.slice(
-		1
-	);
+	const wasm_path = new URL(
+		"transform_config.wasm",
+		import.meta.url
+	).pathname.slice(1);
 	const extra_plugins = depsToAdd.map((dep) => resolvePluginConfig(dep));
 	const res = await transform(configData, {
 		filename: "vite.config.ts",
@@ -70,7 +71,7 @@ async function main() {
 	for (const plugin of extra_plugins) {
 		if (!plugin) continue;
 		const res = await new Promise((res) =>
-			exec(`${manager} i ${plugin[0].toLowerCase()}`, res)
+			exec(`${manager} i ${plugin[1].toLowerCase().split("/")[0]}`, res)
 		);
 		console.log(res);
 		p.log.info(`Installed ${plugin[0]}`);
