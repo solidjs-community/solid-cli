@@ -1,4 +1,4 @@
 import UnoCss from "unocss/vite";
 export default defineConfig({
-	plugins: [solid(), UnoCss()],
+	plugins: [UnoCss()],
 });

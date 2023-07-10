@@ -64,36 +64,49 @@ impl TransformVisitor {
         }
     }
 }
+fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOrSpread {
+    let mut elems: Vec<Option<ExprOrSpread>> = arr_lit.elems.clone();
+    for (name, import_path, is_default_import) in visitor.config.additional_plugins.clone() {
+        elems.push(Some(ExprOrSpread {
+            spread: None,
+            expr: Box::new(Expr::Call(CallExpr {
+                span: Default::default(),
+                callee: Callee::Expr(Box::new(Expr::Ident(Ident::new(
+                    name.clone().into(),
+                    swc_common::DUMMY_SP,
+                )))),
+                args: vec![],
+                type_args: None,
+            })),
+        }));
+        // Add to imports
+        visitor.imports.insert(
+            import_path,
+            (
+                Ident::new(name.into(), swc_common::DUMMY_SP),
+                is_default_import,
+            ),
+        );
+    }
+    // Building new prop
+    PropOrSpread::Prop(Box::new(Prop::KeyValue(KeyValueProp {
+        key: PropName::Ident(Ident::new("plugins".into(), swc_common::DUMMY_SP)),
+        value: Box::new(Expr::Array(ArrayLit {
+            span: Default::default(),
+            elems,
+        })),
+    })))
+}
 fn update_argument(visitor: &mut TransformVisitor, arg: &mut ExprOrSpread) {
     if let Expr::Object(obj) = arg.expr.as_expr() {
         let mut new_props: Vec<PropOrSpread> = vec![];
+        let mut mutated_existing = false;
         for prop_spread in obj.props.clone() {
             if let PropOrSpread::Prop(prop) = &prop_spread {
                 if let Prop::KeyValue(key_value_prop) = &**prop && let Some(i) = key_value_prop.key.as_ident() {
-                    if i.sym.to_string() == "plugins" && let Expr::Array(arr_lit) = &*key_value_prop.value{
-                        let mut elems: Vec<Option<ExprOrSpread>> = arr_lit.elems.clone();
-                        for (name, import_path, is_default_import) in visitor.config.additional_plugins.clone(){
-                            elems.push(Some(ExprOrSpread {
-                                spread: None,
-                                expr: Box::new(Expr::Call(CallExpr{
-                                    span: Default::default(),
-                                    callee: Callee::Expr(Box::new(Expr::Ident(Ident::new(name.clone().into(), swc_common::DUMMY_SP)))),
-                                    args: vec![],
-                                    type_args: None,
-                                })),
-                            }));
-                            // Add to imports
-                            visitor.imports.insert(import_path, (Ident::new(name.into(), swc_common::DUMMY_SP), is_default_import));
-                        }
-                        // Building new prop
-                        let new_prop = PropOrSpread::Prop(Box::new(Prop::KeyValue(KeyValueProp {
-                            key: PropName::Ident(Ident::new("plugins".into(), swc_common::DUMMY_SP)),
-                            value: Box::new(Expr::Array(ArrayLit {
-                                span: Default::default(),
-                                elems,
-                            })),
-                        })));
-                        new_props.push(new_prop);
+                    if i.sym.to_string() == "plugins" && let Expr::Array(arr_lit) = &*key_value_prop.value {
+                        new_props.push(add_new_plugins(visitor, arr_lit));
+                        mutated_existing = true;
                     }
                     else{
                         new_props.push(prop_spread);
@@ -105,6 +118,16 @@ fn update_argument(visitor: &mut TransformVisitor, arg: &mut ExprOrSpread) {
             } else {
                 new_props.push(prop_spread);
             }
+        }
+        if !mutated_existing {
+            // `plugins` prop doesn't exist. So we need to create it
+            new_props.push(add_new_plugins(
+                visitor,
+                &ArrayLit {
+                    span: Default::default(),
+                    elems: vec![],
+                },
+            ));
         }
         // Can add new props to the obj here
         arg.expr = Box::new(Expr::Object(ObjectLit {
