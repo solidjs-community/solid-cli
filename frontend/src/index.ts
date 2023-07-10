@@ -1,10 +1,4 @@
-import {
-	command,
-	oneOf,
-	restPositionals,
-	run,
-	subcommands,
-} from "cmd-ts";
+import { command, oneOf, restPositionals, run, subcommands } from "cmd-ts";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import {
@@ -30,20 +24,22 @@ const add = command({
 		const configs = package_name
 			.map((n) => {
 				const res = resolvePluginConfig(n);
-				if (res === null) {
+				if (!res) {
 					p.log.error(
 						`Can't automatically configure ${n}: we don't support it`
 					);
+					return;
 				}
 				return res;
 			})
-			.filter((p) => p !== null) as PluginType[];
+			.filter((p) => p) as PluginType[];
 		await transformer.add_plugins(configs);
 		p.log.success("Config updated");
 		const pM = await detect();
 		const s = p.spinner();
 		s.start(`Installing packages via ${pM}`);
-		for (const config in configs) {
+		for (let i = 0; i< configs.length; i++) {
+            const config = configs[i];
 			await new Promise((res) =>
 				exec(`${pM} i ${config[1].toLowerCase().split("/")[0]}`, res)
 			);
