@@ -3,14 +3,17 @@ import color from "picocolors";
 import { transform } from "@swc/core";
 import { readFile, writeFile } from "fs/promises";
 import { exec } from "child_process";
-const resolvePluginConfig = (packageName: string) => {
+import { detect } from "detect-package-manager";
+const resolvePluginConfig = (
+	packageName: string
+): [string, string, boolean] | null => {
 	switch (packageName.toLowerCase()) {
 		case "unocss":
-			return ["UnoCSS", "unocss/vite"];
+			return ["UnoCss", "unocss/vite", true];
 		case "other_plugin":
-			return ["Other_Plugin", "other_plugin/vite"];
+			return ["Other_Plugin", "other_plugin/vite", false];
 		default:
-			return [];
+			return null;
 	}
 };
 async function main() {
@@ -60,10 +63,14 @@ async function main() {
 	});
 	await writeFile("vite.config.ts", res.code);
 	p.log.success("Updated config");
+	p.log.info("Detecting package manager");
+	const manager = await detect();
+	p.log.success(`Package manager detected as ${manager}`);
 	p.log.info("Updating packages...");
 	for (const plugin of extra_plugins) {
+		if (!plugin) continue;
 		const res = await new Promise((res) =>
-			exec(`pnpm i ${plugin[0].toLowerCase()}`, res)
+			exec(`${manager} i ${plugin[0].toLowerCase()}`, res)
 		);
 		console.log(res);
 		p.log.info(`Installed ${plugin[0]}`);

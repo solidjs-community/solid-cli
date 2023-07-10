@@ -14,6 +14,9 @@ dependencies:
   '@swc/core':
     specifier: ^1.3.68
     version: 1.3.68
+  detect-package-manager:
+    specifier: ^2.0.1
+    version: 2.0.1
   picocolors:
     specifier: ^1.0.0
     version: 1.0.0
@@ -747,6 +750,13 @@ packages:
 
   /destr@2.0.0:
     resolution: {integrity: sha512-FJ9RDpf3GicEBvzI3jxc2XhHzbqD8p4ANw/1kPsFBfTvP1b7Gn/Lg1vO7R9J4IVgoMbyUmFrFGZafJ1hPZpvlg==}
+    dev: false
+
+  /detect-package-manager@2.0.1:
+    resolution: {integrity: sha512-j/lJHyoLlWi6G1LDdLgvUtz60Zo5GEj+sVYtTVXnYLDPuzgC3llMxonXym9zIwhhUII8vjdw0LXxavpLqTbl1A==}
+    engines: {node: '>=12'}
+    dependencies:
+      execa: 5.1.1
     dev: false
 
   /duplexer@0.1.2:

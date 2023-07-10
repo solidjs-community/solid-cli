@@ -4,13 +4,13 @@ pub trait Testing {
 }
 #[derive(Serialize, Deserialize, Default)]
 pub struct Config {
-    pub additional_plugins: Vec<(String, String)>,
+    pub additional_plugins: Vec<(String, String, bool)>,
 }
 
 impl Testing for Config {
     fn test() -> Self {
         Self {
-            additional_plugins: vec![("UnoCSS".to_string(), "unocss/vite".to_string())],
+            additional_plugins: vec![("UnoCss".to_string(), "unocss/vite".to_string(), true)],
         }
     }
 }

@@ -4,8 +4,9 @@ pub mod config;
 use config::Config;
 use swc_core::common::DUMMY_SP;
 use swc_core::ecma::ast::{
-    ArrayLit, Callee, ExprOrSpread, ImportDecl, ImportNamedSpecifier, ImportSpecifier,
-    KeyValueProp, Module, ModuleDecl, ModuleItem, ObjectLit, Prop, PropName, PropOrSpread, Str,
+    ArrayLit, Callee, ExprOrSpread, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier,
+    ImportSpecifier, KeyValueProp, Module, ModuleDecl, ModuleItem, ObjectLit, Prop, PropName,
+    PropOrSpread, Str,
 };
 use swc_core::ecma::utils::{prepend_stmt, swc_common, ExprExt};
 
@@ -16,7 +17,7 @@ use swc_core::ecma::{
 use swc_core::plugin::{plugin_transform, proxies::TransformPluginProgramMetadata};
 
 pub struct TransformVisitor {
-    imports: HashMap<String, Ident>,
+    imports: HashMap<String, (Ident, bool)>,
     config: Config,
 }
 impl TransformVisitor {
@@ -33,15 +34,23 @@ impl TransformVisitor {
         let mut entries = self.imports.drain().collect::<Vec<_>>();
         entries.sort_by(|(a, _), (b, _)| a.cmp(b));
         for (name, val) in entries {
+            let specifier = if val.1 {
+                ImportSpecifier::Default(ImportDefaultSpecifier {
+                    local: val.0,
+                    span: DUMMY_SP,
+                })
+            } else {
+                ImportSpecifier::Named(ImportNamedSpecifier {
+                    local: val.0,
+                    imported: None,
+                    span: DUMMY_SP,
+                    is_type_only: false,
+                })
+            };
             prepend_stmt(
                 &mut module.body,
                 ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {
-                    specifiers: vec![ImportSpecifier::Named(ImportNamedSpecifier {
-                        local: val,
-                        imported: None,
-                        span: DUMMY_SP,
-                        is_type_only: false,
-                    })],
+                    specifiers: vec![specifier],
                     src: Box::new(Str {
                         span: DUMMY_SP,
                         value: name.into(),
@@ -55,6 +64,55 @@ impl TransformVisitor {
         }
     }
 }
+fn update_argument(visitor: &mut TransformVisitor, arg: &mut ExprOrSpread) {
+    if let Expr::Object(obj) = arg.expr.as_expr() {
+        let mut new_props: Vec<PropOrSpread> = vec![];
+        for prop_spread in obj.props.clone() {
+            if let PropOrSpread::Prop(prop) = &prop_spread {
+                if let Prop::KeyValue(key_value_prop) = &**prop && let Some(i) = key_value_prop.key.as_ident() {
+                    if i.sym.to_string() == "plugins" && let Expr::Array(arr_lit) = &*key_value_prop.value{
+                        let mut elems: Vec<Option<ExprOrSpread>> = arr_lit.elems.clone();
+                        for (name, import_path, is_default_import) in visitor.config.additional_plugins.clone(){
+                            elems.push(Some(ExprOrSpread {
+                                spread: None,
+                                expr: Box::new(Expr::Call(CallExpr{
+                                    span: Default::default(),
+                                    callee: Callee::Expr(Box::new(Expr::Ident(Ident::new(name.clone().into(), swc_common::DUMMY_SP)))),
+                                    args: vec![],
+                                    type_args: None,
+                                })),
+                            }));
+                            // Add to imports
+                            visitor.imports.insert(import_path, (Ident::new(name.into(), swc_common::DUMMY_SP), is_default_import));
+                        }
+                        // Building new prop
+                        let new_prop = PropOrSpread::Prop(Box::new(Prop::KeyValue(KeyValueProp {
+                            key: PropName::Ident(Ident::new("plugins".into(), swc_common::DUMMY_SP)),
+                            value: Box::new(Expr::Array(ArrayLit {
+                                span: Default::default(),
+                                elems,
+                            })),
+                        })));
+                        new_props.push(new_prop);
+                    }
+                    else{
+                        new_props.push(prop_spread);
+                    }
+                }
+                else{
+                    new_props.push(prop_spread);
+                }
+            } else {
+                new_props.push(prop_spread);
+            }
+        }
+        // Can add new props to the obj here
+        arg.expr = Box::new(Expr::Object(ObjectLit {
+            span: Default::default(),
+            props: new_props,
+        }))
+    }
+}
 impl VisitMut for TransformVisitor {
     // Implement necessary visit_mut_* methods for actual custom transform.
     // A comprehensive list of possible visitor methods can be found here:
@@ -66,53 +124,8 @@ impl VisitMut for TransformVisitor {
             if let Expr::Ident(i) = &**call_expr.callee.as_expr().unwrap() {
                 if i.sym.to_string() == "defineConfig" {
                     let args = &mut call_expr.args;
-                    let first_arg = &mut args[0];
-                    if let Expr::Object(obj) = first_arg.expr.as_expr() {
-                        let mut new_props: Vec<PropOrSpread> = vec![];
-                        for prop_spread in obj.props.clone() {
-                            if let PropOrSpread::Prop(prop) = &prop_spread {
-                                if let Prop::KeyValue(key_value_prop) = &**prop && let Some(i) = key_value_prop.key.as_ident() {
-                                    if i.sym.to_string() == "plugins" && let Expr::Array(arr_lit) = &*key_value_prop.value{
-                                        let mut elems: Vec<Option<ExprOrSpread>> = arr_lit.elems.clone();
-                                        for (name, import_path) in self.config.additional_plugins.clone(){
-                                            elems.push(Some(ExprOrSpread {
-                                                spread: None,
-                                                expr: Box::new(Expr::Call(CallExpr{
-                                                    span: Default::default(),
-                                                    callee: Callee::Expr(Box::new(Expr::Ident(Ident::new(name.clone().into(), swc_common::DUMMY_SP)))),
-                                                    args: vec![],
-                                                    type_args: None,
-                                                })),
-                                            }));
-                                            // Add to imports
-                                            self.imports.insert(import_path, Ident::new(name.into(), swc_common::DUMMY_SP));
-                                        }
-                                        // Building new prop
-                                        let new_prop = PropOrSpread::Prop(Box::new(Prop::KeyValue(KeyValueProp {
-                                            key: PropName::Ident(Ident::new("plugins".into(), swc_common::DUMMY_SP)),
-                                            value: Box::new(Expr::Array(ArrayLit {
-                                                span: Default::default(),
-                                                elems,
-                                            })),
-                                        })));
-                                        new_props.push(new_prop);
-                                    }
-                                    else{
-                                        new_props.push(prop_spread);
-                                    }
-                                }
-                                else{
-                                    new_props.push(prop_spread);
-                                }
-                            } else {
-                                new_props.push(prop_spread);
-                            }
-                        }
-                        // Can add new props to the obj here
-                        first_arg.expr = Box::new(Expr::Object(ObjectLit {
-                            span: Default::default(),
-                            props: new_props,
-                        }))
+                    for arg in args {
+                        update_argument(self, arg);
                     }
                 }
             }
