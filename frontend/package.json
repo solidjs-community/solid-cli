@@ -9,6 +9,7 @@
         "@swc/core": "^1.3.68",
         "cmd-ts": "^0.12.1",
         "detect-package-manager": "^2.0.1",
+        "execa": "^7.1.1",
         "picocolors": "^1.0.0"
     },
     "scripts": {

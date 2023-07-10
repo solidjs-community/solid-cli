@@ -39,7 +39,7 @@ export class ConfigTransform {
 	}
 }
 // All the integrations/packages that we support
-export const supported = ["unocss", "vitepwa", "solid-devtools"];
+export const supported = ["unocss", "vitepwa", "solid-devtools"] as const;
 export const resolvePluginConfig = (packageName: string): PluginType | null => {
 	switch (packageName.toLowerCase()) {
 		case "unocss":
