@@ -1,8 +1,7 @@
 import { command, oneOf, positional, subcommands } from "cmd-ts";
 import { isSolidStart } from "../lib/core";
 import * as p from "@clack/prompts";
-import { ConfigTransform } from "../lib/ConfigTransform";
-const transformer = new ConfigTransform();
+import { transform_plugins } from "../lib/transform";
 const mode = command({
 	name: "mode",
 	args: {
@@ -32,6 +31,7 @@ const mode = command({
 });
 export const start_commands = subcommands({
 	name: "start",
+	description: "Commands specific to solid start",
 	cmds: {
 		mode,
 	},

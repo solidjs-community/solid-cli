@@ -12,17 +12,16 @@ import {
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import {
-	ConfigTransform,
+	transform_plugins,
 	PluginType,
 	resolvePluginConfig,
 	supported,
-} from "./lib/ConfigTransform";
+} from "./lib/transform";
 import { detect } from "detect-package-manager";
 import { exec } from "child_process";
-import { openInBrowser } from "./lib/open";
+import { openInBrowser } from "./lib/utils/open";
 import { start_commands } from "./commands/start";
 
-const transformer = new ConfigTransform();
 const add = command({
 	name: "add",
 	description: "Can add and install integration: `solid add unocss`",
@@ -45,7 +44,7 @@ const add = command({
 				return res;
 			})
 			.filter((p) => p) as PluginType[];
-		await transformer.add_plugins(configs);
+		await transform_plugins(configs);
 		p.log.success("Config updated");
 		const pM = await detect();
 		const s = p.spinner();

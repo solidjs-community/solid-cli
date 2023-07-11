@@ -5,9 +5,9 @@ use config::Config;
 use serde_json::Value;
 use swc_core::common::DUMMY_SP;
 use swc_core::ecma::ast::{
-    ArrayLit, Bool, Callee, ExprOrSpread, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier,
-    ImportSpecifier, KeyValueProp, Lit, Module, ModuleDecl, ModuleItem, Null, ObjectLit, Prop,
-    PropName, PropOrSpread, Str,
+    ArrayLit, Bool, Callee, ExprOrSpread, Import, ImportDecl, ImportDefaultSpecifier,
+    ImportNamedSpecifier, ImportSpecifier, KeyValueProp, Lit, Module, ModuleDecl, ModuleItem, Null,
+    ObjectLit, Prop, PropName, PropOrSpread, Str,
 };
 use swc_core::ecma::transforms::testing::parse_options;
 use swc_core::ecma::utils::{prepend_stmt, swc_common, ExprExt};
@@ -19,13 +19,15 @@ use swc_core::ecma::{
 use swc_core::plugin::{plugin_transform, proxies::TransformPluginProgramMetadata};
 
 pub struct TransformVisitor {
-    imports: HashMap<String, (Ident, bool)>,
+    original_imports: Vec<ImportSpecifier>,
+    new_imports: HashMap<String, (Ident, bool)>,
     config: Config,
 }
 impl TransformVisitor {
     pub fn new(config: Config) -> Self {
         Self {
-            imports: Default::default(),
+            original_imports: Default::default(),
+            new_imports: Default::default(),
             config,
         }
     }
@@ -75,7 +77,7 @@ fn to_expr(val: Value) -> Expr {
 impl TransformVisitor {
     // Taken almost verbatim from https://github.com/modderme123/swc-plugin-jsx-dom-expressions
     pub fn insert_imports(&mut self, module: &mut Module) {
-        let mut entries = self.imports.drain().collect::<Vec<_>>();
+        let mut entries = self.new_imports.drain().collect::<Vec<_>>();
         entries.sort_by(|(a, _), (b, _)| a.cmp(b));
         for (name, val) in entries {
             let specifier = if val.1 {
@@ -108,11 +110,32 @@ impl TransformVisitor {
         }
     }
 }
+fn is_plugin_already_added(elems: &Vec<Option<ExprOrSpread>>, plugin_name: &str) -> bool{
+    for elem in elems.iter() {
+        // Assuming that plugins are always call expressions, and always imported as such
+        // Can be fixed in the future by just visiting with self, and collecting all the identifiers that we find
+        if let Some(elem) = elem && let Expr::Call(call_expr) = elem.expr.as_expr() {
+            if let Expr::Ident(i) = &**call_expr.callee.as_expr().unwrap(){
+                // Function name is the same (should be fine for now, should really check if the imports are coming from the same place)
+                if plugin_name == i.sym.as_ref() {
+                    // Plugin already exists, so we don't need to add it
+                    return true;
+                }
+            }
+            
+        }
+    };
+    false
+} 
 fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOrSpread {
     let mut elems: Vec<Option<ExprOrSpread>> = arr_lit.elems.clone();
     for (name, import_path, is_default_import, extra_config) in
         visitor.config.additional_plugins.clone()
     {
+        // Checking if plugin already exists
+        if is_plugin_already_added(&elems, &name){
+            continue;
+        }
         elems.push(Some(ExprOrSpread {
             spread: None,
             expr: Box::new(Expr::Call(CallExpr {
@@ -129,7 +152,7 @@ fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOr
             })),
         }));
         // Add to imports
-        visitor.imports.insert(
+        visitor.new_imports.insert(
             import_path,
             (
                 Ident::new(name.into(), swc_common::DUMMY_SP),
@@ -150,10 +173,13 @@ fn update_argument(visitor: &mut TransformVisitor, arg: &mut ExprOrSpread) {
     if let Expr::Object(obj) = arg.expr.as_expr() {
         let mut new_props: Vec<PropOrSpread> = obj.props.clone();
         let mut mutated_existing = false;
+
         for prop_spread in new_props.iter_mut() {
             if let PropOrSpread::Prop(prop) = prop_spread {
                 if let Prop::KeyValue(key_value_prop) = &**prop && let Some(i) = key_value_prop.key.as_ident() {
                     if i.sym.to_string() == "plugins" && let Expr::Array(arr_lit) = &*key_value_prop.value {
+                        // Check if the desired plugin exists.
+
                         *prop_spread = add_new_plugins(visitor, arr_lit);
                         mutated_existing = true;
                     }
@@ -182,16 +208,16 @@ impl VisitMut for TransformVisitor {
     // A comprehensive list of possible visitor methods can be found here:
     // https://rustdoc.swc.rs/swc_ecma_visit/trait.VisitMut.html
 
-    fn visit_mut_expr(&mut self, e: &mut Expr) {
-        e.visit_mut_children_with(self);
-        if let Expr::Call(call_expr) = e {
-            if let Expr::Ident(i) = &**call_expr.callee.as_expr().unwrap() {
-                if i.sym.to_string() == "defineConfig" {
-                    let config_arg = &mut call_expr.args[0];
-                    update_argument(self, config_arg);
-                }
+    fn visit_mut_call_expr(&mut self, call_expr: &mut CallExpr) {
+        if let Expr::Ident(i) = &**call_expr.callee.as_expr().unwrap() {
+            if i.sym.to_string() == "defineConfig" {
+                let config_arg = &mut call_expr.args[0];
+                update_argument(self, config_arg);
             }
         }
+    }
+    fn visit_mut_import_specifier(&mut self, n: &mut ImportSpecifier) {
+        self.original_imports.push(n.clone());
     }
     fn visit_mut_module(&mut self, module: &mut Module) {
         module.visit_mut_children_with(self);
