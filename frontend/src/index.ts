@@ -4,9 +4,11 @@ import {
 	flag,
 	oneOf,
 	option,
+	optional,
 	positional,
 	restPositionals,
 	run,
+	string,
 	subcommands,
 } from "cmd-ts";
 import * as p from "@clack/prompts";
@@ -17,11 +19,21 @@ import {
 	resolvePluginConfig,
 	supported,
 } from "./lib/transform";
-import { detect } from "detect-package-manager";
+import { PM, detect } from "detect-package-manager";
 import { exec } from "child_process";
 import { openInBrowser } from "./lib/utils/open";
 import { start_commands } from "./commands/start";
-
+import { execa } from "execa";
+const getRunner = (pM: PM) => {
+	switch (pM) {
+		case "npm":
+			return "npx";
+		case "yarn":
+			return "npx";
+		case "pnpm":
+			return "pnpx";
+	}
+};
 const add = command({
 	name: "add",
 	description: "Can add and install integrations: `solid add unocss`.",
@@ -64,20 +76,32 @@ const new_ = command({
 	description: "Creates a new solid project",
 	args: {
 		variation: positional({
-			type: oneOf(["bare"] as const),
+			type: oneOf(["bare", "ts", "js"] as const),
 			displayName: "The variation to create, for example `bare`",
 			description: "",
 		}),
+		name: positional({
+			type: optional(string),
+			displayName: "Project Name",
+			description: "The name of the folder to create",
+		}),
 		stackblitz: flag({ type: boolean, long: "stackblitz", short: "s" }),
 	},
-	async handler({ variation, stackblitz }) {
+	async handler({ variation, name, stackblitz }) {
 		if (stackblitz) {
 			const s = p.spinner();
 			s.start(`Opening ${variation} in browser`);
 			await openInBrowser(`https://solid.new/${variation}`);
 			s.stop();
 			p.log.success("Successfully Opened in Browser");
+			return;
 		}
+		const pM = await detect();
+		const { stdout } = await execa(getRunner(pM), [
+			"degit",
+			`solidjs/templates/${variation}`,
+			name ?? "",
+		]);
 	},
 });
 
