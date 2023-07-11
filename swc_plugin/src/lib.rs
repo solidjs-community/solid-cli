@@ -111,8 +111,9 @@ impl TransformVisitor {
         }
     }
 }
-fn is_plugin_already_added(elems: &Vec<Option<ExprOrSpread>>, plugin_name: &str) -> bool{
-    for elem in elems.iter() {
+fn is_plugin_already_added(elems: &Vec<Option<ExprOrSpread>>, plugin_name: &str) -> i32{
+    for n in 0..elems.iter().len() {
+        let elem = &elems[n];
         // Assuming that plugins are always call expressions, and always imported as such
         // Can be fixed in the future by just visiting with self, and collecting all the identifiers that we find
         if let Some(elem) = elem && let Expr::Call(call_expr) = elem.expr.as_expr() {
@@ -120,13 +121,13 @@ fn is_plugin_already_added(elems: &Vec<Option<ExprOrSpread>>, plugin_name: &str)
                 // Function name is the same (should be fine for now, should really check if the imports are coming from the same place)
                 if plugin_name == i.sym.as_ref() {
                     // Plugin already exists, so we don't need to add it
-                    return true;
+                    return n.try_into().unwrap();
                 }
             }
             
         }
     };
-    false
+    -1
 } 
 fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOrSpread {
     let mut elems: Vec<Option<ExprOrSpread>> = arr_lit.elems.clone();
@@ -134,7 +135,8 @@ fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOr
         visitor.config.additional_plugins.clone()
     {
         // Checking if plugin already exists
-        if is_plugin_already_added(&elems, &name) && !visitor.config.force_transform {
+        let ind = is_plugin_already_added(&elems, &name);
+        if ind != -1 && !visitor.config.force_transform{
             HANDLER.with(|handler| {
                 handler.struct_span_err(
                     DUMMY_SP,
@@ -142,9 +144,8 @@ fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOr
                 )
                 .emit()
             });
-            continue;
         }
-        elems.push(Some(ExprOrSpread {
+        let plugin_expr = Some(ExprOrSpread {
             spread: None,
             expr: Box::new(Expr::Call(CallExpr {
                 span: Default::default(),
@@ -158,7 +159,13 @@ fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOr
                 }],
                 type_args: None,
             })),
-        }));
+        });
+        // The plugin must already exist, so we can just mutate what's already there
+        if ind != -1 {
+            elems[ind as usize] = plugin_expr;
+            continue;
+        }
+        elems.push(plugin_expr);
         // Add to imports
         visitor.new_imports.insert(
             import_path,
