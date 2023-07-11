@@ -3,9 +3,10 @@ use serde_json::{json, Value};
 pub trait Testing {
     fn test() -> Self;
 }
-#[derive(Serialize, Deserialize, Default)]
+#[derive(Serialize, Deserialize, Default, Debug)]
 pub struct Config {
     pub additional_plugins: Vec<(String, String, bool, Value)>,
+    pub force_transform: bool,
 }
 
 impl Testing for Config {
@@ -17,6 +18,7 @@ impl Testing for Config {
                 true,
                 json!({}),
             )],
+            force_transform: false,
         }
     }
 }

@@ -4,6 +4,7 @@ import { readFile, writeFile } from "fs/promises";
 export type PluginType = [string, string, boolean, {}];
 export const transform_plugins = async (
 	new_plugins: PluginType[],
+	force_transform = false,
 	config_path = "vite.config.ts",
 	wasm_path = new URL(
 		"../wasm/transform_config.wasm",
@@ -25,6 +26,7 @@ export const transform_plugins = async (
 						wasm_path,
 						{
 							additional_plugins: new_plugins,
+							force_transform,
 						},
 					],
 				],

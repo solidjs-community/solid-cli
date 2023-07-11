@@ -24,27 +24,28 @@ import { start_commands } from "./commands/start";
 
 const add = command({
 	name: "add",
-	description: "Can add and install integration: `solid add unocss`",
+	description: "Can add and install integrations: `solid add unocss`.",
 	args: {
 		package_name: restPositionals({
 			type: oneOf(supported),
 			displayName: "Package Name",
 		}),
+		force_transform: flag({ type: boolean, long: "force", short: "f" }),
 	},
-	handler: async ({ package_name }) => {
+	handler: async ({ package_name, force_transform }) => {
 		const configs = package_name
 			.map((n) => {
 				const res = resolvePluginConfig(n);
 				if (!res) {
 					p.log.error(
-						`Can't automatically configure ${n}: we don't support it`
+						`Can't automatically configure ${n}: we don't support it.`
 					);
 					return;
 				}
 				return res;
 			})
 			.filter((p) => p) as PluginType[];
-		await transform_plugins(configs);
+		await transform_plugins(configs, force_transform);
 		p.log.success("Config updated");
 		const pM = await detect();
 		const s = p.spinner();

@@ -16,6 +16,7 @@ use swc_core::ecma::{
     ast::{CallExpr, Expr, Ident, Program},
     visit::{as_folder, FoldWith, VisitMut, VisitMutWith},
 };
+use swc_core::plugin::errors::HANDLER;
 use swc_core::plugin::{plugin_transform, proxies::TransformPluginProgramMetadata};
 
 pub struct TransformVisitor {
@@ -133,7 +134,14 @@ fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOr
         visitor.config.additional_plugins.clone()
     {
         // Checking if plugin already exists
-        if is_plugin_already_added(&elems, &name){
+        if is_plugin_already_added(&elems, &name) && !visitor.config.force_transform {
+            HANDLER.with(|handler| {
+                handler.struct_span_err(
+                    DUMMY_SP,
+                    "Plugin already exists, and force_transform is not enabled",
+                )
+                .emit()
+            });
             continue;
         }
         elems.push(Some(ExprOrSpread {
