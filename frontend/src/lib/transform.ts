@@ -5,6 +5,7 @@ export type PluginType = [string, string, boolean, {}];
 export const transform_plugins = async (
 	new_plugins: PluginType[],
 	force_transform = false,
+	merge_configs = false,
 	config_path = "vite.config.ts",
 	wasm_path = new URL(
 		"../wasm/transform_config.wasm",
@@ -27,6 +28,7 @@ export const transform_plugins = async (
 						{
 							additional_plugins: new_plugins,
 							force_transform,
+							merge_configs,
 						},
 					],
 				],

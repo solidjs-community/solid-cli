@@ -7,6 +7,7 @@ pub trait Testing {
 pub struct Config {
     pub additional_plugins: Vec<(String, String, bool, Value)>,
     pub force_transform: bool,
+    pub merge_configs: bool,
 }
 
 impl Testing for Config {
@@ -19,6 +20,7 @@ impl Testing for Config {
                 json!({}),
             )],
             force_transform: true,
+            merge_configs: false,
         }
     }
 }

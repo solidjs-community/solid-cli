@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use serde_json::json;
 use swc_core::common::{chain, Mark};
 use swc_core::{
     ecma::parser::{EsConfig, Syntax},
@@ -19,7 +20,7 @@ fn syntax() -> Syntax {
     })
 }
 
-#[fixture("tests/fixture/**/code.js")]
+#[fixture("tests/fixture/basic_tests/**/code.js")]
 fn jsx_dom_expressions_fixture_babel(input: PathBuf) {
     let output = input.parent().unwrap().join("output.js");
 
@@ -29,6 +30,32 @@ fn jsx_dom_expressions_fixture_babel(input: PathBuf) {
             chain!(
                 resolver(Mark::new(), Mark::new(), false),
                 as_folder(TransformVisitor::new(Config::test()))
+            )
+        },
+        &input,
+        &output,
+        Default::default(),
+    );
+}
+#[fixture("tests/fixture/merge_tests/**/code.js")]
+fn merge_tests(input: PathBuf) {
+    let output = input.parent().unwrap().join("output.js");
+
+    test_fixture(
+        syntax(),
+        &|_t| {
+            chain!(
+                resolver(Mark::new(), Mark::new(), false),
+                as_folder(TransformVisitor::new(Config {
+                    additional_plugins: vec![(
+                        "UnoCss".to_string(),
+                        "unocss/vite".to_string(),
+                        true,
+                        json!({"flag2": false}),
+                    )],
+                    force_transform: true,
+                    merge_configs: true,
+                }))
             )
         },
         &input,
