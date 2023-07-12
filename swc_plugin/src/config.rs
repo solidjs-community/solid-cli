@@ -18,7 +18,7 @@ impl Testing for Config {
                 true,
                 json!({}),
             )],
-            force_transform: false,
+            force_transform: true,
         }
     }
 }

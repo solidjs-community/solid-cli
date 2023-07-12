@@ -5,11 +5,10 @@ use config::Config;
 use serde_json::Value;
 use swc_core::common::DUMMY_SP;
 use swc_core::ecma::ast::{
-    ArrayLit, Bool, Callee, ExprOrSpread, Import, ImportDecl, ImportDefaultSpecifier,
+    ArrayLit, Bool, Callee, ExprOrSpread, ImportDecl, ImportDefaultSpecifier,
     ImportNamedSpecifier, ImportSpecifier, KeyValueProp, Lit, Module, ModuleDecl, ModuleItem, Null,
     ObjectLit, Prop, PropName, PropOrSpread, Str,
 };
-use swc_core::ecma::transforms::testing::parse_options;
 use swc_core::ecma::utils::{prepend_stmt, swc_common, ExprExt};
 
 use swc_core::ecma::{
@@ -20,7 +19,7 @@ use swc_core::plugin::errors::HANDLER;
 use swc_core::plugin::{plugin_transform, proxies::TransformPluginProgramMetadata};
 
 pub struct TransformVisitor {
-    original_imports: Vec<ImportSpecifier>,
+    original_imports: Vec<ImportDecl>,
     new_imports: HashMap<String, (Ident, bool)>,
     config: Config,
 }
@@ -111,17 +110,31 @@ impl TransformVisitor {
         }
     }
 }
-fn is_plugin_already_added(elems: &Vec<Option<ExprOrSpread>>, plugin_name: &str) -> i32{
+fn get_import_names(import_decl: &ImportDecl) -> Vec<&str> {
+    import_decl.specifiers.iter().map(|s| {match s {
+        ImportSpecifier::Named(s) => s.local.sym.as_ref(),
+        ImportSpecifier::Default(s) => s.local.sym.as_ref(),
+        ImportSpecifier::Namespace(s) => s.local.sym.as_ref(),
+    }}).collect()
+}
+fn is_plugin_already_added(visitor: &TransformVisitor, elems: &Vec<Option<ExprOrSpread>>, plugin_name: &str, plugin_import_path: &str) -> i32{
     for n in 0..elems.iter().len() {
         let elem = &elems[n];
         // Assuming that plugins are always call expressions, and always imported as such
         // Can be fixed in the future by just visiting with self, and collecting all the identifiers that we find
         if let Some(elem) = elem && let Expr::Call(call_expr) = elem.expr.as_expr() {
             if let Expr::Ident(i) = &**call_expr.callee.as_expr().unwrap(){
-                // Function name is the same (should be fine for now, should really check if the imports are coming from the same place)
-                if plugin_name == i.sym.as_ref() {
-                    // Plugin already exists, so we don't need to add it
-                    return n.try_into().unwrap();
+                let local_name = i.sym.as_ref();
+                if plugin_name == local_name {
+                    // Checking if the import is from the same place
+                    for import in &visitor.original_imports{
+                        let imported_from = import.src.value.as_ref();
+                        let import_names = get_import_names(import);
+                        if import_names.contains(&local_name) && imported_from == plugin_import_path {
+                            // Plugin already exists, so we don't need to add it
+                            return n.try_into().unwrap();
+                        }
+                    }
                 }
             }
             
@@ -135,7 +148,7 @@ fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOr
         visitor.config.additional_plugins.clone()
     {
         // Checking if plugin already exists
-        let ind = is_plugin_already_added(&elems, &name);
+        let ind = is_plugin_already_added(visitor, &elems, &name, &import_path);
         if ind != -1 && !visitor.config.force_transform{
             HANDLER.with(|handler| {
                 handler.struct_span_err(
@@ -193,8 +206,6 @@ fn update_argument(visitor: &mut TransformVisitor, arg: &mut ExprOrSpread) {
             if let PropOrSpread::Prop(prop) = prop_spread {
                 if let Prop::KeyValue(key_value_prop) = &**prop && let Some(i) = key_value_prop.key.as_ident() {
                     if i.sym.to_string() == "plugins" && let Expr::Array(arr_lit) = &*key_value_prop.value {
-                        // Check if the desired plugin exists.
-
                         *prop_spread = add_new_plugins(visitor, arr_lit);
                         mutated_existing = true;
                     }
@@ -231,7 +242,7 @@ impl VisitMut for TransformVisitor {
             }
         }
     }
-    fn visit_mut_import_specifier(&mut self, n: &mut ImportSpecifier) {
+    fn visit_mut_import_decl(&mut self, n: &mut ImportDecl) {
         self.original_imports.push(n.clone());
     }
     fn visit_mut_module(&mut self, module: &mut Module) {
