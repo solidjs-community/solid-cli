@@ -19,14 +19,12 @@ const mode = command({
 			return;
 		}
 		p.log.info("Updating config");
-		switch (mode) {
-			case "csr":
-				break;
-			case "ssr":
-				break;
-			case "ssg":
-				break;
-		}
+
+		await transform_plugins(
+			[["solid", "solid-start/vite", true, { mode }]],
+			true,
+			true
+		);
 	},
 });
 export const start_commands = subcommands({
