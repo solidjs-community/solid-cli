@@ -1,5 +1,4 @@
 import { PM, detect } from "detect-package-manager";
-import { exec } from "child_process";
 import { openInBrowser } from "../lib/utils/open";
 import { start_commands } from "../commands/start";
 import * as p from "@clack/prompts";
@@ -61,8 +60,9 @@ const add = command({
 		s.start(`Installing packages via ${pM}`);
 		for (let i = 0; i < configs.length; i++) {
 			const config = configs[i];
-			await new Promise((res) =>
-				exec(`${pM} i ${config[1].toLowerCase().split("/")[0]}`, res)
+
+			const { stdout } = await execa(
+				`${pM} i ${config[1].toLowerCase().split("/")[0]}`
 			);
 		}
 		s.stop("Packages installed");
