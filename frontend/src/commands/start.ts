@@ -46,6 +46,12 @@ const route = command({
 		}),
 	},
 	async handler({ path, name }) {
+		if (!(await isSolidStart())) {
+			p.log.error(
+				"Cannot run command. Your project doesn't include solid-start"
+			);
+			return;
+		}
 		const s = p.spinner();
 		s.start("Creating new route");
 		await createRoute(path, name);

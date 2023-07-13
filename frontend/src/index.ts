@@ -7,6 +7,5 @@ const cli = subcommands({
 	name: "solid",
 	cmds: commands,
 });
-console.clear();
 p.intro(`${color.bgCyan(color.black(" Solid-CLI "))}`);
 run(cli, process.argv.slice(2));
