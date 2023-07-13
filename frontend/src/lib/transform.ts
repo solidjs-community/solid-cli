@@ -8,7 +8,7 @@ export const transform_plugins = async (
 	merge_configs = false,
 	config_path = "vite.config.ts",
 	wasm_path = new URL(
-		"../wasm/transform_config.wasm",
+		"./wasm/transform_config.wasm",
 		import.meta.url
 	).pathname.slice(1)
 ) => {

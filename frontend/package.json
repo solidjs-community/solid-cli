@@ -18,7 +18,7 @@
 	},
 	"scripts": {
 		"start": "jiti ./src/index.ts",
-		"build": "tsup"
+		"build": "tsup && jiti scripts/post_build.ts"
 	},
 	"devDependencies": {
 		"@types/node": "^20.4.1",
