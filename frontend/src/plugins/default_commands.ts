@@ -106,7 +106,3 @@ export default {
 	new: new_,
 	start: start_commands,
 };
-// const cli = subcommands({
-// 	name: "solid",
-// 	cmds: { add, new: new_, start: start_commands },
-// });
