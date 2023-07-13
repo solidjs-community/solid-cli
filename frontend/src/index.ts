@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 import { run, subcommands } from "cmd-ts";
 import * as p from "@clack/prompts";
 import color from "picocolors";
