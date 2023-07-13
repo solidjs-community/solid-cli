@@ -1,5 +1,6 @@
 import { transform } from "@swc/core";
 import { readFile, writeFile } from "fs/promises";
+import { fileURLToPath } from "url";
 //              [importName, importSource, isDefaultImport, options]
 export type PluginType = [string, string, boolean, {}];
 export const transform_plugins = async (
@@ -7,11 +8,11 @@ export const transform_plugins = async (
 	force_transform = false,
 	merge_configs = false,
 	config_path = "vite.config.ts",
-	wasm_path = new URL(
-		"./wasm/transform_config.wasm",
-		import.meta.url
-	).pathname.slice(1)
+	wasm_path = fileURLToPath(
+		new URL("./wasm/transform_config.wasm", import.meta.url)
+	)
 ) => {
+	console.log(wasm_path);
 	const configData = (await readFile(config_path)).toString();
 	const res = await transform(configData, {
 		filename: config_path,
