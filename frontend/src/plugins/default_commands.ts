@@ -21,6 +21,7 @@ import {
 	supported,
 	transform_plugins,
 } from "../lib/transform";
+import { writeFile } from "fs/promises";
 const getRunner = (pM: PM) => {
 	switch (pM) {
 		case "npm":
@@ -54,10 +55,10 @@ const add = command({
 				return res;
 			})
 			.filter((p) => p) as PluginType[];
-		await transform_plugins(configs, force_transform);
+		const code = await transform_plugins(configs, force_transform);
+		await writeFile("vite.config.ts", code);
 		p.log.success("Config updated");
 		configs.forEach(async (cfg) => {
-			console.log(cfg.import_name.toLowerCase());
 			await postInstallActions[
 				cfg.import_source
 					.split("/")[0]
@@ -69,7 +70,6 @@ const add = command({
 		s.start(`Installing packages via ${pM}`);
 		for (let i = 0; i < configs.length; i++) {
 			const config = configs[i];
-
 			const { stdout } = await execa(
 				`${pM} i ${config.import_source.toLowerCase().split("/")[0]}`
 			);

@@ -15,8 +15,8 @@ export const replaceString = async (
 	search: string | RegExp,
 	replace: string
 ) => {
-	const contents = await readFileToString(filePath);
-	contents.replace(search, replace);
+	let contents = await readFileToString(filePath);
+	contents = contents.replace(search, replace);
 	await writeFile(filePath, contents);
 };
 export const insertBefore = async (

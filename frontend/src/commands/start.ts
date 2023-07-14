@@ -1,5 +1,6 @@
 import {
 	command,
+	flag,
 	oneOf,
 	optional,
 	positional,
@@ -10,6 +11,7 @@ import { isSolidStart } from "../lib/utils/solid_start";
 import * as p from "@clack/prompts";
 import { transform_plugins } from "../lib/transform";
 import { createRoute } from "../lib/start/add_route";
+import { writeFile } from "fs/promises";
 const mode = command({
 	name: "mode",
 	args: {
@@ -66,11 +68,40 @@ const route = command({
 		s.stop("Route created");
 	},
 });
+const supportedAdapters = ["vercel"] as const;
+const adapter = command({
+	name: "adapter",
+	args: {
+		name: positional({
+			type: oneOf(supportedAdapters),
+			displayName: "Adapter name",
+		}),
+		force_transform: flag({ short: "f", long: "force" }),
+	},
+	async handler({ name, force_transform }) {
+		const sym = Symbol(name).toString();
+		let code = await transform_plugins(
+			[
+				{
+					import_name: "solid",
+					import_source: "solid-start/vite",
+					is_default: true,
+					options: { adapter: sym },
+				},
+			],
+			force_transform
+		);
+		code = `import ${name} from "solid-start-${name}";\n` + code;
+		code = code.replace(`"${sym}"`, `${name}({})`);
+		await writeFile("vite.config.ts", code);
+	},
+});
 export const start_commands = subcommands({
 	name: "start",
 	description: "Commands specific to solid start",
 	cmds: {
 		mode,
 		route,
+		adapter,
 	},
 });

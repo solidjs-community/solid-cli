@@ -20,7 +20,6 @@ export const transform_plugins = async (
 		new URL("./wasm/transform_config.wasm", import.meta.url)
 	)
 ) => {
-	console.log(wasm_path);
 	const configData = (await readFile(config_path)).toString();
 	const res = await transform(configData, {
 		filename: config_path,
@@ -44,7 +43,7 @@ export const transform_plugins = async (
 			},
 		},
 	});
-	await writeFile(config_path, res.code);
+	return res.code;
 };
 // All the integrations/packages that we support
 export const supported = ["unocss", "vitepwa", "solid-devtools"] as const;
@@ -83,7 +82,6 @@ export const postInstallActions = {
 		);
 	},
 	"solid-devtools": async () => {
-		console.log("Running post-install");
 		await insertAtBeginning(
 			await getProjectRoot(),
 			`import "solid-devtools";\n`
