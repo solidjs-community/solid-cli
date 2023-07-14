@@ -34,7 +34,7 @@ A custom CLI built for the purpose of installing and managing SolidJS apps and p
 - [ ] SolidStart
   - [x] New route
   - [ ] New data file
-  - [ ] Enable Adapters
+  - [x] Enable Adapters
   - [x] Enable SSR/CSR/SSG mode
 
 # CLI Design
