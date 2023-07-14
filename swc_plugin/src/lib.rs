@@ -131,25 +131,20 @@ fn is_plugin_already_added(
     for (n, elem) in elems.iter().enumerate().take(elems.iter().len()) {
         // Assuming that plugins are always call expressions, and always imported as such
         // Can be fixed in the future by just visiting with self, and collecting all the identifiers that we find
-        if let Some(elem) = elem && let Expr::Call(call_expr) = elem.expr.as_expr() {
-            match &call_expr.callee {
-                Callee::Expr(e) => {
-                    if let Expr::Ident(i) = &**e {
-                        let local_name = i.sym.as_ref();
-                        if plugin_name == local_name {
-                            // Checking if the import is from the same place
-                            for import in &visitor.original_imports{
-                                let imported_from = import.src.value.as_ref();
-                                let import_names = get_import_names(import);
-                                if import_names.contains(&local_name) && imported_from == plugin_import_path {
-                                    // Plugin already exists, so we don't need to add it
-                                    return n.try_into().unwrap()
-                                }
-                            }
+        if let Some(elem) = elem && let Expr::Call(call_expr) = elem.expr.as_expr() && let Callee::Expr(callee_expr) = &call_expr.callee {
+            if let Expr::Ident(i) = &**callee_expr {
+                let local_name = i.sym.as_ref();
+                if plugin_name == local_name {
+                    // Checking if the import is from the same place
+                    for import in &visitor.original_imports{
+                        let imported_from = import.src.value.as_ref();
+                        let import_names = get_import_names(import);
+                        if import_names.contains(&local_name) && imported_from == plugin_import_path {
+                            // Plugin already exists, so we don't need to add it
+                            return n.try_into().unwrap()
                         }
                     }
-                },
-                _ => {}
+                }
             }
         }
     }
