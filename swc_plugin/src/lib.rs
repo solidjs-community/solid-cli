@@ -3,12 +3,12 @@ use std::collections::HashMap;
 pub mod config;
 use config::Config;
 use serde_json::Value;
-use swc_core::common::DUMMY_SP;
 use swc_core::common::util::take::Take;
+use swc_core::common::DUMMY_SP;
 use swc_core::ecma::ast::{
-    ArrayLit, Bool, Callee, ExprOrSpread, ImportDecl, ImportDefaultSpecifier,
-    ImportNamedSpecifier, ImportSpecifier, KeyValueProp, Lit, Module, ModuleDecl, ModuleItem, Null,
-    ObjectLit, Prop, PropName, PropOrSpread, Str,
+    ArrayLit, Bool, Callee, ExprOrSpread, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier,
+    ImportSpecifier, KeyValueProp, Lit, Module, ModuleDecl, ModuleItem, Null, ObjectLit, Prop,
+    PropName, PropOrSpread, Str,
 };
 use swc_core::ecma::utils::{prepend_stmt, swc_common, ExprExt};
 
@@ -52,7 +52,7 @@ fn to_expr(val: &Value) -> Expr {
         Value::Array(arr) => Expr::Array(ArrayLit {
             span: DUMMY_SP,
             elems: arr
-                .into_iter()
+                .iter()
                 .map(|v| {
                     Some(ExprOrSpread {
                         spread: None,
@@ -64,7 +64,7 @@ fn to_expr(val: &Value) -> Expr {
         Value::Object(obj) => Expr::Object(ObjectLit {
             span: DUMMY_SP,
             props: obj
-                .into_iter()
+                .iter()
                 .map(|(k, v)| {
                     PropOrSpread::Prop(Box::new(Prop::KeyValue(KeyValueProp {
                         key: PropName::Ident(Ident::new(k.clone().into(), DUMMY_SP)),
@@ -112,13 +112,22 @@ impl TransformVisitor {
     }
 }
 fn get_import_names(import_decl: &ImportDecl) -> Vec<&str> {
-    import_decl.specifiers.iter().map(|s| {match s {
-        ImportSpecifier::Named(s) => s.local.sym.as_ref(),
-        ImportSpecifier::Default(s) => s.local.sym.as_ref(),
-        ImportSpecifier::Namespace(s) => s.local.sym.as_ref(),
-    }}).collect()
+    import_decl
+        .specifiers
+        .iter()
+        .map(|s| match s {
+            ImportSpecifier::Named(s) => s.local.sym.as_ref(),
+            ImportSpecifier::Default(s) => s.local.sym.as_ref(),
+            ImportSpecifier::Namespace(s) => s.local.sym.as_ref(),
+        })
+        .collect()
 }
-fn is_plugin_already_added(visitor: &TransformVisitor, elems: &Vec<Option<ExprOrSpread>>, plugin_name: &str, plugin_import_path: &str) -> i32{
+fn is_plugin_already_added(
+    visitor: &TransformVisitor,
+    elems: &[Option<ExprOrSpread>],
+    plugin_name: &str,
+    plugin_import_path: &str,
+) -> i32 {
     for n in 0..elems.iter().len() {
         let elem = &elems[n];
         // Assuming that plugins are always call expressions, and always imported as such
@@ -138,52 +147,55 @@ fn is_plugin_already_added(visitor: &TransformVisitor, elems: &Vec<Option<ExprOr
                     }
                 }
             }
-            
         }
-    };
+    }
     -1
-} 
+}
 fn get_key_name(key: &PropName) -> String {
-    match key{
+    match key {
         PropName::Ident(i) => i.sym.to_string(),
         PropName::Str(s) => s.value.to_string(),
         PropName::Num(n) => n.value.to_string(),
         PropName::BigInt(b) => b.value.to_string(),
-        PropName::Computed(_) => {HANDLER.with(|handler| {
-                handler.struct_span_err(DUMMY_SP,
-                    "Plugin already exists, and force_transform is not enabled")
-                .emit()
+        PropName::Computed(_) => {
+            HANDLER.with(|handler| {
+                handler
+                    .struct_span_err(
+                        DUMMY_SP,
+                        "Plugin already exists, and force_transform is not enabled",
+                    )
+                    .emit()
             });
             panic!();
-        },
+        }
     }
 }
 /**
  * Merge two objects.
  * `obj1` takes precedence.
  */
-fn merge_objects(obj1: &ObjectLit, obj2: &ObjectLit) -> Vec<PropOrSpread>{
+fn merge_objects(obj1: &ObjectLit, obj2: &ObjectLit) -> Vec<PropOrSpread> {
     // Storing string here gives a really quick way to access the prop name
     let mut new_props: Vec<(String, &PropOrSpread)> = vec![];
-    for prop in &obj1.props{
-        if let PropOrSpread::Prop(p) = prop{
-            if let Prop::KeyValue(key_val) = &**p{
+    for prop in &obj1.props {
+        if let PropOrSpread::Prop(p) = prop {
+            if let Prop::KeyValue(key_val) = &**p {
                 let name = get_key_name(&key_val.key);
                 new_props.push((name, prop))
             }
         }
     }
-    for prop in &obj2.props{
-        if let PropOrSpread::Prop(p) = prop{
-            if let Prop::KeyValue(key_val) = &**p{
+    for prop in &obj2.props {
+        if let PropOrSpread::Prop(p) = prop {
+            if let Prop::KeyValue(key_val) = &**p {
                 let prop_name = &get_key_name(&key_val.key);
                 let mut exists = false;
-                for (name, _) in &new_props{
-                    if prop_name == name{
+                for (name, _) in &new_props {
+                    if prop_name == name {
                         exists = true;
                     }
                 }
-                if exists{
+                if exists {
                     continue;
                 }
                 // We can now add this prop
@@ -192,12 +204,16 @@ fn merge_objects(obj1: &ObjectLit, obj2: &ObjectLit) -> Vec<PropOrSpread>{
         }
     }
     let mut data_to_ret = vec![];
-    for (_, prop) in new_props{
+    for (_, prop) in new_props {
         data_to_ret.push(prop.clone());
     }
     data_to_ret
 }
-fn generate_plugin_expr(name: &str, extra_config: &Value, original_config: &Option<ExprOrSpread>) -> Option<ExprOrSpread>{
+fn generate_plugin_expr(
+    name: &str,
+    extra_config: &Value,
+    original_config: &Option<ExprOrSpread>,
+) -> Option<ExprOrSpread> {
     Some(ExprOrSpread {
         spread: None,
         expr: Box::new(Expr::Call(CallExpr {
@@ -211,11 +227,11 @@ fn generate_plugin_expr(name: &str, extra_config: &Value, original_config: &Opti
                 expr: Box::new({
                     let mut converted = to_expr(extra_config);
                     if let Some(ExprOrSpread { expr, .. }) = &original_config {
-                        if let Expr::Call(call_expr) = &**expr{
+                        if let Expr::Call(call_expr) = &**expr {
                             if let Expr::Object(obj) = &*call_expr.args[0].expr {
-                                if let Expr::Object(new_cfg) = &converted{
+                                if let Expr::Object(new_cfg) = &converted {
                                     let merged = merge_objects(new_cfg, obj);
-                                    converted = Expr::Object(ObjectLit{
+                                    converted = Expr::Object(ObjectLit {
                                         span: DUMMY_SP,
                                         props: merged,
                                     })
@@ -232,33 +248,45 @@ fn generate_plugin_expr(name: &str, extra_config: &Value, original_config: &Opti
 }
 fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOrSpread {
     let mut elems: Vec<Option<ExprOrSpread>> = arr_lit.elems.clone();
-    for plugin_config in
-        &visitor.config.additional_plugins
-    {
+    for plugin_config in &visitor.config.additional_plugins {
         // Checking if plugin already exists
-        let ind = is_plugin_already_added(visitor, &elems, &plugin_config.import_name, &plugin_config.import_source);
+        let ind = is_plugin_already_added(
+            visitor,
+            &elems,
+            &plugin_config.import_name,
+            &plugin_config.import_source,
+        );
         if ind != -1 && !visitor.config.force_transform {
             HANDLER.with(|handler| {
-                handler.struct_span_err(
-                    DUMMY_SP,
-                    "Plugin already exists, and force_transform is not enabled",
-                )
-                .emit()
+                handler
+                    .struct_span_err(
+                        DUMMY_SP,
+                        "Plugin already exists, and force_transform is not enabled",
+                    )
+                    .emit()
             });
         }
         // The plugin must already exist, so we can just mutate what's already there
         if ind != -1 {
-            let plugin_expr = generate_plugin_expr(&plugin_config.import_name, &plugin_config.options, &elems[ind as usize]);
+            let plugin_expr = generate_plugin_expr(
+                &plugin_config.import_name,
+                &plugin_config.options,
+                &elems[ind as usize],
+            );
             elems[ind as usize] = plugin_expr;
             continue;
         }
-        let plugin_expr = generate_plugin_expr(&plugin_config.import_name, &plugin_config.options, &None);
+        let plugin_expr =
+            generate_plugin_expr(&plugin_config.import_name, &plugin_config.options, &None);
         elems.push(plugin_expr);
         // Add to imports
         visitor.new_imports.insert(
             plugin_config.import_source.clone(),
             (
-                Ident::new(plugin_config.import_name.clone().into(), swc_common::DUMMY_SP),
+                Ident::new(
+                    plugin_config.import_name.clone().into(),
+                    swc_common::DUMMY_SP,
+                ),
                 plugin_config.is_default,
             ),
         );
