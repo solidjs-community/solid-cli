@@ -1,8 +1,16 @@
 import { transform } from "@swc/core";
 import { readFile, writeFile } from "fs/promises";
 import { fileURLToPath } from "url";
-//              [importName, importSource, isDefaultImport, options]
-export type PluginType = [string, string, boolean, {}];
+import { insertAtBeginning } from "./utils/file_ops";
+import { getProjectRoot } from "./utils/helpers";
+//              [importName, importSource, isDefaultImport, options, extraConfig]
+// export type PluginType = [string, string, boolean, {}];
+export type PluginType = {
+	import_name: string;
+	import_source: string;
+	is_default: boolean;
+	options: {};
+};
 export const transform_plugins = async (
 	new_plugins: PluginType[],
 	force_transform = false,
@@ -43,12 +51,42 @@ export const supported = ["unocss", "vitepwa", "solid-devtools"] as const;
 export const resolvePluginConfig = (packageName: string): PluginType | null => {
 	switch (packageName.toLowerCase()) {
 		case "unocss":
-			return ["UnoCss", "unocss/vite", true, {}];
+			return {
+				import_name: "UnoCss",
+				import_source: "unocss/vite",
+				is_default: true,
+				options: {},
+			};
 		case "vitepwa":
-			return ["VitePWA", "vite-plugin-pwa", false, {}];
+			return {
+				import_name: "VitePWA",
+				import_source: "vite-plugin-pwa",
+				is_default: false,
+				options: {},
+			};
 		case "solid-devtools":
-			return ["devtools", "solid-devtools/vite", true, {}];
+			return {
+				import_name: "devtools",
+				import_source: "solid-devtools/vite",
+				is_default: true,
+				options: {},
+			};
 		default:
 			return null;
 	}
 };
+export const postInstallActions = {
+	unocss: async () => {
+		await insertAtBeginning(
+			await getProjectRoot(),
+			`import "virtual:uno.css";\n`
+		);
+	},
+	"solid-devtools": async () => {
+		console.log("Running post-install");
+		await insertAtBeginning(
+			await getProjectRoot(),
+			`import "solid-devtools";\n`
+		);
+	},
+} as const;

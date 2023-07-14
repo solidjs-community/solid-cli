@@ -8,8 +8,8 @@ A custom CLI built for the purpose of installing and managing SolidJS apps and p
 
 # Roadmap/Features
 
-- [ ] Templates
-  - [ ] From Degit
+- [x] Templates
+  - [x] From Degit
 - [ ] Docs
 - [ ] Primitives
   - [ ] Add/remove/update primitives
@@ -20,22 +20,23 @@ A custom CLI built for the purpose of installing and managing SolidJS apps and p
   - [ ] PandaCSS
   - [ ] Cypress
   - [ ] PostCSS
+  - [x] UnoCSS
   - [ ] Vanilla Extract
   - [ ] Vitest
   - [ ] Tauri
   - [ ] Playwright
 - [ ] Utilities
   - [ ] eslint-plugin-solid
-  - [ ] solid-devtools
+  - [x] solid-devtools
 - [ ] Misc
-  - [ ] Launch new Stackblitz
+  - [x] Launch new Stackblitz
   - [ ] Launch new CodeSandBox
 - [ ] SolidStart
-  - [ ] New route
+  - [x] New route
   - [ ] New data file
   - [ ] Enable Adapters
-  - [ ] Enable SSR/CSR/SSG mode
-     
+  - [x] Enable SSR/CSR/SSG mode
+
 # CLI Design
 
 The CLI will use `solid` as the initialiation keyword. The CLI commands will then cascade based on groupings determined baed on what the action does defined by higher level actions. The actions will be:
@@ -43,13 +44,13 @@ The CLI will use `solid` as the initialiation keyword. The CLI commands will the
 - `version`: Displays a changelog of recent Solid versions
   - `start`: Specific command for Start versions
 - `docs`: List a `man`-like page for versioned docs or link out to the docs
-- `primitives`: Potential integration with Solid Primitives  
+- `primitives`: Potential integration with Solid Primitives
 - `add`, `remove`: Used for adding and installing integrations/packages ie. `solid add tailwind`
 - `config`: For enabling a certain features ie. `solid config vite _____`
 - `start`: Special keyword for SolidStart commands
   - `mode`: Changes the Start serving mode (ssr/csr/ssg) `solid mode ssr`
   - `route`: Creates a new route ie. `solid start route login`
-- `new`: Opens your browser to a new template via CSB/SB ie. `solid new bare --stackblitz` opens https://solid.new/bare
+- `new`: Opens your browser to a new template via CSB/SB ie. `solid new bare --stackblitz` opens <https://solid.new/bare>
 - `ecosystem`
   - `add`: Starts the process of submitting your current project to our ecosystem listing (Solidex) ie. `solid ecosystem publish`
   - `search`: Initializes an ecosystem search result `solid ecosystem search auth`

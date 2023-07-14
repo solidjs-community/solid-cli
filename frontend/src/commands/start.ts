@@ -6,7 +6,7 @@ import {
 	string,
 	subcommands,
 } from "cmd-ts";
-import { isSolidStart } from "../lib/core";
+import { isSolidStart } from "../lib/utils/solid_start";
 import * as p from "@clack/prompts";
 import { transform_plugins } from "../lib/transform";
 import { createRoute } from "../lib/start/add_route";
@@ -29,7 +29,14 @@ const mode = command({
 		p.log.info("Updating config");
 		if (mode != "ssg") {
 			await transform_plugins(
-				[["solid", "solid-start/vite", true, { ssr: mode === "ssr" }]],
+				[
+					{
+						import_name: "solid",
+						import_source: "solid-start/vite",
+						is_default: true,
+						options: { ssr: mode === "ssr" },
+					},
+				],
 				true,
 				true
 			);

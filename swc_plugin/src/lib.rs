@@ -232,11 +232,11 @@ fn generate_plugin_expr(name: &str, extra_config: &Value, original_config: &Opti
 }
 fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOrSpread {
     let mut elems: Vec<Option<ExprOrSpread>> = arr_lit.elems.clone();
-    for (name, import_path, is_default_import, extra_config) in
-        visitor.config.additional_plugins.clone()
+    for plugin_config in
+        &visitor.config.additional_plugins
     {
         // Checking if plugin already exists
-        let ind = is_plugin_already_added(visitor, &elems, &name, &import_path);
+        let ind = is_plugin_already_added(visitor, &elems, &plugin_config.import_name, &plugin_config.import_source);
         if ind != -1 && !visitor.config.force_transform {
             HANDLER.with(|handler| {
                 handler.struct_span_err(
@@ -248,18 +248,18 @@ fn add_new_plugins(visitor: &mut TransformVisitor, arr_lit: &ArrayLit) -> PropOr
         }
         // The plugin must already exist, so we can just mutate what's already there
         if ind != -1 {
-            let plugin_expr = generate_plugin_expr(&name, &extra_config, &elems[ind as usize]);
+            let plugin_expr = generate_plugin_expr(&plugin_config.import_name, &plugin_config.options, &elems[ind as usize]);
             elems[ind as usize] = plugin_expr;
             continue;
         }
-        let plugin_expr = generate_plugin_expr(&name, &extra_config, &None);
+        let plugin_expr = generate_plugin_expr(&plugin_config.import_name, &plugin_config.options, &None);
         elems.push(plugin_expr);
         // Add to imports
         visitor.new_imports.insert(
-            import_path,
+            plugin_config.import_source.clone(),
             (
-                Ident::new(name.into(), swc_common::DUMMY_SP),
-                is_default_import,
+                Ident::new(plugin_config.import_name.clone().into(), swc_common::DUMMY_SP),
+                plugin_config.is_default,
             ),
         );
     }

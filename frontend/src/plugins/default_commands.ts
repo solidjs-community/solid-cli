@@ -16,6 +16,7 @@ import {
 } from "cmd-ts";
 import {
 	PluginType,
+	postInstallActions,
 	resolvePluginConfig,
 	supported,
 	transform_plugins,
@@ -55,6 +56,14 @@ const add = command({
 			.filter((p) => p) as PluginType[];
 		await transform_plugins(configs, force_transform);
 		p.log.success("Config updated");
+		configs.forEach(async (cfg) => {
+			console.log(cfg.import_name.toLowerCase());
+			await postInstallActions[
+				cfg.import_source
+					.split("/")[0]
+					.toLowerCase() as keyof typeof postInstallActions
+			]?.();
+		});
 		const pM = await detect();
 		const s = p.spinner();
 		s.start(`Installing packages via ${pM}`);
@@ -62,7 +71,7 @@ const add = command({
 			const config = configs[i];
 
 			const { stdout } = await execa(
-				`${pM} i ${config[1].toLowerCase().split("/")[0]}`
+				`${pM} i ${config.import_source.toLowerCase().split("/")[0]}`
 			);
 		}
 		s.stop("Packages installed");
@@ -94,11 +103,12 @@ const new_ = command({
 			return;
 		}
 		const pM = await detect();
-		const { stdout } = await execa(getRunner(pM), [
-			"degit",
-			`solidjs/templates/${variation}`,
-			name ?? "",
-		]);
+		const { stdout } = await execa(
+			getRunner(pM),
+			["degit", `solidjs/templates/${variation}`, name ?? null].filter(
+				(e) => e !== null
+			) as string[]
+		);
 	},
 });
 export default {
