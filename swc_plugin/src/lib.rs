@@ -3,7 +3,7 @@ use std::collections::HashMap;
 pub mod config;
 use config::Config;
 use serde_json::Value;
-use swc_core::common::util::take::Take;
+
 use swc_core::common::DUMMY_SP;
 use swc_core::ecma::ast::{
     ArrayLit, Bool, Callee, ExprOrSpread, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier,
@@ -128,8 +128,7 @@ fn is_plugin_already_added(
     plugin_name: &str,
     plugin_import_path: &str,
 ) -> i32 {
-    for n in 0..elems.iter().len() {
-        let elem = &elems[n];
+    for (n, elem) in elems.iter().enumerate().take(elems.iter().len()) {
         // Assuming that plugins are always call expressions, and always imported as such
         // Can be fixed in the future by just visiting with self, and collecting all the identifiers that we find
         if let Some(elem) = elem && let Expr::Call(call_expr) = elem.expr.as_expr() {
@@ -307,11 +306,9 @@ fn update_argument(visitor: &mut TransformVisitor, arg: &mut ExprOrSpread) {
 
         for prop_spread in new_props.iter_mut() {
             if let PropOrSpread::Prop(prop) = prop_spread {
-                if let Prop::KeyValue(key_value_prop) = &**prop && let Some(i) = key_value_prop.key.as_ident() {
-                    if i.sym.to_string() == "plugins" && let Expr::Array(arr_lit) = &*key_value_prop.value {
-                        *prop_spread = add_new_plugins(visitor, arr_lit);
-                        mutated_existing = true;
-                    }
+                if let Prop::KeyValue(key_value_prop) = &**prop && let Some(i) = key_value_prop.key.as_ident() && i.sym.to_string() == "plugins" && let Expr::Array(arr_lit) = &*key_value_prop.value {
+                    *prop_spread = add_new_plugins(visitor, arr_lit);
+                    mutated_existing = true;
                 }
             }
         }
