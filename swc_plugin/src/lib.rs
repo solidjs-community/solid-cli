@@ -227,7 +227,7 @@ fn generate_plugin_expr(
                     let mut converted = to_expr(extra_config);
                     if let Some(ExprOrSpread { expr, .. }) = &original_config {
                         if let Expr::Call(call_expr) = &**expr {
-                            if let Expr::Object(obj) = &*call_expr.args[0].expr {
+                            if call_expr.args.len() > 0 && let Expr::Object(obj) = &*call_expr.args[0].expr {
                                 if let Expr::Object(new_cfg) = &converted {
                                     let merged = merge_objects(new_cfg, obj);
                                     converted = Expr::Object(ObjectLit {
