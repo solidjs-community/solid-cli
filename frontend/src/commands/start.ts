@@ -27,12 +27,13 @@ const mode = command({
 			return;
 		}
 		p.log.info("Updating config");
-
-		await transform_plugins(
-			[["solid", "solid-start/vite", true, { mode }]],
-			true,
-			true
-		);
+		if (mode != "ssg") {
+			await transform_plugins(
+				[["solid", "solid-start/vite", true, { ssr: mode === "ssr" }]],
+				true,
+				true
+			);
+		}
 	},
 });
 const route = command({
