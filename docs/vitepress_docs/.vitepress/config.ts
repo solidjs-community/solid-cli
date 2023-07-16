@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Solid-cli Docs",
-  description: "The docs site for the solid cli",
+  description: "Documentation for the solid cli",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

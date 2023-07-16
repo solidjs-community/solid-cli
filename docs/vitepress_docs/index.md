@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "Solid-cli Docs"
-  text: "The docs site for the solid cli"
+  text: "Documentation for the solid cli"
   tagline: My great project tagline
   actions:
     - theme: brand
