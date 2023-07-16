@@ -5,24 +5,12 @@ import * as p from "@clack/prompts";
 import color from "picocolors";
 
 import { $ } from "execa";
-import {
-  boolean,
-  command,
-  flag,
-  oneOf,
-  optional,
-  positional,
-  restPositionals,
-  string,
-} from "cmd-ts";
-import {
-  PluginType,
-  resolvePluginConfig,
-  supported,
-  transform_plugins,
-} from "../lib/transform";
 import { autocomplete } from "../autocomplete/autocomplete";
 import { S_BAR } from "../autocomplete/utils";
+import { execa } from "execa";
+import { boolean, command, flag, oneOf, optional, positional, restPositionals, string } from "cmd-ts";
+import { PluginType, postInstallActions, resolvePluginConfig, supported, transform_plugins } from "../lib/transform";
+import { writeFile } from "fs/promises";
 const getRunner = (pM: PM) => {
   switch (pM) {
     case "npm":
@@ -44,8 +32,10 @@ const add = command({
     force_transform: flag({ type: boolean, long: "force", short: "f" }),
   },
   handler: async ({ package_name, force_transform }) => {
+    console.log(package_name, force_transform);
     let configs: PluginType[] = [];
     if (!package_name.length) {
+      console.log("Inside autocomplete");
       const a = await autocomplete({
         message: "Add packages",
         options: supported.map((value) => ({ label: value, value })),
@@ -59,15 +49,14 @@ const add = command({
             { label: "No", value: false },
             { label: "Yes (force)", value: [true, "force"] },
           ],
-          message: `Install the following (${a.length}) packages? \n${color.red(
-            S_BAR
-          )} \n${color.red(S_BAR)}  ${
+          message: `Install the following (${a.length}) packages? \n${color.red(S_BAR)} \n${color.red(S_BAR)}  ${
             " " + color.yellow(a.map((opt) => opt.label).join(" ")) + " "
           } \n${color.red(S_BAR)} `,
         });
 
         if (!shouldInstall) return;
 
+        console.log("inside autocomplete force");
         if (Array.isArray(shouldInstall) && shouldInstall[1] === "force") {
           force_transform = true;
         }
@@ -76,11 +65,10 @@ const add = command({
           .map((opt) => {
             const n = opt.value;
             if (!n) return;
+            console.log(n);
             const res = resolvePluginConfig(n);
             if (!res) {
-              p.log.error(
-                `Can't automatically configure ${n}: we don't support it.`
-              );
+              p.log.error(`Can't automatically configure ${n}: we don't support it.`);
               return;
             }
             return res;
@@ -93,25 +81,26 @@ const add = command({
           if (!n) return;
           const res = resolvePluginConfig(n);
           if (!res) {
-            p.log.error(
-              `Can't automatically configure ${n}: we don't support it.`
-            );
+            p.log.error(`Can't automatically configure ${n}: we don't support it.`);
             return;
           }
           return res;
         })
         .filter((p) => p) as PluginType[];
     }
-    await transform_plugins(configs, force_transform);
+    const code = await transform_plugins(configs, force_transform);
+    await writeFile("vite.config.ts", code);
     p.log.success("Config updated");
+    configs.forEach(async (cfg) => {
+      await postInstallActions[cfg.import_source.split("/")[0].toLowerCase() as keyof typeof postInstallActions]?.();
+    });
     const pM = await detect();
     const s = p.spinner();
     s.start(`Installing packages via ${pM}`);
     for (let i = 0; i < configs.length; i++) {
       const config = configs[i];
 
-      // prettier-ignore
-      const { stdout } = await $`${pM} i ${config[1].toLowerCase().split("/")[0]}`;
+      const { stdout } = await $`${pM} i ${config.import_source.toLowerCase().split("/")[0]}`;
     }
     s.stop("Packages installed");
   },
@@ -142,11 +131,10 @@ const new_ = command({
       return;
     }
     const pM = await detect();
-    const { stdout } = await execa(getRunner(pM), [
-      "degit",
-      `solidjs/templates/${variation}`,
-      name ?? "",
-    ]);
+    const { stdout } = await execa(
+      getRunner(pM),
+      ["degit", `solidjs/templates/${variation}`, name ?? null].filter((e) => e !== null) as string[],
+    );
   },
 });
 export default {
