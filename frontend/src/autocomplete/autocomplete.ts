@@ -180,8 +180,6 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
     defaultValue: opts.defaultValue,
     initialValue: opts.initialValue,
     render() {
-      const title = `${color.gray(S_BAR)}\n  ${color.bgBlue(color.black(opts.message))}\n`;
-
       const selected = this.selected.map((option, i) => `${color.red(option.label)}`).join(" ");
       const placeholder = opts.placeholder
         ? color.inverse(opts.placeholder[0]) + color.dim(opts.placeholder.slice(1))
@@ -189,7 +187,7 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
 
       const value = typeof this.value === "string" ? (!this.value ? placeholder : this.valueWithCursor) : "";
 
-      const textView = "Search: " + value + "\n";
+      const textView = `${color.cyan("?")} Pick your packages: ` + value + "\n";
 
       const noResults = color.red("No results");
 
@@ -217,11 +215,17 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
         })
         .join(`\n${color.cyan(S_BAR)}  `);
 
-      const options = `${color.cyan(S_BAR)}  ${this.filteredOptions.length ? filteredOptions : noResults}\n${color.cyan(
-        S_BAR_END,
-      )}\n`;
+      // prettier-ignore
+      const options = `${color.cyan(S_BAR)}  ${this.filteredOptions.length ? filteredOptions : noResults}\n${color.cyan(S_BAR_END,)}\n`;
 
-      return title + `Selected: ${selected}\n` + textView + options;
+      return (
+        `${color.cyan(S_BAR)} \n ${color.cyan(S_BAR)} ${color.yellow(
+          S_CHECKBOX_SELECTED,
+        )} Selected Packages: ${selected}\n${color.cyan(S_BAR)} \n` +
+        `${color.cyan(S_BAR)} ` +
+        textView +
+        options
+      );
     },
   }).prompt() as Promise<T[] | symbol>;
 };
