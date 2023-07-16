@@ -1,5 +1,5 @@
 import { transform } from "@swc/core";
-import { readFile, writeFile } from "fs/promises";
+import { readFile } from "fs/promises";
 import { fileURLToPath } from "url";
 import { insertAtBeginning } from "./utils/file_ops";
 import { getProjectRoot } from "./utils/helpers";
@@ -44,39 +44,38 @@ export const transform_plugins = async (
   return res.code;
 };
 // All the integrations/packages that we support
-export const supported = ["unocss", "vitepwa", "solid-devtools"] as const;
-export const resolvePluginConfig = (packageName: string): PluginType | null => {
-  switch (packageName.toLowerCase()) {
-    case "unocss":
-      return {
-        import_name: "UnoCss",
-        import_source: "unocss/vite",
-        is_default: true,
-        options: {},
-      };
-    case "vitepwa":
-      return {
-        import_name: "VitePWA",
-        import_source: "vite-plugin-pwa",
-        is_default: false,
-        options: {},
-      };
-    case "solid-devtools":
-      return {
-        import_name: "devtools",
-        import_source: "solid-devtools/vite",
-        is_default: true,
-        options: {},
-      };
-    default:
-      return null;
-  }
-};
-export const postInstallActions = {
-  "unocss": async () => {
-    await insertAtBeginning(await getProjectRoot(), `import "virtual:uno.css";\n`);
+// export const supported = ["unocss", "vitepwa", "solid-devtools"] as const;
+export type Supported = keyof typeof integrations;
+export const integrations = {
+  "unocss": {
+    pluginOptions: {
+      import_name: "UnoCss",
+      import_source: "unocss/vite",
+      is_default: true,
+      options: {},
+    },
+    postInstall: async () => {
+      await insertAtBeginning(await getProjectRoot(), `import "virtual:uno.css";\n`);
+    },
   },
-  "solid-devtools": async () => {
-    await insertAtBeginning(await getProjectRoot(), `import "solid-devtools";\n`);
+  "vitepwa": {
+    pluginOptions: {
+      import_name: "VitePWA",
+      import_source: "vite-plugin-pwa",
+      is_default: false,
+      options: {},
+    },
+    postInstall: async () => {
+      await insertAtBeginning(await getProjectRoot(), `import "solid-devtools";\n`);
+    },
+  },
+  "solid-devtools": {
+    pluginOptions: {
+      import_name: "devtools",
+      import_source: "solid-devtools/vite",
+      is_default: true,
+      options: {},
+    },
+    postInstall: null,
   },
 } as const;

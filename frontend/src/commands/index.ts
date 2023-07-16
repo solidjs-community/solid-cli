@@ -9,7 +9,7 @@ import { autocomplete } from "../autocomplete/autocomplete";
 import { S_BAR } from "../autocomplete/utils";
 import { execa } from "execa";
 import { boolean, command, flag, oneOf, optional, positional, restPositionals, string } from "cmd-ts";
-import { PluginType, postInstallActions, resolvePluginConfig, supported, transform_plugins } from "../lib/transform";
+import { Supported, integrations, transform_plugins } from "../lib/transform";
 import { writeFile } from "fs/promises";
 const getRunner = (pM: PM) => {
   switch (pM) {
@@ -26,17 +26,17 @@ const add = command({
   description: "Can add and install integrations: `solid add unocss`.",
   args: {
     package_name: restPositionals({
-      type: oneOf(supported),
+      type: oneOf(Object.keys(integrations) as Supported[]),
       displayName: "Package Name",
     }),
     force_transform: flag({ type: boolean, long: "force", short: "f" }),
   },
   handler: async ({ package_name, force_transform }) => {
-    let configs: PluginType[] = [];
+    let configs: (typeof integrations)[keyof typeof integrations][] = [];
     if (!package_name.length) {
       const a = await autocomplete({
         message: "Add packages",
-        options: supported.map((value) => ({ label: value, value })),
+        options: (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value })),
       });
 
       if (typeof a === "object") {
@@ -62,33 +62,36 @@ const add = command({
           .map((opt) => {
             const n = opt.value;
             if (!n) return;
-            const res = resolvePluginConfig(n);
+            const res = integrations[n];
             if (!res) {
               p.log.error(`Can't automatically configure ${n}: we don't support it.`);
               return;
             }
             return res;
           })
-          .filter((p) => p) as PluginType[];
+          .filter((p) => p) as typeof configs;
       }
     } else {
       configs = package_name
         .map((n) => {
           if (!n) return;
-          const res = resolvePluginConfig(n);
+          const res = integrations[n];
           if (!res) {
             p.log.error(`Can't automatically configure ${n}: we don't support it.`);
             return;
           }
           return res;
         })
-        .filter((p) => p) as PluginType[];
+        .filter((p) => p) as typeof configs;
     }
-    const code = await transform_plugins(configs, force_transform);
+    const code = await transform_plugins(
+      configs.map((c) => c.pluginOptions),
+      force_transform,
+    );
     await writeFile("vite.config.ts", code);
     p.log.success("Config updated");
     configs.forEach(async (cfg) => {
-      await postInstallActions[cfg.import_source.split("/")[0].toLowerCase() as keyof typeof postInstallActions]?.();
+      await cfg.postInstall?.();
     });
     const pM = await detect();
     const s = p.spinner();
@@ -96,7 +99,7 @@ const add = command({
     for (let i = 0; i < configs.length; i++) {
       const config = configs[i];
 
-      const { stdout } = await $`${pM} i ${config.import_source.toLowerCase().split("/")[0]}`;
+      const { stdout } = await $`${pM} i ${config.pluginOptions.import_source.toLowerCase().split("/")[0]}`;
     }
     s.stop("Packages installed");
   },
