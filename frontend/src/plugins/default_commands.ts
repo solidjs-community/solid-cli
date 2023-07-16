@@ -44,10 +44,8 @@ const add = command({
     force_transform: flag({ type: boolean, long: "force", short: "f" }),
   },
   handler: async ({ package_name, force_transform }) => {
-    console.log(package_name, force_transform);
     let configs: PluginType[] = [];
     if (!package_name.length) {
-      console.log("Inside autocomplete");
       const a = await autocomplete({
         message: "Add packages",
         options: supported.map((value) => ({ label: value, value })),
@@ -70,7 +68,6 @@ const add = command({
 
         if (!shouldInstall) return;
 
-        console.log("inside autocomplete force");
         if (Array.isArray(shouldInstall) && shouldInstall[1] === "force") {
           force_transform = true;
         }
@@ -79,7 +76,6 @@ const add = command({
           .map((opt) => {
             const n = opt.value;
             if (!n) return;
-            console.log(n);
             const res = resolvePluginConfig(n);
             if (!res) {
               p.log.error(
@@ -114,9 +110,8 @@ const add = command({
     for (let i = 0; i < configs.length; i++) {
       const config = configs[i];
 
-      const { stdout } = await $`${pM} i ${
-        config[1].toLowerCase().split("/")[0]
-      }`;
+      // prettier-ignore
+      const { stdout } = await $`${pM} i ${config[1].toLowerCase().split("/")[0]}`;
     }
     s.stop("Packages installed");
   },
