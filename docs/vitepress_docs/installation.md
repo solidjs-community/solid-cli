@@ -1,6 +1,6 @@
 # Installation
 
-The solid-cli can be installed locally to your project via
+The CLI can be installed locally to your project via
 
 ```sh
 npm install solid-cli

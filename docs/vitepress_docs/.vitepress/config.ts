@@ -2,8 +2,8 @@ import { defineConfig } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Solid-cli Docs",
-  description: "Documentation for the solid cli",
+  title: "Solid-CLI Docs",
+  description: "Documentation for the Solid CLI",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
