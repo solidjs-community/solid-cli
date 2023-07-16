@@ -2,13 +2,13 @@
 
 The solid-cli can be installed locally to your project via
 
-```bash
+```sh
 npm install solid-cli
 ```
 
 Or installed globally:
 
-```bash
+```sh
 npm install -g solid-cli
 ```
 
