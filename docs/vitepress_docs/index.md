@@ -8,11 +8,8 @@ hero:
   tagline: My great project tagline
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Get started
+      link: /about
 features:
   - title: Package manager
     details: Installs solid related packages, and automatically configure them in your project.
