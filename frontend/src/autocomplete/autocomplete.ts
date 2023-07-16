@@ -158,10 +158,6 @@ class AutocompleteText<T extends Option> extends Prompt {
   }
 }
 
-const highlight = <T extends Option>(option: T) => {
-  return color.bgBlack(`${color.white(S_CHECKBOX_INACTIVE)} ${color.white(option.label ?? option.value)}`);
-};
-
 const getTerminalSize = () => {
   const stdout = process.stdout.getWindowSize();
 
@@ -203,7 +199,7 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
 
           const isFocused = this.focusIndex === i;
 
-          const state = selected ? (active ? "active-selected" : "selected") : active ? "active" : "inactive";
+          const state = selected ? "selected" : active ? "active" : "inactive";
 
           const spacing = i > 9 ? " " : "  ";
 
@@ -211,7 +207,7 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
             has || !option.group ? "" : `\n${color.cyan(S_BAR)}${color.bgBlue(color.black(option.group))}`
           } ${!has && option.group ? `\n${color.cyan(S_BAR)}   ` : ""}`;
 
-          return groupView + `${i}:${spacing}` + (isFocused ? highlight(option) : opt(option, state));
+          return groupView + `${i}:${spacing}` + (isFocused ? color.bgBlack(opt(option, state)) : opt(option, state));
         })
         .join(`\n${color.cyan(S_BAR)}  `);
 
