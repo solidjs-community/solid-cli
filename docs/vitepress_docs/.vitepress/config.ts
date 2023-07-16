@@ -8,29 +8,26 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: "Home", link: "/" },
-      { text: "Examples", link: "/markdown-examples" },
+      { text: "Guide", link: "/about" },
     ],
 
     sidebar: [
       {
-        text: "Introduction",
+        text: "Getting started",
         items: [
-          { text: "Getting Started" },
+          { text: "About", link: "/about" },
+          { text: "Installation", link: "/installation" },
           { text: "Basic Commands", link: "/basic-commands" },
           { text: "Solid-Start Commands", link: "/start-commands" },
-        ],
-      },
-      {
-        text: "Examples",
-        items: [
-          { text: "Markdown Examples", link: "/markdown-examples" },
-          { text: "Runtime API Examples", link: "/api-examples" },
         ],
       },
     ],
 
     socialLinks: [
-      { icon: "github", link: "https://github.com/vuejs/vitepress" },
+      {
+        icon: "github",
+        link: "https://github.com/solidjs-community/solid-cli",
+      },
     ],
   },
 });

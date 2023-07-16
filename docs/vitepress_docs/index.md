@@ -8,18 +8,13 @@ hero:
   tagline: My great project tagline
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
-
+      text: Get started
+      link: /about
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Package manager
+    details: Installs solid related packages, and automatically configure them in your project.
+  - title: Customisable
+    details: Plugins can be used to extend or manipulate existing functionality
+  - title: Automatic configuration
+    details: Can automatically enable or disable features within solid, such as automatically enabling ssr
 ---
-
