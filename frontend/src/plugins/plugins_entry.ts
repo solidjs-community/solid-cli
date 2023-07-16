@@ -1,4 +1,4 @@
-import defaultCommands from "./default_commands";
+import defaultCommands from "../commands";
 import userCommands from "./user_commands";
 export default {
   ...defaultCommands,
