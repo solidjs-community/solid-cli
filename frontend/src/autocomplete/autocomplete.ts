@@ -153,6 +153,7 @@ class AutocompleteText<T extends Option> extends Prompt {
       } else {
         this.selected = this.filteredOptions?.length === 0 ? this.selected : [...this.selected, focusedOption];
       }
+      // @ts-ignore
       this.rl.clearLine();
     }
   }
