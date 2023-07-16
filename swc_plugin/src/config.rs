@@ -4,8 +4,27 @@ pub trait Testing {
     fn test() -> Self;
 }
 #[derive(Serialize, Deserialize, Default, Debug)]
+pub struct PluginConfig {
+    pub import_name: String,
+    pub import_source: String,
+    pub is_default: bool,
+    pub options: Value,
+}
+
+impl PluginConfig {
+    fn test() -> Self {
+        Self {
+            import_name: "UnoCss".to_string(),
+            import_source: "unocss/vite".to_string(),
+            is_default: true,
+            options: json!({}),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Default, Debug)]
 pub struct Config {
-    pub additional_plugins: Vec<(String, String, bool, Value)>,
+    pub additional_plugins: Vec<PluginConfig>,
     pub force_transform: bool,
     pub merge_configs: bool,
 }
@@ -13,12 +32,7 @@ pub struct Config {
 impl Testing for Config {
     fn test() -> Self {
         Self {
-            additional_plugins: vec![(
-                "UnoCss".to_string(),
-                "unocss/vite".to_string(),
-                true,
-                json!({}),
-            )],
+            additional_plugins: vec![PluginConfig::test()],
             force_transform: true,
             merge_configs: false,
         }
