@@ -1,6 +1,6 @@
 import { PM, detect } from "detect-package-manager";
 import { openInBrowser } from "../lib/utils/open";
-import { start_commands } from "../commands/start";
+import { start_commands } from "./start";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 
