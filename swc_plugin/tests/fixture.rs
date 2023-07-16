@@ -10,7 +10,7 @@ use swc_core::{
 };
 
 use testing::fixture;
-use transform_config::config::{Config, Testing};
+use transform_config::config::{Config, PluginConfig, Testing};
 use transform_config::TransformVisitor;
 
 fn syntax() -> Syntax {
@@ -47,12 +47,12 @@ fn merge_tests(input: PathBuf) {
             chain!(
                 resolver(Mark::new(), Mark::new(), false),
                 as_folder(TransformVisitor::new(Config {
-                    additional_plugins: vec![(
-                        "UnoCss".to_string(),
-                        "unocss/vite".to_string(),
-                        true,
-                        json!({"flag2": false}),
-                    )],
+                    additional_plugins: vec![PluginConfig {
+                        import_name: "UnoCss".to_string(),
+                        import_source: "unocss/vite".to_string(),
+                        is_default: true,
+                        options: json!({"flag2": false}),
+                    }],
                     force_transform: true,
                     merge_configs: true,
                 }))

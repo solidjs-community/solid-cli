@@ -23,6 +23,10 @@ import {
 } from "../lib/transform";
 import { autocomplete } from "../autocomplete/autocomplete";
 import { S_BAR } from "../autocomplete/utils";
+import { execa } from "execa";
+import { boolean, command, flag, oneOf, optional, positional, restPositionals, string } from "cmd-ts";
+import { PluginType, postInstallActions, resolvePluginConfig, supported, transform_plugins } from "../lib/transform";
+import { writeFile } from "fs/promises";
 const getRunner = (pM: PM) => {
   switch (pM) {
     case "npm":
@@ -106,14 +110,18 @@ const add = command({
         })
         .filter((p) => p) as PluginType[];
     }
-    await transform_plugins(configs, force_transform);
+    const code = await transform_plugins(configs, force_transform);
+    await writeFile("vite.config.ts", code);
     p.log.success("Config updated");
+    configs.forEach(async (cfg) => {
+      await postInstallActions[cfg.import_source.split("/")[0].toLowerCase() as keyof typeof postInstallActions]?.();
+    });
     const pM = await detect();
     const s = p.spinner();
     s.start(`Installing packages via ${pM}`);
     for (let i = 0; i < configs.length; i++) {
       const config = configs[i];
-
+      
       const { stdout } = await $`${pM} i ${
         config[1].toLowerCase().split("/")[0]
       }`;
@@ -147,11 +155,10 @@ const new_ = command({
       return;
     }
     const pM = await detect();
-    const { stdout } = await execa(getRunner(pM), [
-      "degit",
-      `solidjs/templates/${variation}`,
-      name ?? "",
-    ]);
+    const { stdout } = await execa(
+      getRunner(pM),
+      ["degit", `solidjs/templates/${variation}`, name ?? null].filter((e) => e !== null) as string[],
+    );
   },
 });
 export default {
