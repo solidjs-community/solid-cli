@@ -1,4 +1,4 @@
-# Supported Integration
+# Supported Integrations
 
 ## Adapters
 

@@ -1,5 +1,5 @@
 import { defineConfig } from "vitepress";
-
+import { SearchPlugin } from "vitepress-plugin-search";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
 	title: "Solid-CLI Docs",
@@ -23,7 +23,6 @@ export default defineConfig({
 			},
 			{ text: "Supported Integrations", link: "/supported-integrations" },
 		],
-
 		socialLinks: [
 			{
 				icon: "github",
@@ -31,4 +30,5 @@ export default defineConfig({
 			},
 		],
 	},
+	vite: { plugins: [SearchPlugin()] },
 });
