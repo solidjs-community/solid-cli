@@ -14,7 +14,7 @@ npm install -g solid-cli
 
 It can then be invoked via the keyword `solid`, and the help page can be displayed with `solid --help`
 
-```terminal
+```txt
 ┌   Solid-CLI
 solid <subcommand>
 
