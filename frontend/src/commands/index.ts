@@ -8,9 +8,10 @@ import { $ } from "execa";
 import { autocomplete } from "../autocomplete/autocomplete";
 import { S_BAR } from "../autocomplete/utils";
 import { execa } from "execa";
-import { boolean, command, flag, oneOf, optional, positional, restPositionals, string } from "cmd-ts";
+import { boolean, command, flag, optional, positional, restPositionals, string } from "cmd-ts";
 import { Supported, integrations, transform_plugins } from "../lib/transform";
 import { writeFile } from "fs/promises";
+import { oneOf } from "../lib/utils/oneOf";
 const getRunner = (pM: PM) => {
   switch (pM) {
     case "npm":
