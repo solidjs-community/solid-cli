@@ -5,8 +5,8 @@ import * as p from "@clack/prompts";
 import color from "picocolors";
 
 import { $ } from "execa";
-import { autocomplete } from "../autocomplete/autocomplete";
-import { S_BAR } from "../autocomplete/utils";
+import { autocomplete } from "../components/autocomplete/autocomplete";
+import { S_BAR } from "../components/autocomplete/utils";
 import { execa } from "execa";
 import { boolean, command, flag, optional, positional, restPositionals, string } from "cmd-ts";
 import { Supported, integrations, transform_plugins } from "../lib/transform";

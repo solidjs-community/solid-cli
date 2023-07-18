@@ -168,6 +168,8 @@ const getTerminalSize = () => {
   };
 };
 
+const space = (n: number) => ` `.repeat(n);
+
 export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOptions<T>, "render">) => {
   return new AutocompleteText({
     options: opts.options,
