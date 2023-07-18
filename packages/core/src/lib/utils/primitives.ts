@@ -1,4 +1,4 @@
-import type { Option } from "../../autocomplete/autocomplete";
+import type { Option } from "../../components/autocomplete/autocomplete";
 
 export const fetchPrimitives = async () => {
   const result = await (

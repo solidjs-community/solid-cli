@@ -3,8 +3,6 @@ import { readFile } from "fs/promises";
 import { fileURLToPath } from "url";
 import { insertAtBeginning } from "./utils/file_ops";
 import { getProjectRoot } from "./utils/helpers";
-//              [importName, importSource, isDefaultImport, options, extraConfig]
-// export type PluginType = [string, string, boolean, {}];
 export const transformPlugins = async (
   new_plugins: PluginOptions[],
   force_transform = false,
