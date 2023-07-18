@@ -3,6 +3,7 @@ import { Prompt } from "@clack/core";
 import { TextOptions } from "@clack/prompts";
 import { S_CHECKBOX_ACTIVE, S_CHECKBOX_SELECTED, S_CHECKBOX_INACTIVE, S_BAR, S_BAR_END, box } from "./utils";
 import color from "picocolors";
+import { createEffect } from "../../reactivity/core";
 
 export type Option = { value: any; label?: string; hint?: string; group?: string };
 
@@ -67,7 +68,7 @@ const opt = (
 };
 
 interface AutocompleteTextOptions<T extends Option> extends TextOptions {
-  options: T[];
+  options: () => T[];
   render: (this: Omit<AutocompleteText<T>, "prompt">) => string | void;
 }
 
@@ -87,9 +88,15 @@ class AutocompleteText<T extends Option> extends Prompt {
   constructor(opts: AutocompleteTextOptions<T>) {
     super(opts);
 
-    this.options = opts.options;
-    this.filteredOptions = opts.options;
+    this.options = opts.options();
+    this.filteredOptions = opts.options();
     this.selected = [];
+
+    createEffect(() => {
+      this.options = opts.options();
+      this.filteredOptions = sortByGroup(search(this.options, (this.value ?? "").toLowerCase()));
+      this.render();
+    });
 
     this.customKeyPress = this.customKeyPress.bind(this);
 
@@ -170,6 +177,9 @@ const getTerminalSize = () => {
 
 const space = (n: number) => ` `.repeat(n);
 
+const instructions =
+  `${color.dim(S_BAR)} ` + color.dim(`Tab to select | Ctrl-C to cancel | :<number> to highlight by index`);
+
 export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOptions<T>, "render">) => {
   return new AutocompleteText({
     options: opts.options,
@@ -223,7 +233,9 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
         )} Selected Packages: ${selected}\n${color.cyan(S_BAR)} \n` +
         `${color.cyan(S_BAR)} ` +
         textView +
-        options
+        options +
+        "\n" +
+        instructions
       );
     },
   }).prompt() as Promise<T[] | symbol>;

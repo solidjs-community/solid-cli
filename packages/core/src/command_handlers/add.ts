@@ -1,16 +1,26 @@
 import { writeFile } from "fs/promises";
-import { autocomplete } from "../components/autocomplete/autocomplete";
+import { Option, autocomplete } from "../components/autocomplete/autocomplete";
 import { S_BAR } from "../components/autocomplete/utils";
 import { Integrations, PluginOptions, Supported, integrations, transformPlugins } from "../lib/transform";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { detect } from "detect-package-manager";
 import { $ } from "execa";
+import { fetchPrimitives } from "../lib/utils/primitives";
+import { createSignal } from "../reactivity/core";
 
 const handleAutocompleteAdd = async () => {
+  const [g, s] = createSignal<Option[]>(
+    (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value })),
+  );
+
+  setTimeout(() => {
+    fetchPrimitives().then((r) => s([...g(), ...r]));
+  }, 2000);
+
   const a = await autocomplete({
     message: "Add packages",
-    options: (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value })),
+    options: g,
   });
 
   if (p.isCancel(a)) {

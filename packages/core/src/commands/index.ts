@@ -7,6 +7,7 @@ import { boolean, command, flag, optional, positional, restPositionals, string }
 import { Supported, integrations } from "../lib/transform";
 import { oneOf } from "../lib/utils/oneOf";
 import { handleAdd } from "../command_handlers/add";
+import { fetchPrimitives } from "../lib/utils/primitives";
 
 const getRunner = (pM: PM) => {
   switch (pM) {
