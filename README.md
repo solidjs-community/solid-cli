@@ -10,7 +10,7 @@ A custom CLI built for the purpose of installing and managing SolidJS apps and p
 
 - [x] Templates
   - [x] From Degit
-- [ ] Docs
+- [x] Docs
 - [ ] Primitives
   - [ ] Add/remove/update primitives
   - [ ] Search list of primitives
