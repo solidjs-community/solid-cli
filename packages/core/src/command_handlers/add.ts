@@ -6,21 +6,16 @@ import * as p from "@clack/prompts";
 import color from "picocolors";
 import { detect } from "detect-package-manager";
 import { $ } from "execa";
-import { fetchPrimitives } from "../lib/utils/primitives";
+import { loadPrimitives, refetchPrimitives } from "../lib/utils/primitives";
 import { createSignal } from "../reactivity/core";
-
+import { primitives } from "../lib/utils/primitives";
 const handleAutocompleteAdd = async () => {
-  const [g, s] = createSignal<Option[]>(
-    (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value })),
-  );
-
-  setTimeout(() => {
-    fetchPrimitives().then((r) => s([...g(), ...r]));
-  }, 2000);
-
+  const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
+  const opts = () => [...supportedIntegrations, ...primitives()];
+  loadPrimitives();
   const a = await autocomplete({
     message: "Add packages",
-    options: g,
+    options: opts,
   });
 
   if (p.isCancel(a)) {
