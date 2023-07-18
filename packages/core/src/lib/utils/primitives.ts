@@ -20,14 +20,32 @@ const fetchPrimitives = async () => {
 
   return primitives;
 };
+type Cache = {
+  timeCached: string;
+  primitives: Option[];
+};
 const cache = async (primitives: Option[]) => {
   const tmp = tmpdir();
-  await writeFile(`${tmp}/primitives.json`, JSON.stringify(primitives));
+  const p = JSON.stringify(primitives);
+  const t = new Date();
+  const cache: Cache = {
+    timeCached: t.toUTCString(),
+    primitives,
+  };
+  await writeFile(`${tmp}/primitives.json`, JSON.stringify(cache));
+};
+const daysSinceEpoch = (seconds: number) => {
+  return seconds / (60 * 60 * 24);
 };
 const getCached = async () => {
   const tmp = tmpdir();
-  const cached = JSON.parse((await readFile(`${tmp}/primitives.json`)).toString());
-  return cached as Option[];
+  const cached = JSON.parse((await readFile(`${tmp}/primitives.json`)).toString()) as Cache;
+  const timeCached = new Date(Date.parse(cached.timeCached));
+  const currentTime = new Date();
+  if (daysSinceEpoch(currentTime.getTime() - timeCached.getTime()) > 1) {
+    throw new Error("Stale cache");
+  }
+  return cached.primitives as Option[];
 };
 export const refetchPrimitives = async () => {
   const p = await fetchPrimitives();
