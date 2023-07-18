@@ -46,6 +46,17 @@ export const transformPlugins = async (
 // All the integrations/packages that we support
 // export const supported = ["unocss", "vitepwa", "solid-devtools"] as const;
 export type Supported = keyof typeof integrations;
+export type PluginOptions = {
+  import_name: string;
+  import_source: string;
+  is_default: boolean;
+  options: object;
+};
+
+export type IntegrationsValue = { pluginOptions: PluginOptions; postInstall?: () => Promise<void> };
+
+export type Integrations = Record<Supported, IntegrationsValue>;
+
 export const integrations = {
   "unocss": {
     pluginOptions: {
@@ -76,6 +87,5 @@ export const integrations = {
       is_default: true,
       options: {},
     },
-    postInstall: null,
   },
 } as const;
