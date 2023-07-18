@@ -1,13 +1,12 @@
 import { writeFile } from "fs/promises";
-import { Option, autocomplete } from "../components/autocomplete/autocomplete";
+import { autocomplete } from "../components/autocomplete/autocomplete";
 import { S_BAR } from "../components/autocomplete/utils";
-import { Integrations, PluginOptions, Supported, integrations, transformPlugins } from "../lib/transform";
+import { Integrations, Supported, integrations, transformPlugins } from "../lib/transform";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { detect } from "detect-package-manager";
 import { $ } from "execa";
-import { loadPrimitives, refetchPrimitives } from "../lib/utils/primitives";
-import { createSignal } from "../reactivity/core";
+import { loadPrimitives } from "../lib/utils/primitives";
 import { primitives } from "../lib/utils/primitives";
 const handleAutocompleteAdd = async () => {
   const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
