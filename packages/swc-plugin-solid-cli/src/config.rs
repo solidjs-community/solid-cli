@@ -23,12 +23,12 @@ impl PluginConfig {
 }
 
 #[derive(Serialize, Deserialize, Default, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct Config {
     pub additional_plugins: Vec<PluginConfig>,
     pub force_transform: bool,
     pub merge_configs: bool,
 }
-
 impl Testing for Config {
     fn test() -> Self {
         Self {

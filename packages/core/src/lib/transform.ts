@@ -16,7 +16,7 @@ export const transformPlugins = async (
   force_transform = false,
   merge_configs = false,
   config_path = "vite.config.ts",
-  wasm_path = fileURLToPath(new URL("./wasm/transform_config.wasm", import.meta.url)),
+  wasm_path = fileURLToPath(new URL("./wasm/swc_plugin_solid_cli.wasm", import.meta.url)),
 ) => {
   const configData = (await readFile(config_path)).toString();
   const res = await transform(configData, {
@@ -32,9 +32,9 @@ export const transformPlugins = async (
           [
             wasm_path,
             {
-              additional_plugins: new_plugins,
-              force_transform,
-              merge_configs,
+              additionalPlugins: new_plugins,
+              forceTransform: force_transform,
+              mergeConfigs: merge_configs,
             },
           ],
         ],
