@@ -64,8 +64,22 @@ const new_ = command({
     );
   },
 });
+const docs = command({
+  name: "docs",
+  args: {
+    open: flag({ type: boolean, long: "open", short: "o" }),
+  },
+  async handler({ open }) {
+    if (open) {
+      await openInBrowser("https://docs.solidjs.com");
+      return;
+    }
+    p.log.message("The solid documentation is available at https://docs.solidjs.com");
+  },
+});
 export default {
   add,
+  docs,
   new: new_,
   start: startCommands,
 };
