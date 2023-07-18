@@ -1406,6 +1406,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "swc-plugin-solid-cli"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "swc_core",
+ "testing",
+]
+
+[[package]]
 name = "swc_atoms"
 version = "0.5.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2140,16 +2150,6 @@ dependencies = [
  "tracing",
  "tracing-core",
  "tracing-log",
-]
-
-[[package]]
-name = "transform_config"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
- "swc_core",
- "testing",
 ]
 
 [[package]]

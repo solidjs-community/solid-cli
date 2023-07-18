@@ -1,5 +1,5 @@
 [package]
-name = "transform_config"
+name = "swc-plugin-solid-cli"
 version = "0.1.0"
 edition = "2021"
 
