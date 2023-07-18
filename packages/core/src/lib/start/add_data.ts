@@ -5,6 +5,6 @@ export const createData = async (path: string, name?: string) => {
   const path_parts = path.split("/");
   path_parts.unshift("src", "routes");
   await mkdir(path_parts.join("/"), { recursive: true });
-  path_parts.push(`${name}.data.ts` ?? "index.data.ts");
+  path_parts.push(name ? `${name}.data.ts` : "Index.data.ts");
   await writeChecked(path_parts.join("/"), "");
 };
