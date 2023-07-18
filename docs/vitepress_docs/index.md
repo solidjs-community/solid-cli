@@ -13,8 +13,11 @@ hero:
 features:
   - title: Package manager
     details: Installs solid related packages, and automatically configure them in your project.
+    icon: 📦
   - title: Customisable
     details: Plugins can be used to extend or manipulate existing functionality
+    icon: 🎨
   - title: Automatic configuration
     details: Can automatically enable or disable features within solid, such as automatically enabling ssr
+    icon: ♻
 ---
