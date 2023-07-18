@@ -65,7 +65,7 @@ const data = command({
     name: positional({
       type: optional(string),
       displayName: "Data name",
-      description: "The data of the `.data.ts` file to be generated",
+      description: "The name of the `.data.ts` file to be generated",
     }),
   },
   async handler({ path, name }) {
