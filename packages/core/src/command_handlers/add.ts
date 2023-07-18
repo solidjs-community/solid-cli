@@ -62,9 +62,14 @@ export const handleAdd = async (packages?: Supported[], forceTransform: boolean 
     packages = autocompleted.packages;
     forceTransform = autocompleted.forceTransform;
   }
+  const primitives: string[] = [];
   const configs: Configs = packages
     .map((n) => {
       if (!n) return;
+      if (n.startsWith("@solid-primitives")) {
+        primitives.push(n);
+        return;
+      }
       const res = integrations[n];
       if (!res) {
         p.log.error(`Can't automatically configure ${n}: we don't support it.`);
@@ -85,10 +90,15 @@ export const handleAdd = async (packages?: Supported[], forceTransform: boolean 
   const pM = await detect();
   const s = p.spinner();
   s.start(`Installing packages via ${pM}`);
+  // Install plugins
   for (let i = 0; i < configs.length; i++) {
     const config = configs[i];
 
     const { stdout } = await $`${pM} i ${config.pluginOptions.importSource.toLowerCase().split("/")[0]}`;
+  }
+  // Install primitives
+  for (const primitive of primitives) {
+    const { stdout } = await $`${pM} i ${primitive}`;
   }
   s.stop("Packages installed");
 };
