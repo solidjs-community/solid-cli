@@ -40,8 +40,16 @@ const add = command({
         options: (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value })),
       });
 
+      if (p.isCancel(a)) {
+        p.log.warn("Canceled");
+        return;
+      }
+
       if (typeof a === "object") {
-        if (a.length === 0) return;
+        if (a.length === 0) {
+          p.log.warn("Nothing selected");
+          return;
+        }
         const shouldInstall = await p.select({
           options: [
             { label: "Yes", value: true },
@@ -52,6 +60,11 @@ const add = command({
             " " + color.yellow(a.map((opt) => opt.label).join(" ")) + " "
           } \n${color.red(S_BAR)} `,
         });
+
+        if (p.isCancel(shouldInstall)) {
+          p.log.warn("Canceled");
+          return;
+        }
 
         if (!shouldInstall) return;
 
