@@ -9,9 +9,9 @@ use swc_core::{
     ecma::visit::as_folder,
 };
 
+use swc_plugin_solid_cli::config::{Config, PluginConfig, Testing};
+use swc_plugin_solid_cli::TransformVisitor;
 use testing::fixture;
-use transform_config::config::{Config, PluginConfig, Testing};
-use transform_config::TransformVisitor;
 
 fn syntax() -> Syntax {
     Syntax::Es(EsConfig {
