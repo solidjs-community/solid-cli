@@ -31,9 +31,9 @@ A custom CLI built for the purpose of installing and managing SolidJS apps and p
 - [ ] Misc
   - [x] Launch new Stackblitz
   - [ ] Launch new CodeSandBox
-- [ ] SolidStart
+- [x] SolidStart
   - [x] New route
-  - [ ] New data file
+  - [x] New data file
   - [x] Enable Adapters
   - [x] Enable SSR/CSR/SSG mode
 
