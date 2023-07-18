@@ -95,6 +95,7 @@ class AutocompleteText<T extends Option> extends Prompt {
     createEffect(() => {
       this.options = opts.options();
       this.filteredOptions = sortByGroup(search(this.options, (this.value ?? "").toLowerCase()));
+      // @ts-ignore
       this.render();
     });
 
