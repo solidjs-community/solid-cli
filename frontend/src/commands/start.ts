@@ -1,9 +1,10 @@
-import { command, flag, oneOf, optional, positional, string, subcommands } from "cmd-ts";
+import { command, flag, optional, positional, string, subcommands } from "cmd-ts";
 import { isSolidStart } from "../lib/utils/solid_start";
 import * as p from "@clack/prompts";
 import { transform_plugins } from "../lib/transform";
 import { createRoute } from "../lib/start/add_route";
 import { writeFile } from "fs/promises";
+import { oneOf } from "../lib/utils/oneOf";
 const mode = command({
   name: "mode",
   args: {
@@ -56,7 +57,16 @@ const route = command({
     s.stop("Route created");
   },
 });
-const supportedAdapters = ["vercel"] as const;
+const supportedAdapters = [
+  "aws",
+  "cloudflare-pages",
+  "cloudflare-workers",
+  "deno",
+  "netlify",
+  "node",
+  "static",
+  "vercel",
+] as const;
 const adapter = command({
   name: "adapter",
   args: {
