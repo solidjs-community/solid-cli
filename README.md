@@ -13,7 +13,7 @@ A custom CLI built for the purpose of installing and managing SolidJS apps and p
 - [x] Docs
 - [ ] Primitives
   - [ ] Add/remove/update primitives
-  - [ ] Search list of primitives
+  - [x] Search list of primitives
 - [ ] Integrations
   - [ ] Auth.js
   - [ ] Tailwind

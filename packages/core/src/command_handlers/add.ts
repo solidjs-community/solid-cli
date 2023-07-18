@@ -48,10 +48,22 @@ const handleAutocompleteAdd = async () => {
   if (Array.isArray(shouldInstall) && shouldInstall[1] === "force") {
     forceTransform = true;
   }
+  const packages = a.map((opt) => opt.value as Supported);
 
-  const configs = a
-    .map((opt) => {
-      const n = opt.value as Supported;
+  return { packages, forceTransform };
+};
+type Configs = Integrations[keyof Integrations][];
+export const handleAdd = async (packages?: Supported[], forceTransform: boolean = false) => {
+  if (!packages?.length) {
+    const autocompleted = await handleAutocompleteAdd();
+
+    if (!autocompleted) return;
+
+    packages = autocompleted.packages;
+    forceTransform = autocompleted.forceTransform;
+  }
+  const configs: Configs = packages
+    .map((n) => {
       if (!n) return;
       const res = integrations[n];
       if (!res) {
@@ -60,33 +72,7 @@ const handleAutocompleteAdd = async () => {
       }
       return res;
     })
-    .filter((p) => p) as Integrations[keyof Integrations][];
-
-  return { configs, forceTransform };
-};
-
-export const handleAdd = async (packages?: Supported[], forceTransform: boolean = false) => {
-  let configs: Integrations[keyof Integrations][] = [];
-  if (!packages?.length) {
-    const autocompleted = await handleAutocompleteAdd();
-
-    if (!autocompleted) return;
-
-    configs = autocompleted.configs;
-    forceTransform = autocompleted.forceTransform;
-  } else {
-    configs = packages
-      .map((n) => {
-        if (!n) return;
-        const res = integrations[n];
-        if (!res) {
-          p.log.error(`Can't automatically configure ${n}: we don't support it.`);
-          return;
-        }
-        return res;
-      })
-      .filter((p) => p) as typeof configs;
-  }
+    .filter((p) => p) as Configs;
   const code = await transformPlugins(
     configs.map((c) => c.pluginOptions),
     forceTransform,
