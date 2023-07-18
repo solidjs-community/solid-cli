@@ -6,7 +6,11 @@ export const readFileToString = async (path: string) => {
 };
 export const writeChecked = async (path: string, contents: string) => {
   const handle = await open(path, "wx");
-  await handle.writeFile(contents);
+  try {
+    await handle.writeFile(contents);
+  } finally {
+    await handle.close();
+  }
 };
 export const insertAtBeginning = async (path: string, text: string) => {
   const contents = await readFileToString(path);
