@@ -1,6 +1,6 @@
 import { PM, detect } from "detect-package-manager";
 import { openInBrowser } from "../lib/utils/open";
-import { start_commands } from "./start";
+import { startCommands } from "./start";
 import * as p from "@clack/prompts";
 import { execa } from "execa";
 import { boolean, command, flag, optional, positional, restPositionals, string } from "cmd-ts";
@@ -67,5 +67,5 @@ const new_ = command({
 export default {
   add,
   new: new_,
-  start: start_commands,
+  start: startCommands,
 };

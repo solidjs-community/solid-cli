@@ -1,7 +1,7 @@
 import { writeFile } from "fs/promises";
 import { autocomplete } from "../components/autocomplete/autocomplete";
 import { S_BAR } from "../components/autocomplete/utils";
-import { Supported, integrations, transform_plugins } from "../lib/transform";
+import { Supported, integrations, transformPlugins } from "../lib/transform";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { detect } from "detect-package-manager";
@@ -73,7 +73,7 @@ export const handleAdd = async (packages?: Supported[], forceTransform: boolean 
       })
       .filter((p) => p) as typeof configs;
   }
-  const code = await transform_plugins(
+  const code = await transformPlugins(
     configs.map((c) => c.pluginOptions),
     forceTransform,
   );

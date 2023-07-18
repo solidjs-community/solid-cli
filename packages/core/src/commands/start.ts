@@ -1,7 +1,7 @@
 import { command, flag, optional, positional, string, subcommands } from "cmd-ts";
 import { isSolidStart } from "../lib/utils/solid_start";
 import * as p from "@clack/prompts";
-import { transform_plugins } from "../lib/transform";
+import { transformPlugins } from "../lib/transform";
 import { createRoute } from "../lib/start/add_route";
 import { writeFile } from "fs/promises";
 import { oneOf } from "../lib/utils/oneOf";
@@ -21,7 +21,7 @@ const mode = command({
     }
     p.log.info("Updating config");
     if (mode != "ssg") {
-      await transform_plugins(
+      await transformPlugins(
         [
           {
             import_name: "solid",
@@ -74,11 +74,11 @@ const adapter = command({
       type: oneOf(supportedAdapters),
       displayName: "Adapter name",
     }),
-    force_transform: flag({ short: "f", long: "force" }),
+    forceTransform: flag({ short: "f", long: "force" }),
   },
-  async handler({ name, force_transform }) {
+  async handler({ name, forceTransform }) {
     const sym = Symbol(name).toString();
-    let code = await transform_plugins(
+    let code = await transformPlugins(
       [
         {
           import_name: "solid",
@@ -87,14 +87,14 @@ const adapter = command({
           options: { adapter: sym },
         },
       ],
-      force_transform,
+      forceTransform,
     );
     code = `import ${name} from "solid-start-${name}";\n` + code;
     code = code.replace(`"${sym}"`, `${name}({})`);
     await writeFile("vite.config.ts", code);
   },
 });
-export const start_commands = subcommands({
+export const startCommands = subcommands({
   name: "start",
   description: "Commands specific to solid start",
   cmds: {

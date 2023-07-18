@@ -11,7 +11,7 @@ export type PluginType = {
   is_default: boolean;
   options: {};
 };
-export const transform_plugins = async (
+export const transformPlugins = async (
   new_plugins: PluginType[],
   force_transform = false,
   merge_configs = false,
