@@ -66,10 +66,10 @@ export const handleAdd = async (packages?: Supported[], forceTransform: boolean 
   if (!packages?.length) {
     const autocompleted = await handleAutocompleteAdd();
 
-    if (autocompleted) {
-      configs = autocompleted.configs;
-      forceTransform = autocompleted.forceTransform;
-    }
+    if (!autocompleted) return;
+
+    configs = autocompleted.configs;
+    forceTransform = autocompleted.forceTransform;
   } else {
     configs = packages
       .map((n) => {
