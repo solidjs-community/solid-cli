@@ -14,7 +14,7 @@ export const createSignal = <T>(val: T) => {
 };
 
 export const createEffect = <T>(fn: () => T) => {
-  const prev = fn;
+  const prev = OBSERVER;
   OBSERVER = fn;
   fn();
   OBSERVER = prev;
