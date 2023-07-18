@@ -5,6 +5,7 @@ import { transformPlugins } from "../lib/transform";
 import { createRoute } from "../lib/start/add_route";
 import { writeFile } from "fs/promises";
 import { oneOf } from "../lib/utils/oneOf";
+import { createData } from "../lib/start/add_data";
 const mode = command({
   name: "mode",
   args: {
@@ -57,6 +58,27 @@ const route = command({
     s.stop("Route created");
   },
 });
+const data = command({
+  name: "data",
+  args: {
+    path: positional({ type: string, displayName: "Data Path" }),
+    name: positional({
+      type: optional(string),
+      displayName: "Data name",
+      description: "The data of the `.data.ts` file to be generated",
+    }),
+  },
+  async handler({ path, name }) {
+    if (!(await isSolidStart())) {
+      p.log.error("Cannot run command. Your project doesn't include solid-start");
+      return;
+    }
+    const s = p.spinner();
+    s.start("Creating new route");
+    await createData(path, name);
+    s.stop("Route created");
+  },
+});
 const supportedAdapters = [
   "aws",
   "cloudflare-pages",
@@ -100,6 +122,7 @@ export const startCommands = subcommands({
   cmds: {
     mode,
     route,
+    data,
     adapter,
   },
 });
