@@ -5,14 +5,8 @@ import { insertAtBeginning } from "./utils/file_ops";
 import { getProjectRoot } from "./utils/helpers";
 //              [importName, importSource, isDefaultImport, options, extraConfig]
 // export type PluginType = [string, string, boolean, {}];
-export type PluginType = {
-  import_name: string;
-  import_source: string;
-  is_default: boolean;
-  options: {};
-};
 export const transformPlugins = async (
-  new_plugins: PluginType[],
+  new_plugins: PluginOptions[],
   force_transform = false,
   merge_configs = false,
   config_path = "vite.config.ts",
@@ -47,9 +41,9 @@ export const transformPlugins = async (
 // export const supported = ["unocss", "vitepwa", "solid-devtools"] as const;
 export type Supported = keyof typeof integrations;
 export type PluginOptions = {
-  import_name: string;
-  import_source: string;
-  is_default: boolean;
+  importName: string;
+  importSource: string;
+  isDefault: boolean;
   options: object;
 };
 
@@ -60,9 +54,9 @@ export type Integrations = Record<Supported, IntegrationsValue>;
 export const integrations = {
   "unocss": {
     pluginOptions: {
-      import_name: "UnoCss",
-      import_source: "unocss/vite",
-      is_default: true,
+      importName: "UnoCss",
+      importSource: "unocss/vite",
+      isDefault: true,
       options: {},
     },
     postInstall: async () => {
@@ -71,9 +65,9 @@ export const integrations = {
   },
   "vitepwa": {
     pluginOptions: {
-      import_name: "VitePWA",
-      import_source: "vite-plugin-pwa",
-      is_default: false,
+      importName: "VitePWA",
+      importSource: "vite-plugin-pwa",
+      isDefault: false,
       options: {},
     },
     postInstall: async () => {
@@ -82,9 +76,9 @@ export const integrations = {
   },
   "solid-devtools": {
     pluginOptions: {
-      import_name: "devtools",
-      import_source: "solid-devtools/vite",
-      is_default: true,
+      importName: "devtools",
+      importSource: "solid-devtools/vite",
+      isDefault: true,
       options: {},
     },
   },

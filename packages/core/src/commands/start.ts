@@ -24,9 +24,9 @@ const mode = command({
       await transformPlugins(
         [
           {
-            import_name: "solid",
-            import_source: "solid-start/vite",
-            is_default: true,
+            importName: "solid",
+            importSource: "solid-start/vite",
+            isDefault: true,
             options: { ssr: mode === "ssr" },
           },
         ],
@@ -81,9 +81,9 @@ const adapter = command({
     let code = await transformPlugins(
       [
         {
-          import_name: "solid",
-          import_source: "solid-start/vite",
-          is_default: true,
+          importName: "solid",
+          importSource: "solid-start/vite",
+          isDefault: true,
           options: { adapter: sym },
         },
       ],

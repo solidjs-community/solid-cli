@@ -98,7 +98,7 @@ export const handleAdd = async (packages?: Supported[], forceTransform: boolean 
   for (let i = 0; i < configs.length; i++) {
     const config = configs[i];
 
-    const { stdout } = await $`${pM} i ${config.pluginOptions.import_source.toLowerCase().split("/")[0]}`;
+    const { stdout } = await $`${pM} i ${config.pluginOptions.importSource.toLowerCase().split("/")[0]}`;
   }
   s.stop("Packages installed");
 };

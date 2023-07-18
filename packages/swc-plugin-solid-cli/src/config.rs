@@ -4,6 +4,7 @@ pub trait Testing {
     fn test() -> Self;
 }
 #[derive(Serialize, Deserialize, Default, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct PluginConfig {
     pub import_name: String,
     pub import_source: String,
