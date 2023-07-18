@@ -22,14 +22,14 @@ const add = command({
   name: "add",
   description: "Can add and install integrations: `solid add unocss`.",
   args: {
-    package_name: restPositionals({
+    packages: restPositionals({
       type: oneOf(Object.keys(integrations) as Supported[]),
       displayName: "Package Name",
     }),
-    force_transform: flag({ type: boolean, long: "force", short: "f" }),
+    forceTransform: flag({ type: boolean, long: "force", short: "f" }),
   },
-  handler: async ({ package_name, force_transform }) => {
-    await handleAdd(package_name, force_transform);
+  handler: async ({ packages, forceTransform }) => {
+    await handleAdd(packages, forceTransform);
   },
 });
 const new_ = command({

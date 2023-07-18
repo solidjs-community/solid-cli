@@ -7,9 +7,9 @@ import color from "picocolors";
 import { detect } from "detect-package-manager";
 import { $ } from "execa";
 
-export const handleAdd = async (package_name?: Supported[], force_transform: boolean = false) => {
+export const handleAdd = async (packages?: Supported[], forceTransform: boolean = false) => {
   let configs: (typeof integrations)[keyof typeof integrations][] = [];
-  if (!package_name?.length) {
+  if (!packages?.length) {
     const a = await autocomplete({
       message: "Add packages",
       options: (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value })),
@@ -44,7 +44,7 @@ export const handleAdd = async (package_name?: Supported[], force_transform: boo
       if (!shouldInstall) return;
 
       if (Array.isArray(shouldInstall) && shouldInstall[1] === "force") {
-        force_transform = true;
+        forceTransform = true;
       }
 
       configs = a
@@ -61,7 +61,7 @@ export const handleAdd = async (package_name?: Supported[], force_transform: boo
         .filter((p) => p) as typeof configs;
     }
   } else {
-    configs = package_name
+    configs = packages
       .map((n) => {
         if (!n) return;
         const res = integrations[n];
@@ -75,7 +75,7 @@ export const handleAdd = async (package_name?: Supported[], force_transform: boo
   }
   const code = await transform_plugins(
     configs.map((c) => c.pluginOptions),
-    force_transform,
+    forceTransform,
   );
   await writeFile("vite.config.ts", code);
   p.log.success("Config updated");
