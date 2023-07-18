@@ -57,7 +57,7 @@ const handleAutocompleteAdd = async () => {
 
   const configs = a
     .map((opt) => {
-      const n = opt.value;
+      const n = opt.value as Supported;
       if (!n) return;
       const res = integrations[n];
       if (!res) {
