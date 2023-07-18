@@ -3,6 +3,7 @@ import { run, subcommands } from "cmd-ts";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import commands from "./plugins/plugins_entry";
+import { handleAdd } from "./command_handlers/add";
 const possibleActions = [
   { value: "add", label: "Add an integration", hint: "solid add ..." },
   { value: "new", label: "Create new project", hint: "solid new ..." },
@@ -18,7 +19,7 @@ const provideSuggestions = async () => {
   if (!action) return;
   switch (action) {
     case "add":
-      // Launch add autocomplete
+      await handleAdd(undefined, false);
       break;
     case "new":
       // Launch new autocomplete
