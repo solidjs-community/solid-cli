@@ -11,7 +11,7 @@ import { primitives } from "../lib/utils/primitives";
 const handleAutocompleteAdd = async () => {
   const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
   const opts = () => [...supportedIntegrations, ...primitives()];
-  loadPrimitives();
+  loadPrimitives().catch((e) => p.log.error(e));
   const a = await autocomplete({
     message: "Add packages",
     options: opts,
