@@ -1,4 +1,3 @@
-import { exists } from "fs";
 import { open } from "fs/promises";
 import { readFile, writeFile } from "fs/promises";
 export const readFileToString = async (path: string) => {
