@@ -56,22 +56,16 @@ const isIntegration = (str: string) => {
   if (Object.keys(integrations).includes(str)) return true;
   return false;
 };
-const checkPrimitives = async (ps: string[]) => {
+const transformPrimitives = async (ps: string[]) => {
+  if (!ps.length) return [];
   if (!primitives().length) {
     const s = p.spinner();
     s.start("Loading primitives");
     await loadPrimitives();
     s.stop("Primitives loaded");
   }
-  for (const primitive in primitives()) {
-    if (
-      primitives()
-        .map((p) => p.value)
-        .includes(primitive)
-    )
-      return true;
-  }
-  return false;
+  const mappedInput = ps.map((p) => p.replace("@solid-primitives/", ""));
+  return primitives().filter((p) => mappedInput.includes(p.value.replace("@solid-primitives/", "")));
 };
 type Configs = Integrations[keyof Integrations][];
 export const handleAdd = async (packages?: string[], forceTransform: boolean = false) => {
@@ -83,16 +77,13 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
     packages = autocompleted.packages;
     forceTransform = autocompleted.forceTransform;
   }
-  const primitives: string[] = [];
+  const possiblePrimitives: string[] = [];
   const configs: Configs = packages
     .map((n) => {
       if (!n) return;
-      if (n.startsWith("@solid-primitives")) {
-        primitives.push(n);
-        return;
-      }
       if (!isIntegration(n)) {
-        p.log.error(`Unknown integration ${n}`);
+        possiblePrimitives.push(n);
+        return;
       }
       const res = integrations[n as Supported];
       if (!res) {
@@ -102,6 +93,7 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
       return res;
     })
     .filter((p) => p) as Configs;
+
   const code = await transformPlugins(
     configs.map((c) => c.pluginOptions),
     forceTransform,
@@ -113,10 +105,6 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
   });
   const pM = await detect();
   // Check primitives are valid
-  if (!(await checkPrimitives(primitives))) {
-    p.log.error("Invalid primitive" + (primitives.length > 0 ? "s" : ""));
-    return;
-  }
   const s = p.spinner();
   s.start(`Installing packages via ${pM}`);
   // Install plugins
@@ -126,8 +114,8 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
     const { stdout } = await $`${pM} i ${config.pluginOptions.importSource.toLowerCase().split("/")[0]}`;
   }
   // Install primitives
-  for (const primitive of primitives) {
-    const { stdout } = await $`${pM} i ${primitive}`;
+  for (const primitive of await transformPrimitives(possiblePrimitives)) {
+    const { stdout } = await $`${pM} i ${primitive.value}`;
   }
   s.stop("Packages installed");
 };
