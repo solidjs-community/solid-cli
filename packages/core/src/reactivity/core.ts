@@ -1,3 +1,6 @@
+type Getter<T> = () => T;
+type Setter<T> = (val: T | ((val: T | null) => T)) => void;
+type Signal<T> = [Getter<T>, Setter<T>];
 let OBSERVER: Computation<any> | null = null;
 class Computation<T> {
   fn: () => T;
@@ -56,6 +59,14 @@ export function untrack<T>(fn: () => T) {
   OBSERVER = prev;
   return res;
 }
+export function on<T>(deps: Getter<unknown>[] | Getter<unknown>, fn: () => T) {
+  return () => {
+    // Track all getters on call
+    Array.isArray(deps) ? deps.forEach((d) => d()) : deps();
+    // Ensure that the function isn't tracked
+    return untrack(fn);
+  };
+}
 export function createSignal<T>(val: T) {
   const comp = new Computation(() => val);
   const set = (fnOrVal: T | ((val: T | null) => T) | null) => {
@@ -67,7 +78,7 @@ export function createSignal<T>(val: T) {
       comp.set(fnOrVal as T);
     }
   };
-  return [comp.get, set] as [() => T, (val: T | ((val: T | null) => T)) => void];
+  return [comp.get, set] as Signal<T>;
 }
 export function createEffect<T>(fn: () => T) {
   new Computation(fn);
