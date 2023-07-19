@@ -112,10 +112,10 @@ class AutocompleteText<T extends Option> extends Prompt {
     if (this.mode === "explore") this.value = this.options;
 
     createEffect(() => {
-      if (this.mode !== "explore") {
-        this.options = opts.options();
-        this.filteredOptions = sortByGroup(search(this.options, (this.value ?? "").toLowerCase()));
-      }
+      this.options = opts.options();
+      this.filteredOptions = sortByGroup(
+        search(opts.options(), (typeof this.value === "string" ? this.value : "").toLowerCase()),
+      ).slice(0, 12);
       // @ts-ignore
       this.render();
     });
@@ -133,13 +133,13 @@ class AutocompleteText<T extends Option> extends Prompt {
     this.on("value", () => {
       if (this.mode === "explore") return;
       const value = this.value as string;
-      if (this.__cursor >= value.length) {
-        this.valueWithCursor = `${value}${color.inverse(color.hidden("_"))}`;
-      } else {
-        const s1 = value.slice(0, this.__cursor);
-        const s2 = value.slice(this.__cursor);
-        this.valueWithCursor = `${s1}${color.inverse(s2)}${s2.slice(1)}`;
-      }
+      // if (this._cursor >= value.length) {
+      //   this.valueWithCursor = `${value}${color.inverse(color.hidden("_"))}`;
+      // } else {
+      //   const s1 = value.slice(0, this._cursor);
+      //   const s2 = value.slice(this._cursor);
+      //   this.valueWithCursor = `${s1}${color.inverse(s2)}${s2.slice(1)}`;
+      // }
 
       const indexSelector = value.match(/:(\d+)/);
       if (!indexSelector) this.cursor = 0;
@@ -210,7 +210,6 @@ class AutocompleteText<T extends Option> extends Prompt {
         this.value = "";
         this.valueWithCursor = "";
         this.cursor = 0;
-        this._cursor = 0;
         // @ts-ignore
         this.rl.clearLine();
       }

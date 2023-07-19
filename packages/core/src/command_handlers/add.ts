@@ -1,26 +1,20 @@
 import { writeFile } from "fs/promises";
-import { Option, autocomplete } from "../components/autocomplete/autocomplete";
+import { autocomplete } from "../components/autocomplete/autocomplete";
 import { S_BAR } from "../components/autocomplete/utils";
-import { Integrations, PluginOptions, Supported, integrations, transformPlugins } from "../lib/transform";
+import { Integrations, Supported, integrations, transformPlugins } from "../lib/transform";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { detect } from "detect-package-manager";
 import { $ } from "execa";
-import { fetchPrimitives } from "../lib/utils/primitives";
-import { createSignal } from "../reactivity/core";
-
+import { loadPrimitives } from "../lib/utils/primitives";
+import { primitives } from "../lib/utils/primitives";
 const handleAutocompleteAdd = async () => {
-  const [g, s] = createSignal<Option[]>(
-    (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value })),
-  );
-
-  setTimeout(() => {
-    fetchPrimitives().then((r) => s([...g(), ...r]));
-  }, 2000);
-
+  const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
+  const opts = () => [...supportedIntegrations, ...primitives()];
+  loadPrimitives().catch((e) => p.log.error(e));
   const a = await autocomplete({
     message: "Add packages",
-    options: g,
+    options: opts,
   });
 
   if (p.isCancel(a)) {
@@ -54,11 +48,28 @@ const handleAutocompleteAdd = async () => {
   if (Array.isArray(shouldInstall) && shouldInstall[1] === "force") {
     forceTransform = true;
   }
+  const packages = a.map((opt) => opt.value as Supported);
 
-  const configs = a
-    .map((opt) => {
-      const n = opt.value;
+  return { packages, forceTransform };
+};
+type Configs = Integrations[keyof Integrations][];
+export const handleAdd = async (packages?: Supported[], forceTransform: boolean = false) => {
+  if (!packages?.length) {
+    const autocompleted = await handleAutocompleteAdd();
+
+    if (!autocompleted) return;
+
+    packages = autocompleted.packages;
+    forceTransform = autocompleted.forceTransform;
+  }
+  const primitives: string[] = [];
+  const configs: Configs = packages
+    .map((n) => {
       if (!n) return;
+      if (n.startsWith("@solid-primitives")) {
+        primitives.push(n);
+        return;
+      }
       const res = integrations[n];
       if (!res) {
         p.log.error(`Can't automatically configure ${n}: we don't support it.`);
@@ -66,33 +77,7 @@ const handleAutocompleteAdd = async () => {
       }
       return res;
     })
-    .filter((p) => p) as Integrations[keyof Integrations][];
-
-  return { configs, forceTransform };
-};
-
-export const handleAdd = async (packages?: Supported[], forceTransform: boolean = false) => {
-  let configs: Integrations[keyof Integrations][] = [];
-  if (!packages?.length) {
-    const autocompleted = await handleAutocompleteAdd();
-
-    if (!autocompleted) return;
-
-    configs = autocompleted.configs;
-    forceTransform = autocompleted.forceTransform;
-  } else {
-    configs = packages
-      .map((n) => {
-        if (!n) return;
-        const res = integrations[n];
-        if (!res) {
-          p.log.error(`Can't automatically configure ${n}: we don't support it.`);
-          return;
-        }
-        return res;
-      })
-      .filter((p) => p) as typeof configs;
-  }
+    .filter((p) => p) as Configs;
   const code = await transformPlugins(
     configs.map((c) => c.pluginOptions),
     forceTransform,
@@ -105,10 +90,15 @@ export const handleAdd = async (packages?: Supported[], forceTransform: boolean 
   const pM = await detect();
   const s = p.spinner();
   s.start(`Installing packages via ${pM}`);
+  // Install plugins
   for (let i = 0; i < configs.length; i++) {
     const config = configs[i];
 
     const { stdout } = await $`${pM} i ${config.pluginOptions.importSource.toLowerCase().split("/")[0]}`;
+  }
+  // Install primitives
+  for (const primitive of primitives) {
+    const { stdout } = await $`${pM} i ${primitive}`;
   }
   s.stop("Packages installed");
 };
