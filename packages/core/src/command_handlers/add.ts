@@ -56,6 +56,9 @@ const isIntegration = (str: string) => {
   if (Object.keys(integrations).includes(str)) return true;
   return false;
 };
+/**
+ * Transforms a list containing primitives, either by name or full package name, and returns the corresponding primitive objects
+ */
 const transformPrimitives = async (ps: string[]) => {
   if (!ps.length) return [];
   if (!primitives().length) {
@@ -104,7 +107,7 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
     await cfg.postInstall?.();
   });
   const pM = await detect();
-  // Check primitives are valid
+
   const s = p.spinner();
   s.start(`Installing packages via ${pM}`);
   // Install plugins
