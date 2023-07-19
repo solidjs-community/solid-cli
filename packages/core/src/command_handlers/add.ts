@@ -52,8 +52,29 @@ const handleAutocompleteAdd = async () => {
 
   return { packages, forceTransform };
 };
+const isIntegration = (str: string) => {
+  if (Object.keys(integrations).includes(str)) return true;
+  return false;
+};
+const checkPrimitives = async (ps: string[]) => {
+  if (!primitives().length) {
+    const s = p.spinner();
+    s.start("Loading primitives");
+    await loadPrimitives();
+    s.stop("Primitives loaded");
+  }
+  for (const primitive in primitives()) {
+    if (
+      primitives()
+        .map((p) => p.value)
+        .includes(primitive)
+    )
+      return true;
+  }
+  return false;
+};
 type Configs = Integrations[keyof Integrations][];
-export const handleAdd = async (packages?: Supported[], forceTransform: boolean = false) => {
+export const handleAdd = async (packages?: string[], forceTransform: boolean = false) => {
   if (!packages?.length) {
     const autocompleted = await handleAutocompleteAdd();
 
@@ -70,7 +91,10 @@ export const handleAdd = async (packages?: Supported[], forceTransform: boolean 
         primitives.push(n);
         return;
       }
-      const res = integrations[n];
+      if (!isIntegration(n)) {
+        p.log.error(`Unknown integration ${n}`);
+      }
+      const res = integrations[n as Supported];
       if (!res) {
         p.log.error(`Can't automatically configure ${n}: we don't support it.`);
         return;
@@ -88,6 +112,11 @@ export const handleAdd = async (packages?: Supported[], forceTransform: boolean 
     await cfg.postInstall?.();
   });
   const pM = await detect();
+  // Check primitives are valid
+  if (!(await checkPrimitives(primitives))) {
+    p.log.error("Invalid primitive" + (primitives.length > 0 ? "s" : ""));
+    return;
+  }
   const s = p.spinner();
   s.start(`Installing packages via ${pM}`);
   // Install plugins

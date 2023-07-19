@@ -4,7 +4,6 @@ import { startCommands } from "./start";
 import * as p from "@clack/prompts";
 import { execa } from "execa";
 import { boolean, command, flag, optional, positional, restPositionals, string } from "cmd-ts";
-import { Supported, integrations } from "../lib/transform";
 import { oneOf } from "../lib/utils/oneOf";
 import { handleAdd } from "../command_handlers/add";
 
@@ -23,7 +22,7 @@ const add = command({
   description: "Can add and install integrations: `solid add unocss`.",
   args: {
     packages: restPositionals({
-      type: oneOf(Object.keys(integrations) as Supported[]),
+      type: string,
       displayName: "Package Name",
     }),
     forceTransform: flag({ type: boolean, long: "force", short: "f" }),

@@ -80,4 +80,4 @@ export const integrations = {
       options: {},
     },
   },
-} as const;
+};
