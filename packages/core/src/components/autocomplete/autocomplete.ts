@@ -115,7 +115,7 @@ class AutocompleteText<T extends Option> extends Prompt {
       this.options = opts.options();
       this.filteredOptions = sortByGroup(
         search(opts.options(), (typeof this.value === "string" ? this.value : "").toLowerCase()),
-      ).slice(0, 12);
+      );
       // @ts-ignore
       this.render();
     });
@@ -131,18 +131,25 @@ class AutocompleteText<T extends Option> extends Prompt {
     });
 
     this.on("value", () => {
+      if (this.value[this.value.length - 1] === "/" && this.mode === "explore") {
+        // @ts-ignore
+        this.rl.clearLine();
+        this.value = "";
+        this.mode = "search";
+        return;
+      }
       if (this.mode === "explore") return;
       const value = this.value as string;
-      // if (this._cursor >= value.length) {
-      //   this.valueWithCursor = `${value}${color.inverse(color.hidden("_"))}`;
-      // } else {
-      //   const s1 = value.slice(0, this._cursor);
-      //   const s2 = value.slice(this._cursor);
-      //   this.valueWithCursor = `${s1}${color.inverse(s2)}${s2.slice(1)}`;
-      // }
+      if (this._cursor >= value.length) {
+        this.valueWithCursor = `${value}${color.inverse(color.hidden("_"))}`;
+      } else {
+        const s1 = value.slice(0, this._cursor);
+        const s2 = value.slice(this._cursor);
+        this.valueWithCursor = `${s1}${color.inverse(s2)}${s2.slice(1)}`;
+      }
 
       const indexSelector = value.match(/:(\d+)/);
-      if (!indexSelector) this.cursor = 0;
+      // if (!indexSelector) this.cursor = 0;
 
       const last = value[value.length - 1];
       if (last === ":") {
@@ -168,7 +175,13 @@ class AutocompleteText<T extends Option> extends Prompt {
         return;
       }
 
+      const before = this.filteredOptions.length;
       this.filteredOptions = sortByGroup(search(this.options, value.toLowerCase()));
+      const after = this.filteredOptions.length;
+
+      if (before !== after) {
+        this.cursor = 0;
+      }
     });
     this.on("cursor", (key) => {
       if (this.mode === "explore" && key === "/") return;
@@ -183,7 +196,6 @@ class AutocompleteText<T extends Option> extends Prompt {
           break;
         case "tab":
           this.toggleValue();
-
           break;
       }
     });
@@ -204,19 +216,9 @@ class AutocompleteText<T extends Option> extends Prompt {
       }
       // @ts-ignore
       this.rl.clearLine();
-    } else if (char === "/") {
-      if (this.mode === "explore") {
-        this.mode = "search";
-        this.value = "";
-        this.valueWithCursor = "";
-        this.cursor = 0;
-        // @ts-ignore
-        this.rl.clearLine();
-      }
     } else if (key?.name === "escape") {
       if (this.mode === "search") {
         this.mode = "explore";
-        this.cursor = 0;
         return;
       }
     }
@@ -268,9 +270,11 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
       const noResults = color.red("No results");
 
       let uniqueGroups = new Set();
+      let start = Math.max(0, this.cursor - 11);
       const filteredOptions = this.filteredOptions
         .map((option, i) => {
-          const active = (i === 0 && this.mode === "search") || (this.mode === "explore" && i === this.cursor);
+          if (i < start || i > start + 11) return;
+
           const selected = this.selected.find((v) => v.value === option.value) !== undefined;
           const has = option.group && uniqueGroups.has(option.group);
           if (!has && option.group) {
@@ -279,16 +283,20 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
 
           const isFocused = this.cursor === i;
 
+          const active = (i === 0 && this.mode === "search") || (this.mode === "explore" && isFocused);
           const state = selected ? "selected" : active ? "active" : "inactive";
 
           const spacing = i > 9 ? " " : "  ";
 
           const groupView = `${
-            has || !option.group ? "" : `\n${color.cyan(S_BAR)}${color.bgBlue(color.black(option.group))}`
+            has || !option.group
+              ? ""
+              : `\n${color.cyan(S_BAR)}${color.bgBlue(color.black(option.group + ` ${this.cursor}`))}`
           } ${!has && option.group ? `\n${color.cyan(S_BAR)}   ` : ""}`;
 
           return groupView + `${i}:${spacing}` + (isFocused ? color.bgBlack(opt(option, state)) : opt(option, state));
         })
+        .filter(Boolean)
         .join(`\n${color.cyan(S_BAR)}  `);
 
       // prettier-ignore
