@@ -289,9 +289,7 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
           const spacing = i > 9 ? " " : "  ";
 
           const groupView = `${
-            has || !option.group
-              ? ""
-              : `\n${color.cyan(S_BAR)}${color.bgBlue(color.black(option.group + ` ${this.cursor}`))}`
+            has || !option.group ? "" : `\n${color.cyan(S_BAR)}${color.bgBlue(color.black(option.group))}`
           } ${!has && option.group ? `\n${color.cyan(S_BAR)}   ` : ""}`;
 
           return groupView + `${i}:${spacing}` + (isFocused ? color.bgBlack(opt(option, state)) : opt(option, state));

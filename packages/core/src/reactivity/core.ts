@@ -63,6 +63,8 @@ export function createSignal<T>(val: T) {
       let fn = fnOrVal as (val: T | null) => T;
       const newVal = fn(untrack(comp.get));
       comp.set(newVal);
+    } else {
+      comp.set(fnOrVal as T);
     }
   };
   return [comp.get, set] as [() => T, (val: T | ((val: T | null) => T)) => void];
