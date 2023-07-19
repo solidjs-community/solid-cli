@@ -1,7 +1,7 @@
 import { Key } from "node:readline";
 import { Prompt } from "@clack/core";
 import { TextOptions } from "@clack/prompts";
-import { S_CHECKBOX_ACTIVE, S_CHECKBOX_SELECTED, S_CHECKBOX_INACTIVE, S_BAR, S_BAR_END, box } from "./utils";
+import { S_CHECKBOX_ACTIVE, S_CHECKBOX_SELECTED, S_CHECKBOX_INACTIVE, S_BAR, S_BAR_END, box, S_INFO } from "./utils";
 import color from "picocolors";
 import { createEffect } from "../../reactivity/core";
 
@@ -67,6 +67,13 @@ const opt = (
   return `${color.dim(S_CHECKBOX_INACTIVE)} ${color.dim(label)}`;
 };
 
+const aliases = new Map([
+  ["k", "up"],
+  ["j", "down"],
+  ["h", "left"],
+  ["l", "right"],
+]);
+
 interface AutocompleteTextOptions<T extends Option> extends TextOptions {
   options: () => T[];
   render: (this: Omit<AutocompleteText<T>, "prompt">) => string | void;
@@ -76,14 +83,24 @@ class AutocompleteText<T extends Option> extends Prompt {
   valueWithCursor = "";
   options: T[];
 
-  get cursor() {
+  get __cursor() {
     return this._cursor;
   }
+  cursor: number = 0;
 
   filteredOptions: T[];
   selected: T[];
 
-  focusIndex: number = 0;
+  mode: "search" | "explore" = "explore";
+
+  private toggleValue() {
+    const cursorOption = this.filteredOptions[this.cursor];
+    const selected = this.selected.find((v) => v.value === cursorOption.value) !== undefined;
+
+    this.selected = selected
+      ? this.selected.filter((v) => v.value !== cursorOption.value)
+      : [...this.selected, cursorOption];
+  }
 
   constructor(opts: AutocompleteTextOptions<T>) {
     super(opts);
@@ -92,9 +109,14 @@ class AutocompleteText<T extends Option> extends Prompt {
     this.filteredOptions = opts.options();
     this.selected = [];
 
+    if (this.mode === "explore") this.value = this.options;
+
     createEffect(() => {
-      this.options = opts.options();
-      this.filteredOptions = sortByGroup(search(this.options, (this.value ?? "").toLowerCase()));
+      if (this.mode !== "explore") {
+        this.options = opts.options();
+        this.filteredOptions = sortByGroup(search(this.options, (this.value ?? "").toLowerCase()));
+      }
+      // @ts-ignore
       this.render();
     });
 
@@ -109,17 +131,18 @@ class AutocompleteText<T extends Option> extends Prompt {
     });
 
     this.on("value", () => {
+      if (this.mode === "explore") return;
       const value = this.value as string;
-      if (this.cursor >= value.length) {
+      if (this.__cursor >= value.length) {
         this.valueWithCursor = `${value}${color.inverse(color.hidden("_"))}`;
       } else {
-        const s1 = value.slice(0, this.cursor);
-        const s2 = value.slice(this.cursor);
+        const s1 = value.slice(0, this.__cursor);
+        const s2 = value.slice(this.__cursor);
         this.valueWithCursor = `${s1}${color.inverse(s2)}${s2.slice(1)}`;
       }
 
       const indexSelector = value.match(/:(\d+)/);
-      if (!indexSelector) this.focusIndex = 0;
+      if (!indexSelector) this.cursor = 0;
 
       const last = value[value.length - 1];
       if (last === ":") {
@@ -141,19 +164,38 @@ class AutocompleteText<T extends Option> extends Prompt {
           this.state = "error";
           return;
         }
-        this.focusIndex = index;
+        this.cursor = index;
         return;
       }
 
       this.filteredOptions = sortByGroup(search(this.options, value.toLowerCase()));
     });
+    this.on("cursor", (key) => {
+      if (this.mode === "explore" && key === "/") return;
+      switch (key) {
+        case "left":
+        case "up":
+          this.cursor = this.cursor === 0 ? this.filteredOptions.length - 1 : this.cursor - 1;
+          break;
+        case "down":
+        case "right":
+          this.cursor = this.cursor === this.filteredOptions.length - 1 ? 0 : this.cursor + 1;
+          break;
+        case "tab":
+          this.toggleValue();
 
+          break;
+      }
+    });
     this.input.on("keypress", this.customKeyPress);
   }
 
   private customKeyPress(char: string, key?: Key) {
+    if (this.mode === "explore" && key?.name && aliases.has(key.name)) {
+      this.emit("cursor", aliases.get(key.name));
+    }
     if (key?.name === "tab") {
-      const focusedOption = this.filteredOptions[this.focusIndex];
+      const focusedOption = this.filteredOptions[this.cursor];
       const selected = this.selected.find((v) => v?.value === focusedOption?.value) !== undefined;
       if (selected) {
         this.selected = this.selected.filter((v) => v !== focusedOption);
@@ -162,6 +204,22 @@ class AutocompleteText<T extends Option> extends Prompt {
       }
       // @ts-ignore
       this.rl.clearLine();
+    } else if (char === "/") {
+      if (this.mode === "explore") {
+        this.mode = "search";
+        this.value = "";
+        this.valueWithCursor = "";
+        this.cursor = 0;
+        this._cursor = 0;
+        // @ts-ignore
+        this.rl.clearLine();
+      }
+    } else if (key?.name === "escape") {
+      if (this.mode === "search") {
+        this.mode = "explore";
+        this.cursor = 0;
+        return;
+      }
     }
   }
 }
@@ -177,8 +235,15 @@ const getTerminalSize = () => {
 
 const space = (n: number) => ` `.repeat(n);
 
-const instructions =
-  `${color.dim(S_BAR)} ` + color.dim(`Tab to select | Ctrl-C to cancel | :<number> to highlight by index`);
+const BULLET = "•";
+
+const instructions = color.gray(
+  `↓/j down ${BULLET} ↑/k up ${BULLET} tab select ${BULLET} Ctrl-C cancel ${BULLET} / filter`,
+);
+
+const searchInstructions = color.gray(
+  `tab select ${BULLET} ESC cancel filter ${BULLET} :<number> to highlight by index`,
+);
 
 export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOptions<T>, "render">) => {
   return new AutocompleteText({
@@ -189,28 +254,31 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
     defaultValue: opts.defaultValue,
     initialValue: opts.initialValue,
     render() {
-      const selected = this.selected.map((option, i) => `${color.red(option.label)}`).join(" ");
+      const selected =
+        this.selected.length === 0
+          ? color.gray("Nothing selected")
+          : this.selected.map((option, i) => `${color.red(option.label)}`).join(" ");
       const placeholder = opts.placeholder
         ? color.inverse(opts.placeholder[0]) + color.dim(opts.placeholder.slice(1))
         : color.inverse(color.hidden("_"));
 
       const value = typeof this.value === "string" ? (!this.value ? placeholder : this.valueWithCursor) : "";
 
-      const textView = `${color.cyan("?")} Pick your packages: ` + value + "\n";
+      const textView = `${color.cyan("?")} Filter: ` + value + "\n";
 
       const noResults = color.red("No results");
 
       let uniqueGroups = new Set();
       const filteredOptions = this.filteredOptions
         .map((option, i) => {
-          const active = i === 0;
+          const active = (i === 0 && this.mode === "search") || (this.mode === "explore" && i === this.cursor);
           const selected = this.selected.find((v) => v.value === option.value) !== undefined;
           const has = option.group && uniqueGroups.has(option.group);
           if (!has && option.group) {
             uniqueGroups.add(option.group);
           }
 
-          const isFocused = this.focusIndex === i;
+          const isFocused = this.cursor === i;
 
           const state = selected ? "selected" : active ? "active" : "inactive";
 
@@ -231,11 +299,10 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
         `${color.cyan(S_BAR)} \n ${color.cyan(S_BAR)} ${color.yellow(
           S_CHECKBOX_SELECTED,
         )} Selected Packages: ${selected}\n${color.cyan(S_BAR)} \n` +
-        `${color.cyan(S_BAR)} ` +
-        textView +
+        (this.mode === "search" ? `${color.cyan(S_BAR)} ` + textView : "") +
         options +
         "\n" +
-        instructions
+        (this.mode === "search" ? searchInstructions : instructions)
       );
     },
   }).prompt() as Promise<T[] | symbol>;
