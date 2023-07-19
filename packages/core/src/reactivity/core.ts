@@ -49,11 +49,28 @@ class Computation<T> {
     this.observers.forEach((o) => o.decrement());
   }
 }
-
+export function untrack<T>(fn: () => T) {
+  const prev = OBSERVER;
+  OBSERVER = null;
+  const res = fn();
+  OBSERVER = prev;
+  return res;
+}
 export function createSignal<T>(val: T) {
   const comp = new Computation(() => val);
-  return [comp.get, comp.set] as [() => T, (val: T) => void];
+  const set = (fnOrVal: T | ((val: T | null) => T) | null) => {
+    if (typeof fnOrVal === "function") {
+      let fn = fnOrVal as (val: T | null) => T;
+      const newVal = fn(untrack(comp.get));
+      comp.set(newVal);
+    }
+  };
+  return [comp.get, set] as [() => T, (val: T | ((val: T | null) => T)) => void];
 }
 export function createEffect<T>(fn: () => T) {
   new Computation(fn);
+}
+export function createMemo<T>(fn: () => T) {
+  const comp = new Computation(fn);
+  return comp.get;
 }
