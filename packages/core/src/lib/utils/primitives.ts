@@ -1,6 +1,6 @@
 import { tmpdir } from "os";
 import type { Option } from "../../components/autocomplete/autocomplete";
-import { createSignal } from "../../../../reactivity/src";
+import { createSignal } from "@solid-cli/reactivity";
 import { readFile, writeFile } from "fs/promises";
 export const [primitives, setPrimitives] = createSignal<Option[]>([]);
 const fetchPrimitives = async () => {

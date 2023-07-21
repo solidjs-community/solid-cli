@@ -16,7 +16,8 @@
     "detect-package-manager": "^2.0.1",
     "execa": "^7.1.1",
     "picocolors": "^1.0.0",
-    "tsup": "^7.1.0"
+    "tsup": "^7.1.0",
+    "@solid-cli/reactivity": "workspace:*"
   },
   "scripts": {
     "start": "jiti ./src/index.ts",
