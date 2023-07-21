@@ -2,9 +2,9 @@
   <img width="100%" src="https://assets.solidjs.com/banner?type=CLI&background=tiles&project=%20" alt="Solid CLI">
 </p>
 
-# Solid CLI
+# Solid CLI (This is currently very much still in beta)
 
-A custom CLI built for the purpose of installing and managing SolidJS apps and projets. The goal of the CLI is to provide a usefu and powerful utility to installing any dependencies, searching the Solid ecosystem etc.
+A custom CLI built for the purpose of installing and managing SolidJS apps and projects. The goal of the CLI is to provide a useful and powerful utility to installing any dependencies, searching the Solid ecosystem etc.
 
 # Roadmap/Features
 
