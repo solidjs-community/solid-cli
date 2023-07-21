@@ -1,6 +1,6 @@
 {
   "name": "@solid-cli/core",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "dist/index.mjs",
   "bin": {
     "solid": "./dist/index.mjs"
@@ -26,5 +26,8 @@
   "devDependencies": {
     "@types/node": "^20.4.1",
     "jiti": "^1.17.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -5,7 +5,8 @@
 	"description": "A CLI for making the solidjs development experience easier, faster, and less error prone.",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "turbo run build"
+		"build": "turbo run build",
+		"release": "pnpm build && changeset publish"
 	},
 	"keywords": [],
 	"author": "",
@@ -15,5 +16,8 @@
 	],
 	"dependencies": {
 		"turbo": "^1.10.9"
+	},
+	"devDependencies": {
+		"@changesets/cli": "2.26.2"
 	}
 }
