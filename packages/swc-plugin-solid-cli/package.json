@@ -1,5 +1,5 @@
 {
-	"name": "swc-plugin-solid-cli",
+	"name": "@solid-cli/swc-plugin-solid-cli",
 	"version": "0.1.0",
 	"description": "An SWC plugin for transforming a project's vite config",
 	"author": "Thomas Beer",
@@ -9,7 +9,8 @@
 	],
 	"main": "target/wasm32-wasi/release/swc_plugin_solid_cli.wasm",
 	"scripts": {
-		"prepublishOnly": "cargo build-wasi --release"
+		"prepublishOnly": "cargo build-wasi --release",
+		"build": ""
 	},
 	"files": [],
 	"preferUnplugged": true

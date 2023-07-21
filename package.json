@@ -1,12 +1,19 @@
 {
 	"name": "solid-cli",
-	"private": "true",
+	"private": true,
 	"version": "0.0.1",
 	"description": "A CLI for making the solidjs development experience easier, faster, and less error prone.",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "turbo run build --filter='./packages/*'"
 	},
 	"keywords": [],
 	"author": "",
-	"license": "MIT"
+	"license": "MIT",
+	"workspaces": [
+		"./packages/*"
+	],
+	"dependencies": {
+		"turbo": "^1.9.9"
+	}
 }

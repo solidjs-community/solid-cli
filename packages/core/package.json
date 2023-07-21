@@ -1,11 +1,13 @@
 {
-  "name": "solid-cli",
-  "private": true,
+  "name": "@solid-cli/core",
   "version": "0.0.0",
   "main": "dist/index.mjs",
   "bin": {
     "solid": "./dist/index.mjs"
   },
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@clack/core": "0.3.2",
     "@clack/prompts": "0.6.3",
