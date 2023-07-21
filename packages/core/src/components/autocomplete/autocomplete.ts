@@ -3,7 +3,7 @@ import { Prompt } from "@clack/core";
 import { TextOptions } from "@clack/prompts";
 import { S_CHECKBOX_ACTIVE, S_CHECKBOX_SELECTED, S_CHECKBOX_INACTIVE, S_BAR, S_BAR_END, box, S_INFO } from "./utils";
 import color from "picocolors";
-import { createEffect } from "../../reactivity/core";
+import { createEffect } from "../../../../reactivity/src";
 
 export type Option = { value: any; label?: string; hint?: string; group?: string };
 
