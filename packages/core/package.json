@@ -1,6 +1,7 @@
 {
   "name": "@solid-cli/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "description": "A CLI for Solid",
   "main": "dist/index.mjs",
   "bin": {
     "solid": "./dist/index.mjs"
@@ -16,7 +17,6 @@
     "detect-package-manager": "^2.0.1",
     "execa": "^7.1.1",
     "picocolors": "^1.0.0",
-    "tsup": "^7.1.0",
     "@solid-cli/reactivity": "workspace:*"
   },
   "scripts": {
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.4.1",
+    "tsup": "^7.1.0",
     "jiti": "^1.17.0"
   },
   "publishConfig": {

@@ -1,7 +1,7 @@
 {
 	"name": "@solid-cli/reactivity",
-	"version": "0.0.1",
-	"description": "",
+	"version": "0.0.2",
+	"description": "The minimal, eager reactive system that powers the Solid CLI",
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
 	"types": "./types/index.d.ts",
@@ -17,7 +17,7 @@
 	},
 	"author": "",
 	"license": "MIT",
-	"dependencies": {
+	"devDependencies": {
 		"tsup": "^7.1.0",
 		"typescript": "^5.1.6"
 	},
