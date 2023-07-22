@@ -7,9 +7,9 @@
 	"keywords": [
 		"swc-plugin"
 	],
-	"main": "target/wasm32-wasi/release/swc_plugin_solid_cli.wasm",
+	"main": "output/swc_plugin_solid_cli.wasm",
 	"scripts": {
-		"prepublishOnly": "cargo build-wasi --release",
+		"prepublishOnly": "cargo build-wasi --release --out-dir=./output -Z unstable-options",
 		"build": ""
 	},
 	"files": [],

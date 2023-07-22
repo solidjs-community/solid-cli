@@ -27,6 +27,9 @@ importers:
       '@solid-cli/reactivity':
         specifier: workspace:*
         version: link:../reactivity
+      '@solid-cli/swc-plugin-solid-cli':
+        specifier: workspace:*
+        version: link:../swc-plugin-solid-cli
       '@swc/core':
         specifier: ^1.3.68
         version: 1.3.68
@@ -43,6 +46,9 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
     devDependencies:
+      '@chialab/esbuild-plugin-meta-url':
+        specifier: ^0.17.7
+        version: 0.17.7
       '@types/node':
         specifier: ^20.4.1
         version: 20.4.1
@@ -276,6 +282,36 @@ packages:
       fs-extra: 7.0.1
       human-id: 1.0.2
       prettier: 2.8.8
+    dev: true
+
+  /@chialab/esbuild-plugin-meta-url@0.17.7:
+    resolution: {integrity: sha512-f4Eg/+XSrcf9JlYUjI8IEupMOuGR7P3hMlfdbE8aMHM0+PJSIYeFV+udMZyNmSpCYfO3dpVtdulv5QDZfTvzWg==}
+    engines: {node: '>=13'}
+    dependencies:
+      '@chialab/esbuild-rna': 0.17.8
+      '@chialab/estransform': 0.17.4
+      '@chialab/node-resolve': 0.17.1
+      mime-types: 2.1.35
+    dev: true
+
+  /@chialab/esbuild-rna@0.17.8:
+    resolution: {integrity: sha512-hovU4W5zlyMnbJjexdczpQ9mcUfFsJuv9FWUhzpXiQwPprlp5lul+frTed9s8AyVDTDq2yq3Gx2Ac411QsXYGA==}
+    engines: {node: '>=13'}
+    dependencies:
+      '@chialab/estransform': 0.17.4
+      '@chialab/node-resolve': 0.17.1
+    dev: true
+
+  /@chialab/estransform@0.17.4:
+    resolution: {integrity: sha512-p4nf8ECdmanwbRK6A/X/VYtJfkBk5vgChPh0GiCyZAPt6/mKPbe0v3y9WjLHfFdkv1bzjJzP3pjTJ1SZ1E1U8Q==}
+    engines: {node: '>=13'}
+    dependencies:
+      '@parcel/source-map': 2.1.1
+    dev: true
+
+  /@chialab/node-resolve@0.17.1:
+    resolution: {integrity: sha512-YWaK0MKKeB0FILI6j7qiAlGoSC9MqJZDFXzlAgfOaMCbn8Feqh6njxv7mI3oVkdi7QwV6zPRaTN6hKig/NriMA==}
+    engines: {node: '>=13'}
     dev: true
 
   /@clack/core@0.3.2:
@@ -566,6 +602,13 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
+    dev: true
+
+  /@parcel/source-map@2.1.1:
+    resolution: {integrity: sha512-Ejx1P/mj+kMjQb8/y5XxDUn4reGdr+WyKYloBljpppUy8gs42T+BNoEOuRYqDVdgPc6NxduzIDoJS9pOFfV5Ew==}
+    engines: {node: ^12.18.3 || >=14}
+    dependencies:
+      detect-libc: 1.0.3
     dev: true
 
   /@swc/core-darwin-arm64@1.3.68:
@@ -1031,6 +1074,12 @@ packages:
   /detect-indent@6.1.0:
     resolution: {integrity: sha512-reYkTUJAZb9gUuZ2RvVCNhVHdg62RHnJ7WJl8ftMi4diZ6NWlciOzQN88pUhSELEwflJht4oQDv0F0BMlwaYtA==}
     engines: {node: '>=8'}
+    dev: true
+
+  /detect-libc@1.0.3:
+    resolution: {integrity: sha512-pGjwhsmsp4kL2RTz08wcOlGN83otlqHeD/Z5T8GXZB+/YcpQ/dgo+lbU8ZsGxV0HIvqqxo9l7mqYwyYMD9bKDg==}
+    engines: {node: '>=0.10'}
+    hasBin: true
     dev: true
 
   /detect-package-manager@2.0.1:
@@ -1814,6 +1863,18 @@ packages:
     dependencies:
       braces: 3.0.2
       picomatch: 2.3.1
+    dev: true
+
+  /mime-db@1.52.0:
+    resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
+    engines: {node: '>= 0.6'}
+    dev: true
+
+  /mime-types@2.1.35:
+    resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
+    engines: {node: '>= 0.6'}
+    dependencies:
+      mime-db: 1.52.0
     dev: true
 
   /mimic-fn@2.1.0:

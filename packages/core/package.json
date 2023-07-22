@@ -12,21 +12,23 @@
   "dependencies": {
     "@clack/core": "0.3.2",
     "@clack/prompts": "0.6.3",
+    "@solid-cli/reactivity": "workspace:*",
+    "@solid-cli/swc-plugin-solid-cli": "workspace:*",
     "@swc/core": "^1.3.68",
     "cmd-ts": "^0.12.1",
     "detect-package-manager": "^2.0.1",
     "execa": "^7.1.1",
-    "picocolors": "^1.0.0",
-    "@solid-cli/reactivity": "workspace:*"
+    "picocolors": "^1.0.0"
   },
   "scripts": {
     "start": "jiti ./src/index.ts",
-    "build": "tsup && jiti scripts/post_build.ts"
+    "build": "tsup"
   },
   "devDependencies": {
+    "@chialab/esbuild-plugin-meta-url": "^0.17.7",
     "@types/node": "^20.4.1",
-    "tsup": "^7.1.0",
-    "jiti": "^1.17.0"
+    "jiti": "^1.17.0",
+    "tsup": "^7.1.0"
   },
   "publishConfig": {
     "access": "public"
