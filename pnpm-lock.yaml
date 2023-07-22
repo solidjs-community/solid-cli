@@ -13,7 +13,7 @@ importers:
         version: 1.10.9
     devDependencies:
       '@changesets/cli':
-        specifier: latest
+        specifier: 2.26.2
         version: 2.26.2
 
   packages/core:
