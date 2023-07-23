@@ -20,7 +20,7 @@ const provideSuggestions = async () => {
   if (!action) return;
   switch (action) {
     case "add":
-      await handleAdd(undefined, false);
+      await handleAdd();
       break;
     case "new":
       await handleNew();
