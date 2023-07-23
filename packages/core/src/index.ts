@@ -4,6 +4,7 @@ import * as p from "@clack/prompts";
 import color from "picocolors";
 import commands from "./plugins/plugins_entry";
 import { handleAdd } from "./command_handlers/add";
+import { handleNew } from "./command_handlers/new";
 const possibleActions = [
   { value: "add", label: "Add an integration", hint: "solid add ..." },
   { value: "new", label: "Create new project", hint: "solid new ..." },
@@ -22,7 +23,7 @@ const provideSuggestions = async () => {
       await handleAdd(undefined, false);
       break;
     case "new":
-      // Launch new autocomplete
+      await handleNew();
       break;
     case "start":
       // Launch start autocomplete

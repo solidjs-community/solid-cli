@@ -6,17 +6,8 @@ import { execa } from "execa";
 import { boolean, command, flag, optional, positional, restPositionals, string } from "cmd-ts";
 import { oneOf } from "../lib/utils/oneOf";
 import { handleAdd } from "../command_handlers/add";
+import { handleNew } from "../command_handlers/new";
 
-const getRunner = (pM: PM) => {
-  switch (pM) {
-    case "npm":
-      return "npx";
-    case "yarn":
-      return "npx";
-    case "pnpm":
-      return "pnpx";
-  }
-};
 const add = command({
   name: "add",
   description: "Can add and install integrations: `solid add unocss`.",
@@ -36,7 +27,7 @@ const new_ = command({
   description: "Creates a new solid project",
   args: {
     variation: positional({
-      type: oneOf(["bare", "ts", "js"] as const),
+      type: optional(oneOf(["bare", "ts", "js"] as const)),
       displayName: "The variation to create, for example `bare`",
       description: "",
     }),
@@ -48,19 +39,8 @@ const new_ = command({
     stackblitz: flag({ type: boolean, long: "stackblitz", short: "s" }),
   },
   async handler({ variation, name, stackblitz }) {
-    if (stackblitz) {
-      const s = p.spinner();
-      s.start(`Opening ${variation} in browser`);
-      await openInBrowser(`https://solid.new/${variation}`);
-      s.stop();
-      p.log.success("Successfully Opened in Browser");
-      return;
-    }
-    const pM = await detect();
-    const { stdout } = await execa(
-      getRunner(pM),
-      ["degit", `solidjs/templates/${variation}`, name ?? null].filter((e) => e !== null) as string[],
-    );
+    if (!name) name = `solid-${variation}`;
+    await handleNew(variation, name, stackblitz);
   },
 });
 const docs = command({
