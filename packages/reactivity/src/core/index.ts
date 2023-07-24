@@ -25,7 +25,13 @@ export class Computation<T> {
 		this.value = newVal;
 		this.notifyObservers();
 	};
+	removeParentObservers() {
+		if (!this.sources) return;
+		this.sources.forEach((s) => s.observers.delete(this));
+		this.observers.clear();
+	}
 	update() {
+		this.removeParentObservers();
 		const prev = OBSERVER;
 		OBSERVER = this;
 		const newVal = this.fn();
