@@ -22,13 +22,14 @@ export class Computation<T> {
 		return this.value;
 	};
 	set = (newVal: T) => {
+		if (newVal === this.value) return;
 		this.value = newVal;
 		this.notifyObservers();
 	};
 	removeParentObservers() {
 		if (!this.sources) return;
 		this.sources.forEach((s) => s.observers.delete(this));
-		this.observers.clear();
+		this.sources.clear();
 	}
 	update() {
 		this.removeParentObservers();
