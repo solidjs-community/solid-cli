@@ -7,14 +7,13 @@ settings:
 importers:
 
   .:
-    dependencies:
-      turbo:
-        specifier: ^1.10.10
-        version: 1.10.10
     devDependencies:
       '@changesets/cli':
         specifier: 2.26.2
         version: 2.26.2
+      turbo:
+        specifier: ^1.10.10
+        version: 1.10.10
       vitest:
         specifier: ^0.33.0
         version: 0.33.0
@@ -2868,7 +2867,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /turbo-darwin-arm64@1.10.10:
@@ -2876,7 +2875,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /turbo-linux-64@1.10.10:
@@ -2884,7 +2883,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /turbo-linux-arm64@1.10.10:
@@ -2892,7 +2891,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /turbo-windows-64@1.10.10:
@@ -2900,7 +2899,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /turbo-windows-arm64@1.10.10:
@@ -2908,7 +2907,7 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /turbo@1.10.10:
@@ -2922,7 +2921,7 @@ packages:
       turbo-linux-arm64: 1.10.10
       turbo-windows-64: 1.10.10
       turbo-windows-arm64: 1.10.10
-    dev: false
+    dev: true
 
   /type-detect@4.0.8:
     resolution: {integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==}

@@ -14,11 +14,10 @@
 	"workspaces": [
 		"./packages/*"
 	],
-	"dependencies": {
-		"turbo": "^1.10.10"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"@changesets/cli": "2.26.2",
+		"turbo": "^1.10.10",
 		"vitest": "^0.33.0"
 	}
 }
