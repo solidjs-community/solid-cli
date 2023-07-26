@@ -1,6 +1,6 @@
 {
   "name": "@solid-cli/core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A CLI for Solid",
   "main": "dist/index.mjs",
   "bin": {
