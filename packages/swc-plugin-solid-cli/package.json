@@ -10,7 +10,8 @@
 	"main": "output/swc_plugin_solid_cli.wasm",
 	"scripts": {
 		"prepublishOnly": "cargo build-wasi --release --out-dir=./output -Z unstable-options",
-		"build": ""
+		"build": "",
+		"test": "cargo +nightly test"
 	},
 	"files": [],
 	"preferUnplugged": true,
