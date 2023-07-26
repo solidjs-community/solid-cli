@@ -37,7 +37,10 @@ const main = async () => {
   });
   p.intro(`${color.bgCyan(color.black(" Solid-CLI "))}`);
   const args = process.argv.slice(2);
-  if (args.length === 0) await provideSuggestions();
+  if (args.length === 0) {
+    await provideSuggestions();
+    return;
+  }
   run(cli, args);
 };
 main();

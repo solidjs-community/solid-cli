@@ -26,13 +26,16 @@ const handleAutocompleteNew = async () => {
       }),
   });
   const pM = await detect();
+  const projectName = project.name ?? "solid-project";
   const { stdout } = await execa(
     getRunner(pM),
-    ["degit", `solidjs/templates/${project.template}`, project.name ?? "solid-project"].filter(
-      (e) => e !== null,
-    ) as string[],
+    ["degit", `solidjs/templates/${project.template}`, projectName].filter((e) => e !== null) as string[],
   );
   p.log.success("Project successfully created! 🎉");
+  p.log.info(`To get started, run:
+  - cd ${projectName}
+  - npm install
+  - npm run dev`);
 };
 export const handleNew = async (variation?: AllSupported, name?: string, stackblitz: boolean = false) => {
   if (!variation) {
