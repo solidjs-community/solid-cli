@@ -6,7 +6,8 @@
 	"scripts": {
 		"test": "vitest",
 		"build": "turbo run build",
-		"release": "pnpm build && changeset publish"
+		"release": "pnpm build && changeset publish",
+		"start": "cd packages/core && pnpm start"
 	},
 	"keywords": [],
 	"author": "",
