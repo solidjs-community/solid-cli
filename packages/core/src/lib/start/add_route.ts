@@ -1,4 +1,4 @@
-import { writeFile, mkdir } from "fs/promises";
+import { mkdir } from "fs/promises";
 import { writeChecked } from "../utils/file_ops";
 const default_file = `export default function Route() {
 	return <></>;
