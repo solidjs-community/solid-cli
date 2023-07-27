@@ -47,3 +47,18 @@ Used to setup a Solid-Start specific adapter.
 | --------- | -------------------------------- |
 | `<name>`  | The name of the adapter `string` |
 | `--force` | Force setup the adapater         |
+
+### `Data`
+
+```sh
+solid start data
+```
+
+Creates a new data file at the given path
+
+**Options**
+
+| Option   | Description                                     |
+| -------- | ----------------------------------------------- |
+| `<path>` | The path to the new data file                   |
+| `<name>` | The name of the `.data.ts` file to be generated |
