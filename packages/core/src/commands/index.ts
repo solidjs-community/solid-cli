@@ -39,7 +39,7 @@ const new_ = command({
     stackblitz: flag({ type: boolean, long: "stackblitz", short: "s" }),
   },
   async handler({ variation, name, stackblitz }) {
-    if (!name) {
+    if (!name && variation) {
       const _name = await p.text({
         message: "Project Name",
         placeholder: `solid-${variation}`,
