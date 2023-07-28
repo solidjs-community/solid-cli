@@ -39,7 +39,18 @@ const new_ = command({
     stackblitz: flag({ type: boolean, long: "stackblitz", short: "s" }),
   },
   async handler({ variation, name, stackblitz }) {
-    if (!name) name = `solid-${variation}`;
+    if (!name) {
+      const _name = await p.text({
+        message: "Project Name",
+        placeholder: `solid-${variation}`,
+        defaultValue: `solid-${variation}`,
+      });
+      if (p.isCancel(_name)) {
+        p.log.warn("Canceled");
+        return;
+      }
+      name = _name;
+    }
     await handleNew(variation, name, stackblitz);
   },
 });

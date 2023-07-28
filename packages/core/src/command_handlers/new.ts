@@ -16,22 +16,27 @@ const getRunner = (pM: PM) => {
   }
 };
 const handleAutocompleteNew = async () => {
-  const project = await p.group({
-    name: () => p.text({ message: "Project Name", placeholder: "solid-project" }),
-    template: () =>
-      p.select({
-        message: "Template",
-        initialValue: "ts",
-        options: localSupported.map((s) => ({ label: s, value: s })),
-      }),
+  const name = await p.text({ message: "Project Name", placeholder: "solid-project" });
+  if (p.isCancel(name)) {
+    p.log.warn("Canceled");
+    return;
+  }
+  const template = await p.select({
+    message: "Template",
+    initialValue: "ts",
+    options: localSupported.map((s) => ({ label: s, value: s })),
   });
+  if (p.isCancel(template)) {
+    p.log.warn("Canceled");
+    return;
+  }
   const pM = await detect();
-  const projectName = project.name ?? "solid-project";
+  const projectName = name ?? "solid-project";
   const s = p.spinner();
   s.start("Creating project");
   const { stdout } = await execa(
     getRunner(pM),
-    ["degit", `solidjs/templates/${project.template}`, projectName].filter((e) => e !== null) as string[],
+    ["degit", `solidjs/templates/${template}`, projectName].filter((e) => e !== null) as string[],
   );
   s.stop("Project successfully created! 🎉");
   p.log.info(`To get started, run:
@@ -53,8 +58,15 @@ export const handleNew = async (variation?: AllSupported, name?: string, stackbl
     return;
   }
   const pM = await detect();
+  const s = p.spinner();
+  s.start("Creating project");
   const { stdout } = await execa(
     getRunner(pM),
     ["degit", `solidjs/templates/${variation}`, name ?? null].filter((e) => e !== null) as string[],
   );
+  s.stop("Project successfully created! 🎉");
+  p.log.info(`To get started, run:
+  - cd ${name}
+  - npm install
+  - npm run dev`);
 };
