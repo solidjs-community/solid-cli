@@ -9,9 +9,10 @@ import { handleMode } from "./command_handlers/start/mode";
 import { handleAdapter } from "./command_handlers/start/adapter";
 import { handleData } from "./command_handlers/start/data";
 import { handleRoute } from "./command_handlers/start/route";
+import { t } from "./translations";
 
 const possibleActions = [
-  { value: "add", label: "Add an integration", hint: "solid add ..." },
+  { value: "add", label: t.ACTION_ADD, hint: "solid add ..." },
   { value: "new", label: "Create new project", hint: "solid new ..." },
   { value: "start", label: "A start specific action", hint: "solid start ..." },
 ] as const;
