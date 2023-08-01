@@ -1,4 +1,6 @@
+import { createSignal } from "@solid-cli/reactivity";
 import { SL, Translations } from "./types";
+export const [locale, setLocale] = createSignal(Intl.DateTimeFormat().resolvedOptions().locale);
 
 const TRANSLATIONS = {
   ACTION_ADD: {
@@ -9,22 +11,13 @@ const TRANSLATIONS = {
   },
 } as const satisfies Translations;
 
-const locale = () => Intl.DateTimeFormat().resolvedOptions().locale;
-
-export const t = Object.defineProperties(
-  {},
-  Object.keys(TRANSLATIONS).reduce((acc, s) => {
-    acc[s as keyof typeof acc] = {
-      get() {
-        const l = locale() as SL;
-        const text = TRANSLATIONS[s as keyof typeof TRANSLATIONS];
-        if (l in text) {
-          return text[l as keyof typeof text];
-        }
-        return text["en"];
-      },
-    };
-
-    return acc;
-  }, {} as any),
-) as Record<keyof typeof TRANSLATIONS, string>;
+export const t = new Proxy(TRANSLATIONS, {
+  get(target, p, receiver) {
+    const l = locale() as SL;
+    const text = target[p as keyof typeof target];
+    if (l in text) {
+      return text[l as keyof typeof text];
+    }
+    return text["en"];
+  },
+}) as unknown as Record<keyof typeof TRANSLATIONS, string>;
