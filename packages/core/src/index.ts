@@ -9,12 +9,14 @@ import { handleMode } from "./command_handlers/start/mode";
 import { handleAdapter } from "./command_handlers/start/adapter";
 import { handleData } from "./command_handlers/start/data";
 import { handleRoute } from "./command_handlers/start/route";
+
 const possibleActions = [
   { value: "add", label: "Add an integration", hint: "solid add ..." },
   { value: "new", label: "Create new project", hint: "solid new ..." },
   { value: "start", label: "A start specific action", hint: "solid start ..." },
 ] as const;
-const provideStartSuggestions = async () => {
+
+export const provideStartSuggestions = async () => {
   let startAction = await p.select({
     message: "Select a start action",
     options: [
@@ -43,6 +45,7 @@ const provideStartSuggestions = async () => {
       break;
   }
 };
+
 const provideSuggestions = async () => {
   type ActionType = (typeof possibleActions)[number]["value"];
   let action = (await p.select({
@@ -63,6 +66,7 @@ const provideSuggestions = async () => {
       break;
   }
 };
+
 const main = async () => {
   const cli = subcommands({
     name: "solid",
@@ -70,10 +74,17 @@ const main = async () => {
   });
   p.intro(`${color.bgCyan(color.black(" Solid-CLI "))}`);
   const args = process.argv.slice(2);
+
   if (args.length === 0) {
     await provideSuggestions();
     return;
   }
+
+  if (args.length === 1 && args[0] === "start") {
+    await provideStartSuggestions();
+    return;
+  }
+
   run(cli, args);
 };
 main();

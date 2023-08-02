@@ -45,7 +45,11 @@ export type PluginOptions = {
   options: object;
 };
 
-export type IntegrationsValue = { pluginOptions: PluginOptions; postInstall?: () => Promise<void> };
+export type IntegrationsValue = {
+  pluginOptions?: PluginOptions;
+  installs: string[];
+  postInstall?: () => Promise<void>;
+};
 
 export type Integrations = Record<Supported, IntegrationsValue>;
 
@@ -57,6 +61,7 @@ export const integrations = {
       isDefault: true,
       options: {},
     },
+    installs: ["unocss"],
     postInstall: async () => {
       await insertAtBeginning(await getProjectRoot(), `import "virtual:uno.css";\n`);
     },
@@ -68,6 +73,7 @@ export const integrations = {
       isDefault: false,
       options: {},
     },
+    installs: ["vite-plugin-pwa"],
     postInstall: async () => {
       await insertAtBeginning(await getProjectRoot(), `import "solid-devtools";\n`);
     },
@@ -79,5 +85,6 @@ export const integrations = {
       isDefault: true,
       options: {},
     },
+    installs: ["solid-devtools"],
   },
 };
