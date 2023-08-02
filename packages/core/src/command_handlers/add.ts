@@ -31,7 +31,7 @@ const handleAutocompleteAdd = async () => {
         { label: "No", value: false },
         { label: "Yes (force)", value: [true, "force"] },
       ],
-      message: `${t.CONFIRM_INSTALL} (${a.length}) packages? \n${color.red(S_BAR)} \n${color.red(S_BAR)}  ${
+      message: `${t.CONFIRM_INSTALL(a.length)} \n${color.red(S_BAR)} \n${color.red(S_BAR)}  ${
         " " + color.yellow(a.map((opt) => opt.label).join(" ")) + " "
       } \n${color.red(S_BAR)} `,
     }),

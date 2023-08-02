@@ -1,6 +1,6 @@
 import { createSignal } from "@solid-cli/reactivity";
-import { SL, Translations } from "./types";
-export const [locale, setLocale] = createSignal(Intl.DateTimeFormat().resolvedOptions().locale);
+import { SL, TemplateFunction, Translations } from "./types";
+export const [locale, setLocale] = createSignal("ja" ?? Intl.DateTimeFormat().resolvedOptions().locale);
 
 const TRANSLATIONS = {
   AUTOCOMPLETE_SELECTED: {
@@ -99,12 +99,12 @@ const TRANSLATIONS = {
     fr: "Annulé",
     ja: "キャンセル",
   },
-  CONFIRM_INSTALL: {
-    en: "Install the following",
-    es: "Instale lo siguiente",
-    fr: "Installez les éléments suivants",
-    ja: "以下をインストールします",
-  },
+  CONFIRM_INSTALL: (n: number) => ({
+    en: `Install the following (${n}) packages?`,
+    es: `Instale lo siguiente (${n}) paquetes?`,
+    fr: `Installez les éléments suivants (${n}) paquets?`,
+    ja: `以下をインストールします (${n}) パッケージ？`,
+  }),
   NEW_START: {
     en: "Which template would you like to use?",
     es: "¿Qué plantilla te gustaría usar?",
@@ -128,10 +128,27 @@ const TRANSLATIONS = {
 export const t = new Proxy(TRANSLATIONS, {
   get(target, p, receiver) {
     const l = locale() as SL;
-    const text = target[p as keyof typeof target];
+    let text = target[p as keyof typeof target];
+
+    if (typeof text === "function") {
+      return new Proxy(text, {
+        apply(target, thisArg, argArray) {
+          const newT = Reflect.apply(target, thisArg, argArray);
+          if (l in newT) {
+            return newT[l];
+          }
+          return newT["en"];
+        },
+      });
+    }
+
     if (l in text) {
       return text[l as keyof typeof text];
     }
     return text["en"];
   },
-}) as unknown as Record<keyof typeof TRANSLATIONS, string>;
+}) as unknown as {
+  [k in keyof typeof TRANSLATIONS]: (typeof TRANSLATIONS)[k] extends TemplateFunction
+    ? (...args: Parameters<(typeof TRANSLATIONS)[k]>) => string
+    : string;
+};
