@@ -3,13 +3,13 @@
 The CLI can be installed locally to your project via
 
 ```sh
-npm install solid-cli
+npm install @solid-cli/core
 ```
 
 Or installed globally:
 
 ```sh
-npm install -g solid-cli
+npm install -g @solid-cli/core
 ```
 
 It can then be invoked via the keyword `solid`, and the help page can be displayed with `solid --help`
