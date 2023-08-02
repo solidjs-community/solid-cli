@@ -22,7 +22,7 @@ const localSupported = ["ts", "js"] as const;
 const stackblitzSupported = ["bare"] as const;
 
 type AllSupported = (typeof localSupported)[number] | (typeof stackblitzSupported)[number];
-const getRunner = (pM: PM) => {
+export const getRunner = (pM: PM) => {
   switch (pM) {
     case "npm":
       return "npx";

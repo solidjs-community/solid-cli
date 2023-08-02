@@ -1,7 +1,7 @@
 import { writeFile } from "fs/promises";
 import { autocomplete } from "../components/autocomplete/autocomplete";
 import { S_BAR, cancelable } from "../components/autocomplete/utils";
-import { Integrations, Supported, integrations, transformPlugins } from "../lib/transform";
+import { Integrations, PluginOptions, Supported, integrations, transformPlugins } from "../lib/transform";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { detect } from "detect-package-manager";
@@ -92,14 +92,11 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
     .filter((p) => p) as Configs;
 
   const code = await transformPlugins(
-    configs.map((c) => c.pluginOptions),
+    configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
     forceTransform,
   );
   await writeFile("vite.config.ts", code);
   p.log.success("Config updated");
-  configs.forEach(async (cfg) => {
-    await cfg.postInstall?.();
-  });
   const pM = await detect();
 
   const s = p.spinner();
@@ -108,11 +105,19 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
   for (let i = 0; i < configs.length; i++) {
     const config = configs[i];
 
-    const { stdout } = await $`${pM} i ${config.pluginOptions.importSource.toLowerCase().split("/")[0]}`;
+    await $`${pM} install ${config.installs}`;
   }
   // Install primitives
   for (const primitive of await transformPrimitives(possiblePrimitives)) {
-    const { stdout } = await $`${pM} i ${primitive.value}`;
+    await $`${pM} install ${primitive.value}`;
   }
   s.stop("Packages installed");
+
+  s.start("Running post install steps");
+
+  for (const cfg of configs) {
+    await cfg.postInstall?.();
+  }
+
+  s.stop("Post install complete");
 };
