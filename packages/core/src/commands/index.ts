@@ -7,6 +7,7 @@ import { boolean, command, flag, optional, positional, restPositionals, string }
 import { oneOf } from "../lib/utils/oneOf";
 import { handleAdd } from "../command_handlers/add";
 import { handleNew } from "../command_handlers/new";
+import { cancelable } from "../components/autocomplete/utils";
 
 const add = command({
   name: "add",
@@ -40,15 +41,13 @@ const new_ = command({
   },
   async handler({ variation, name, stackblitz }) {
     if (!name && variation) {
-      const _name = await p.text({
-        message: "Project Name",
-        placeholder: `solid-${variation}`,
-        defaultValue: `solid-${variation}`,
-      });
-      if (p.isCancel(_name)) {
-        p.log.warn("Canceled");
-        return;
-      }
+      const _name = await cancelable(
+        p.text({
+          message: "Project Name",
+          placeholder: `solid-${variation}`,
+          defaultValue: `solid-${variation}`,
+        }),
+      );
       name = _name;
     }
     await handleNew(variation, name, stackblitz);

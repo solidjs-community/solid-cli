@@ -2,6 +2,7 @@ import * as p from "@clack/prompts";
 import { openInBrowser } from "../lib/utils/open";
 import { PM, detect } from "detect-package-manager";
 import { execa } from "execa";
+import { cancelable } from "../components/autocomplete/utils";
 
 const startSupported = [
   "bare",
@@ -33,16 +34,13 @@ const getRunner = (pM: PM) => {
 };
 
 const handleNewStartProject = async (projectName: string) => {
-  const template = await p.select({
-    message: "Which template would you like to use?",
-    initialValue: "ts",
-    options: startSupported.map((s) => ({ label: s, value: s })),
-  });
-
-  if (p.isCancel(template)) {
-    p.log.warn("Canceled");
-    return;
-  }
+  const template = await cancelable(
+    p.select({
+      message: "Which template would you like to use?",
+      initialValue: "ts",
+      options: startSupported.map((s) => ({ label: s, value: s })),
+    }),
+  );
 
   const pM = await detect();
   const s = p.spinner();
@@ -62,35 +60,24 @@ const handleNewStartProject = async (projectName: string) => {
 };
 
 const handleAutocompleteNew = async () => {
-  const name = await p.text({ message: "Project Name", placeholder: "solid-project", defaultValue: "solid-project" });
+  const name = await cancelable(
+    p.text({ message: "Project Name", placeholder: "solid-project", defaultValue: "solid-project" }),
+  );
 
-  if (p.isCancel(name)) {
-    p.log.warn("Canceled");
-    return;
-  }
-
-  const isStart = await p.confirm({ message: "Is this a Solid-Start project?" });
-
-  if (p.isCancel(isStart)) {
-    p.log.warn("Canceled");
-    return;
-  }
+  const isStart = await cancelable(p.confirm({ message: "Is this a Solid-Start project?" }));
 
   if (isStart) {
     handleNewStartProject(name);
     return;
   }
 
-  const template = await p.select({
-    message: "Template",
-    initialValue: "ts",
-    options: localSupported.map((s) => ({ label: s, value: s })),
-  });
-
-  if (p.isCancel(template)) {
-    p.log.warn("Canceled");
-    return;
-  }
+  const template = await cancelable(
+    p.select({
+      message: "Template",
+      initialValue: "ts",
+      options: localSupported.map((s) => ({ label: s, value: s })),
+    }),
+  );
 
   const pM = await detect();
   const projectName = name ?? "solid-project";

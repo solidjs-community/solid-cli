@@ -1,6 +1,6 @@
 import { writeFile } from "fs/promises";
 import { autocomplete } from "../components/autocomplete/autocomplete";
-import { S_BAR } from "../components/autocomplete/utils";
+import { S_BAR, cancelable } from "../components/autocomplete/utils";
 import { Integrations, Supported, integrations, transformPlugins } from "../lib/transform";
 import * as p from "@clack/prompts";
 import color from "picocolors";
@@ -12,35 +12,29 @@ const handleAutocompleteAdd = async () => {
   const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
   const opts = () => [...supportedIntegrations, ...primitives()];
   loadPrimitives().catch((e) => p.log.error(e));
-  const a = await autocomplete({
-    message: "Add packages",
-    options: opts,
-  });
-
-  if (p.isCancel(a)) {
-    p.log.warn("Canceled");
-    return;
-  }
+  const a = await cancelable(
+    autocomplete({
+      message: "Add packages",
+      options: opts,
+    }),
+  );
 
   if (a.length === 0) {
     p.log.warn("Nothing selected");
     return;
   }
-  const shouldInstall = await p.select({
-    options: [
-      { label: "Yes", value: true },
-      { label: "No", value: false },
-      { label: "Yes (force)", value: [true, "force"] },
-    ],
-    message: `Install the following (${a.length}) packages? \n${color.red(S_BAR)} \n${color.red(S_BAR)}  ${
-      " " + color.yellow(a.map((opt) => opt.label).join(" ")) + " "
-    } \n${color.red(S_BAR)} `,
-  });
-
-  if (p.isCancel(shouldInstall)) {
-    p.log.warn("Canceled");
-    return;
-  }
+  const shouldInstall = await cancelable<unknown>(
+    p.select({
+      options: [
+        { label: "Yes", value: true },
+        { label: "No", value: false },
+        { label: "Yes (force)", value: [true, "force"] },
+      ],
+      message: `Install the following (${a.length}) packages? \n${color.red(S_BAR)} \n${color.red(S_BAR)}  ${
+        " " + color.yellow(a.map((opt) => opt.label).join(" ")) + " "
+      } \n${color.red(S_BAR)} `,
+    }),
+  );
 
   if (!shouldInstall) return;
 
