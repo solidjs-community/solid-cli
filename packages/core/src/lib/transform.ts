@@ -1,8 +1,12 @@
 import { transform } from "@swc/core";
 import { readFile } from "fs/promises";
 import { fileURLToPath } from "url";
-import { insertAtBeginning } from "./utils/file_ops";
+import { insertAfter, insertAtBeginning } from "./utils/file_ops";
 import { getProjectRoot } from "./utils/helpers";
+import { $ } from "execa";
+import { detect } from "detect-package-manager";
+import { getRunner } from "../command_handlers/new";
+
 export const transformPlugins = async (
   new_plugins: PluginOptions[],
   force_transform = false,
@@ -54,6 +58,15 @@ export type IntegrationsValue = {
 export type Integrations = Record<Supported, IntegrationsValue>;
 
 export const integrations = {
+  "tailwind": {
+    installs: ["tailwindcss", "postcss", "autoprefixer"],
+    postInstall: async () => {
+      const pM = await detect();
+      await $`${getRunner(pM)} tailwindcss init -p`;
+      await insertAfter("tailwind.config.js", "content: [", '"./index.html", "./src/**/*.{js,ts,jsx,tsx}"');
+      await insertAtBeginning("./src/index.css", "@tailwind base;\n@tailwind components;\n@tailwind utilities;\n");
+    },
+  },
   "unocss": {
     pluginOptions: {
       importName: "UnoCss",
