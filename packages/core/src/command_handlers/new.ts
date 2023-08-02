@@ -3,6 +3,7 @@ import { openInBrowser } from "../lib/utils/open";
 import { PM, detect } from "detect-package-manager";
 import { execa } from "execa";
 import { cancelable } from "../components/autocomplete/utils";
+import { t } from "../translations";
 
 const startSupported = [
   "bare",
@@ -36,7 +37,7 @@ export const getRunner = (pM: PM) => {
 const handleNewStartProject = async (projectName: string) => {
   const template = await cancelable(
     p.select({
-      message: "Which template would you like to use?",
+      message: t.NEW_START,
       initialValue: "ts",
       options: startSupported.map((s) => ({ label: s, value: s })),
     }),

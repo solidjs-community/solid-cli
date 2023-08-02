@@ -8,10 +8,11 @@ import { oneOf } from "../lib/utils/oneOf";
 import { handleAdd } from "../command_handlers/add";
 import { handleNew } from "../command_handlers/new";
 import { cancelable } from "../components/autocomplete/utils";
+import { t } from "../translations";
 
 const add = command({
   name: "add",
-  description: "Can add and install integrations: `solid add unocss`.",
+  description: t.ADD_DESC,
   args: {
     packages: restPositionals({
       type: string,
@@ -25,7 +26,7 @@ const add = command({
 });
 const new_ = command({
   name: "new",
-  description: "Creates a new solid project",
+  description: t.NEW_DESC,
   args: {
     variation: positional({
       type: optional(oneOf(["bare", "ts", "js"] as const)),

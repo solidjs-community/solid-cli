@@ -8,6 +8,7 @@ import { detect } from "detect-package-manager";
 import { $ } from "execa";
 import { loadPrimitives } from "../lib/utils/primitives";
 import { primitives } from "../lib/utils/primitives";
+import { t } from "../translations";
 const handleAutocompleteAdd = async () => {
   const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
   const opts = () => [...supportedIntegrations, ...primitives()];
@@ -30,7 +31,7 @@ const handleAutocompleteAdd = async () => {
         { label: "No", value: false },
         { label: "Yes (force)", value: [true, "force"] },
       ],
-      message: `Install the following (${a.length}) packages? \n${color.red(S_BAR)} \n${color.red(S_BAR)}  ${
+      message: `${t.CONFIRM_INSTALL} (${a.length}) packages? \n${color.red(S_BAR)} \n${color.red(S_BAR)}  ${
         " " + color.yellow(a.map((opt) => opt.label).join(" ")) + " "
       } \n${color.red(S_BAR)} `,
     }),

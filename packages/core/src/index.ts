@@ -13,21 +13,21 @@ import { t } from "./translations";
 
 const possibleActions = [
   { value: "add", label: t.ACTION_ADD, hint: "solid add ..." },
-  { value: "new", label: "Create new project", hint: "solid new ..." },
-  { value: "start", label: "A start specific action", hint: "solid start ..." },
+  { value: "new", label: t.ACTION_NEW, hint: "solid new ..." },
+  { value: "start", label: t.ACTION_START, hint: "solid start ..." },
 ] as const;
 
 export const provideStartSuggestions = async () => {
   let startAction = await p.select({
-    message: "Select a start action",
+    message: t.SELECT_START_ACTION,
     options: [
-      { value: "mode", label: "Mode", hint: "Changes the mode of the solid app (SSR, CSR, SSG)" },
-      { value: "route", label: "Route", hint: "Allows you to create a new file system route" },
-      { value: "data", label: "Data File", hint: "Allows you to create a new data file within a route" },
+      { value: "mode", label: t.START_MODE, hint: t.START_MODE_HINT },
+      { value: "route", label: t.START_ROUTE, hint: t.START_ROUTE_HINT },
+      { value: "data", label: t.START_DATA, hint: t.START_DATA_HINT },
       {
         value: "adapter",
-        label: "Adapter",
-        hint: "Allows for setting and updating the adapter used to build a start app",
+        label: t.START_ADAPTER,
+        hint: t.START_ADAPTER_HINT,
       },
     ],
   });
@@ -50,7 +50,7 @@ export const provideStartSuggestions = async () => {
 const provideSuggestions = async () => {
   type ActionType = (typeof possibleActions)[number]["value"];
   let action = (await p.select({
-    message: "Select an action",
+    message: t.ACTION_START,
     // This thing really doesn't like `as const` things
     options: possibleActions as any,
   })) as ActionType;
