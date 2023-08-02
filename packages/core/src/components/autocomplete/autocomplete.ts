@@ -258,7 +258,7 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
     render() {
       const selected =
         this.selected.length === 0
-          ? color.gray("Nothing selected")
+          ? color.gray(t.NOTHING_SELECTED)
           : this.selected.map((option, i) => `${color.red(option.label)}`).join(" ");
       const placeholder = opts.placeholder
         ? color.inverse(opts.placeholder[0]) + color.dim(opts.placeholder.slice(1))

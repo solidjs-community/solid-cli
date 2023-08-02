@@ -45,16 +45,16 @@ const handleNewStartProject = async (projectName: string) => {
 
   const pM = await detect();
   const s = p.spinner();
-  s.start("Creating project");
+  s.start(t.CREATING_PROJECT);
 
   await execa(
     getRunner(pM),
     ["degit", `solidjs/solid-start/examples/${template}#main`, projectName].filter((e) => e !== null) as string[],
   );
 
-  s.stop("Project successfully created! 🎉");
+  s.stop(t.PROJECT_CREATED);
 
-  p.log.info(`To get started, run:
+  p.log.info(`${t.GET_STARTED}
   - cd ${projectName}
   - npm install
   - npm run dev`);
@@ -62,10 +62,10 @@ const handleNewStartProject = async (projectName: string) => {
 
 const handleAutocompleteNew = async () => {
   const name = await cancelable(
-    p.text({ message: "Project Name", placeholder: "solid-project", defaultValue: "solid-project" }),
+    p.text({ message: t.PROJECT_NAME, placeholder: "solid-project", defaultValue: "solid-project" }),
   );
 
-  const isStart = await cancelable(p.confirm({ message: "Is this a Solid-Start project?" }));
+  const isStart = await cancelable(p.confirm({ message: t.IS_START_PROJECT }));
 
   if (isStart) {
     handleNewStartProject(name);
@@ -74,7 +74,7 @@ const handleAutocompleteNew = async () => {
 
   const template = await cancelable(
     p.select({
-      message: "Template",
+      message: t.TEMPLATE,
       initialValue: "ts",
       options: localSupported.map((s) => ({ label: s, value: s })),
     }),
@@ -84,16 +84,16 @@ const handleAutocompleteNew = async () => {
   const projectName = name ?? "solid-project";
 
   const s = p.spinner();
-  s.start("Creating project");
+  s.start(t.CREATING_PROJECT);
 
   await execa(
     getRunner(pM),
     ["degit", `solidjs/templates/${template}`, projectName].filter((e) => e !== null) as string[],
   );
 
-  s.stop("Project successfully created! 🎉");
+  s.stop(t.PROJECT_CREATED);
 
-  p.log.info(`To get started, run:
+  p.log.info(`${t.GET_STARTED}
   - cd ${projectName}
   - npm install
   - npm run dev`);
@@ -106,26 +106,26 @@ export const handleNew = async (variation?: AllSupported, name?: string, stackbl
 
   if (stackblitz) {
     const s = p.spinner();
-    s.start(`Opening ${variation} in browser`);
+    s.start(t.OPENING_IN_BROWSER(variation));
     await openInBrowser(`https://solid.new/${variation}`);
     s.stop();
-    p.log.success("Successfully Opened in Browser");
+    p.log.success(t.OPENED_IN_BROWSER);
     return;
   }
 
   const pM = await detect();
 
   const s = p.spinner();
-  s.start("Creating project");
+  s.start(t.CREATING_PROJECT);
 
   await execa(
     getRunner(pM),
     ["degit", `solidjs/templates/${variation}`, name ?? null].filter((e) => e !== null) as string[],
   );
 
-  s.stop("Project successfully created! 🎉");
+  s.stop(t.PROJECT_CREATED);
 
-  p.log.info(`To get started, run:
+  p.log.info(`${t.GET_STARTED}
   - cd ${name}
   - npm install
   - npm run dev`);

@@ -15,21 +15,21 @@ const handleAutocompleteAdd = async () => {
   loadPrimitives().catch((e) => p.log.error(e));
   const a = await cancelable(
     autocomplete({
-      message: "Add packages",
+      message: t.ADD_PACKAGES,
       options: opts,
     }),
   );
 
   if (a.length === 0) {
-    p.log.warn("Nothing selected");
+    p.log.warn(t.NOTHING_SELECTED);
     return;
   }
   const shouldInstall = await cancelable<unknown>(
     p.select({
       options: [
-        { label: "Yes", value: true },
-        { label: "No", value: false },
-        { label: "Yes (force)", value: [true, "force"] },
+        { label: t.YES, value: true },
+        { label: t.NO, value: false },
+        { label: t.YES_FORCE, value: [true, "force"] },
       ],
       message: `${t.CONFIRM_INSTALL(a.length)} \n${color.red(S_BAR)} \n${color.red(S_BAR)}  ${
         " " + color.yellow(a.map((opt) => opt.label).join(" ")) + " "
@@ -58,9 +58,9 @@ const transformPrimitives = async (ps: string[]) => {
   if (!ps.length) return [];
   if (!primitives().length) {
     const s = p.spinner();
-    s.start("Loading primitives");
+    s.start(t.LOADING_PRIMITIVES);
     await loadPrimitives();
-    s.stop("Primitives loaded");
+    s.stop(t.PRIMITIVES_LOADED);
   }
   const mappedInput = ps.map((p) => p.replace("@solid-primitives/", ""));
   return primitives().filter((p) => mappedInput.includes(p.value.replace("@solid-primitives/", "")));
@@ -85,7 +85,7 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
       }
       const res = integrations[n as Supported];
       if (!res) {
-        p.log.error(`Can't automatically configure ${n}: we don't support it.`);
+        p.log.error(t.NO_SUPPORT(n));
         return;
       }
       return res;
@@ -97,11 +97,11 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
     forceTransform,
   );
   await writeFile("vite.config.ts", code);
-  p.log.success("Config updated");
+  p.log.success(t.CONFIG_UPDATED);
   const pM = await detect();
 
   const s = p.spinner();
-  s.start(`Installing packages via ${pM}`);
+  s.start(t.INSTALLING_VIA(pM));
   // Install plugins
   for (let i = 0; i < configs.length; i++) {
     const config = configs[i];
@@ -112,13 +112,13 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
   for (const primitive of await transformPrimitives(possiblePrimitives)) {
     await $`${pM} install ${primitive.value}`;
   }
-  s.stop("Packages installed");
+  s.stop(t.PACKAGES_INSTALLED);
 
-  s.start("Running post install steps");
+  s.start(t.POST_INSTALL);
 
   for (const cfg of configs) {
     await cfg.postInstall?.();
   }
 
-  s.stop("Post install complete");
+  s.stop(t.POST_INSTALL_COMPLETE);
 };

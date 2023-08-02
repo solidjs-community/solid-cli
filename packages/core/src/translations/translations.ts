@@ -1,6 +1,6 @@
 import { createSignal } from "@solid-cli/reactivity";
 import { SL, TemplateFunction, Translations } from "./types";
-export const [locale, setLocale] = createSignal("ja" ?? Intl.DateTimeFormat().resolvedOptions().locale);
+export const [locale, setLocale] = createSignal(Intl.DateTimeFormat().resolvedOptions().locale.split("-")[0]);
 
 const TRANSLATIONS = {
   AUTOCOMPLETE_SELECTED: {
@@ -45,6 +45,24 @@ const TRANSLATIONS = {
     fr: "Une action spécifique de démarrage",
     ja: "特定のアクションを開始する",
   },
+  NEW_VARIATION_DESC: {
+    en: "The variation to create, for example `bare`",
+    es: "La variación a crear, por ejemplo `bare`",
+    fr: "La variante à créer, par exemple `bare`",
+    ja: "作成するバリエーション、たとえば「bare」",
+  },
+  NEW_NAME_DESC: {
+    en: "The name of the folder to create",
+    es: "El nombre de la carpeta a crear.",
+    fr: "Le nom du dossier à créer",
+    ja: "作成するフォルダーの名前",
+  },
+  IS_START_PROJECT: {
+    en: "Is this a Solid-Start project?",
+    es: "¿Es este un proyecto de Solid-Start?",
+    fr: "Est-ce un projet Solid-Start ?",
+    ja: "これはソリッドスタートプロジェクトですか?",
+  },
   START_MODE: {
     en: "Mode",
     es: "Modo",
@@ -56,6 +74,12 @@ const TRANSLATIONS = {
     es: "Cambia el modo de la aplicación sólida (SSR, CSR, SSG)",
     fr: "Modifie le mode de l'application solide (SSR, CSR, SSG)",
     ja: "ソリッドアプリのモードを変更します（SSR、CSR、SSG）",
+  },
+  START_MODE_DESC: {
+    en: "The rendering mode for solid to build for, and use.",
+    es: "El modo de renderizado de solid para construir y usar.",
+    fr: "Le mode de rendu du solid pour lequel construire et utiliser.",
+    ja: "solid がビルドして使用するレンダリング モード。",
   },
   START_ROUTE: {
     en: "Route",
@@ -69,6 +93,12 @@ const TRANSLATIONS = {
     fr: "Vous permet de créer une nouvelle route de système de fichiers",
     ja: "新しいファイル システム ルートを作成できます。",
   },
+  START_ROUTE_DESC: {
+    en: "The name of `.tsx` file to be generated",
+    es: "El nombre del archivo `.tsx` que se generará",
+    fr: "Le nom du fichier `.tsx` à générer",
+    ja: "生成される `.tsx` ファイルの名前",
+  },
   START_DATA: {
     en: "Data File",
     es: "Archivo de datos",
@@ -81,6 +111,12 @@ const TRANSLATIONS = {
     fr: "Permet de créer un nouveau fichier de données au sein d'un itinéraire",
     ja: "ルート内に新しいデータ ファイルを作成できます。",
   },
+  START_DATA_DESC: {
+    en: "The name of the `.data.ts` file to be generated.",
+    es: "El nombre del archivo `.data.ts` que se generará.",
+    fr: "Le nom du fichier `.data.ts` à générer.",
+    ja: "生成される `.data.ts` ファイルの名前。",
+  },
   START_ADAPTER: {
     en: "Adapter",
     es: "Adaptador",
@@ -92,6 +128,12 @@ const TRANSLATIONS = {
     es: "Permite configurar y actualizar el adaptador utilizado para crear una aplicación de inicio",
     fr: "Permet de définir et de mettre à jour l'adaptateur utilisé pour créer une application de démarrage",
     ja: "スタートアプリの構築に使用されるアダプターの設定と更新が可能",
+  },
+  START_ADAPTER_DISPLAYNAME: {
+    en: "Adapter name",
+    es: "Nombre del adaptador",
+    fr: "Nom de l'adaptateur",
+    ja: "アダプター名",
   },
   CANCELED: {
     en: "Canceled",
@@ -122,6 +164,126 @@ const TRANSLATIONS = {
     es: "Crea un nuevo proyecto sólido.",
     fr: "Crée un nouveau projet solide",
     ja: "新しいソリッドプロジェクトを作成します",
+  },
+  ADD_PACKAGES: {
+    en: "Add packages",
+    es: "Agregar paquetes",
+    fr: "Ajouter des forfaits",
+    ja: "パッケージの追加",
+  },
+  NOTHING_SELECTED: {
+    en: "Nothing selected",
+    es: "Nada seleccionado",
+    fr: "Rien de sélectionné",
+    ja: "何も選択されていません",
+  },
+  YES: {
+    en: "Yes",
+    es: "Sí",
+    fr: "Oui",
+    ja: "はい",
+  },
+  NO: {
+    en: "No",
+    es: "No",
+    fr: "Non",
+    ja: "いいえ",
+  },
+  YES_FORCE: {
+    en: "Yes (force)",
+    es: "Sí (fuerza)",
+    fr: "Oui (forcer)",
+    ja: "はい（強制）",
+  },
+  PROJECT_CREATED: {
+    en: "Project successfully created! 🎉",
+    es: "¡Proyecto creado con éxito! 🎉",
+    fr: "Projet créé avec succès! 🎉",
+    ja: "プロジェクトが正常に作成されました。 🎉",
+  },
+  CREATING_PROJECT: {
+    en: "Creating project",
+    es: "Creando proyecto",
+    fr: "Création de projet",
+    ja: "プロジェクトの作成",
+  },
+  TEMPLATE: {
+    en: "Template",
+    es: "Plantilla",
+    fr: "Modèle",
+    ja: "レンプレート",
+  },
+  GET_STARTED: {
+    en: "To get started, run:",
+    es: "Para empezar, ejecuta:",
+    fr: "Pour commencer, exécutez :",
+    ja: "開始するには、次を実行します。",
+  },
+  PROJECT_NAME: {
+    en: "Project Name",
+    es: "Nombre del proyecto",
+    fr: "nom du projet",
+    ja: "プロジェクト名",
+  },
+  LOADING_PRIMITIVES: {
+    en: "Loading primitives",
+    es: "Cargando primitivas",
+    fr: "Chargement des primitives",
+    ja: "プリミティブのロード",
+  },
+  PRIMITIVES_LOADED: {
+    en: "Primitives loaded",
+    es: "Primitivos cargados",
+    fr: "Primitives chargées",
+    ja: "プリミティブがロードされました",
+  },
+  INSTALLING_VIA: (pm: string) => ({
+    en: `Installing packages via ${pm}`,
+    es: `Instalación de paquetes a través de ${pm}`,
+    fr: `Installation de packages via ${pm}`,
+    ja: `経由でパッケージをインストールする ${pm}`,
+  }),
+  CONFIG_UPDATED: {
+    en: "Config updated",
+    es: "Configuración actualizada",
+    fr: "Configuration mise à jour",
+    ja: "構成が更新されました",
+  },
+  PACKAGES_INSTALLED: {
+    en: "Packages installed",
+    es: "Paquetes instalados",
+    fr: "Paquets installés",
+    ja: "インストールされたパッケージ",
+  },
+  POST_INSTALL: {
+    en: "Running post install steps",
+    es: "Ejecución de pasos posteriores a la instalación",
+    fr: "Exécution des étapes de post-installation",
+    ja: "インストール後の手順の実行",
+  },
+  POST_INSTALL_COMPLETE: {
+    en: "Post install complete",
+    es: "Post instalación completa",
+    fr: "Post-installation terminée",
+    ja: "インストール後の完了",
+  },
+  NO_SUPPORT: (n: string) => ({
+    en: `Can't automatically configure ${n}: we don't support it.`,
+    es: `No se puede configurar automáticamente ${n}: no lo admitimos`,
+    fr: `Impossible de configurer automatiquement ${n}: nous ne le prenons pas en charge`,
+    ja: `${n} を自動的に構成できません: サポートされていません`,
+  }),
+  OPENING_IN_BROWSER: (s: string) => ({
+    en: `Opening ${s} in browser`,
+    es: `Abriendo ${s} en el navegador`,
+    fr: `Ouverture de ${s} dans le navigateur`,
+    ja: `ブラウザで ${s} を開く`,
+  }),
+  OPENED_IN_BROWSER: {
+    en: "Successfully Opened in Browser",
+    es: "Abierto con éxito en el navegador",
+    fr: "Ouvert avec succès dans le navigateur",
+    ja: "ブラウザで正常に開きました",
   },
 } as const satisfies Translations;
 
