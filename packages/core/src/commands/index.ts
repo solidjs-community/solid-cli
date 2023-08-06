@@ -56,14 +56,21 @@ const new_ = command({
 const docs = command({
   name: "docs",
   args: {
+    keyword: positional({ type: optional(string), displayName: "Keyword" }),
     open: flag({ type: boolean, long: "open", short: "o" }),
   },
-  async handler({ open }) {
-    if (open) {
-      await openInBrowser("https://docs.solidjs.com");
+  async handler({ keyword, open }) {
+    if (!keyword) {
+      if (open) {
+        await openInBrowser("https://docs.solidjs.com");
+        return;
+      }
+      p.log.message("The solid documentation is available at https://docs.solidjs.com");
       return;
     }
-    p.log.message("The solid documentation is available at https://docs.solidjs.com");
+    await openInBrowser(
+      `https://www.google.com/search?q=${keyword}+site:docs.solidjs.com+OR+site:start.solidjs.com`,
+    );
   },
 });
 export default {
