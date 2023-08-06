@@ -8,6 +8,7 @@ import { detect } from "detect-package-manager";
 import { $ } from "execa";
 import { loadPrimitives } from "../lib/utils/primitives";
 import { primitives } from "../lib/utils/primitives";
+import { spinnerify } from "../lib/utils/ui";
 const handleAutocompleteAdd = async () => {
   const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
   const opts = () => [...supportedIntegrations, ...primitives()];
@@ -56,10 +57,11 @@ const isIntegration = (str: string) => {
 const transformPrimitives = async (ps: string[]) => {
   if (!ps.length) return [];
   if (!primitives().length) {
-    const s = p.spinner();
-    s.start("Loading primitives");
-    await loadPrimitives();
-    s.stop("Primitives loaded");
+    await spinnerify({
+      startText: "Loading Primitives",
+      finishText: "Primitives loaded",
+      fn: loadPrimitives,
+    });
   }
   const mappedInput = ps.map((p) => p.replace("@solid-primitives/", ""));
   return primitives().filter((p) => mappedInput.includes(p.value.replace("@solid-primitives/", "")));
@@ -98,26 +100,29 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
   await writeFile("vite.config.ts", code);
   p.log.success("Config updated");
   const pM = await detect();
-
-  const s = p.spinner();
-  s.start(`Installing packages via ${pM}`);
-  // Install plugins
-  for (let i = 0; i < configs.length; i++) {
-    const config = configs[i];
-
-    await $`${pM} install ${config.installs}`;
-  }
-  // Install primitives
-  for (const primitive of await transformPrimitives(possiblePrimitives)) {
-    await $`${pM} install ${primitive.value}`;
-  }
-  s.stop("Packages installed");
-
-  s.start("Running post install steps");
-
-  for (const cfg of configs) {
-    await cfg.postInstall?.();
-  }
-
-  s.stop("Post install complete");
+  await spinnerify([
+    {
+      startText: `Installing packages via ${pM}`,
+      finishText: "Packages installed",
+      fn: async () => {
+        for (let i = 0; i < configs.length; i++) {
+          const config = configs[i];
+          await $`${pM} install ${config.installs}`;
+        }
+        // Install primitives
+        for (const primitive of await transformPrimitives(possiblePrimitives)) {
+          await $`${pM} install ${primitive.value}`;
+        }
+      },
+    },
+    {
+      startText: "Running post install steps",
+      finishText: "Post install complete",
+      fn: async () => {
+        for (const cfg of configs) {
+          await cfg.postInstall?.();
+        }
+      },
+    },
+  ]);
 };

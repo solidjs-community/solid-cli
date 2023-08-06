@@ -3,6 +3,7 @@ import { openInBrowser } from "../lib/utils/open";
 import { PM, detect } from "detect-package-manager";
 import { execa } from "execa";
 import { cancelable } from "../components/autocomplete/utils";
+import { spinnerify } from "../lib/utils/ui";
 
 const startSupported = [
   "bare",
@@ -43,16 +44,15 @@ const handleNewStartProject = async (projectName: string) => {
   );
 
   const pM = await detect();
-  const s = p.spinner();
-  s.start("Creating project");
-
-  await execa(
-    getRunner(pM),
-    ["degit", `solidjs/solid-start/examples/${template}#main`, projectName].filter((e) => e !== null) as string[],
-  );
-
-  s.stop("Project successfully created! 🎉");
-
+  await spinnerify({
+    startText: "Creating Project",
+    finishText: "Project successfully created! 🎉",
+    fn: () =>
+      execa(
+        getRunner(pM),
+        ["degit", `solidjs/solid-start/examples/${template}#main`, projectName].filter((e) => e !== null) as string[],
+      ),
+  });
   p.log.info(`To get started, run:
   - cd ${projectName}
   - npm install
@@ -81,16 +81,15 @@ const handleAutocompleteNew = async () => {
 
   const pM = await detect();
   const projectName = name ?? "solid-project";
-
-  const s = p.spinner();
-  s.start("Creating project");
-
-  await execa(
-    getRunner(pM),
-    ["degit", `solidjs/templates/${template}`, projectName].filter((e) => e !== null) as string[],
-  );
-
-  s.stop("Project successfully created! 🎉");
+  await spinnerify({
+    startText: "Creating project",
+    finishText: "Project successfully created! 🎉",
+    fn: () =>
+      execa(
+        getRunner(pM),
+        ["degit", `solidjs/templates/${template}`, projectName].filter((e) => e !== null) as string[],
+      ),
+  });
 
   p.log.info(`To get started, run:
   - cd ${projectName}
@@ -104,26 +103,24 @@ export const handleNew = async (variation?: AllSupported, name?: string, stackbl
   }
 
   if (stackblitz) {
-    const s = p.spinner();
-    s.start(`Opening ${variation} in browser`);
-    await openInBrowser(`https://solid.new/${variation}`);
-    s.stop();
-    p.log.success("Successfully Opened in Browser");
+    await spinnerify({
+      startText: `Opening ${variation} in browser`,
+      finishText: "Successfully Opened in Browser",
+      fn: () => openInBrowser(`https://solid.new/${variation}`),
+    });
     return;
   }
 
   const pM = await detect();
-
-  const s = p.spinner();
-  s.start("Creating project");
-
-  await execa(
-    getRunner(pM),
-    ["degit", `solidjs/templates/${variation}`, name ?? null].filter((e) => e !== null) as string[],
-  );
-
-  s.stop("Project successfully created! 🎉");
-
+  await spinnerify({
+    startText: "Creating project",
+    finishText: "Project successfully created! 🎉",
+    fn: () =>
+      execa(
+        getRunner(pM),
+        ["degit", `solidjs/templates/${variation}`, name ?? null].filter((e) => e !== null) as string[],
+      ),
+  });
   p.log.info(`To get started, run:
   - cd ${name}
   - npm install

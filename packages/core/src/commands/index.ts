@@ -61,16 +61,21 @@ const docs = command({
   async handler({ keyword, open }) {
     if (!keyword) {
       if (open) {
-        await spinnerify("Opening", "Opened", async () => {
-          await openInBrowser("https://docs.solidjs.com");
+        await spinnerify({
+          startText: "Opening",
+          finishText: "Opened",
+          fn: () => openInBrowser("https://docs.solidjs.com"),
         });
         return;
       }
       p.log.message("The solid documentation is available at https://docs.solidjs.com");
       return;
     }
-    await spinnerify("Opening", "Opened", async () => {
-      await openInBrowser(`https://www.google.com/search?q=${keyword}+site:docs.solidjs.com+OR+site:start.solidjs.com`);
+    await spinnerify({
+      startText: "Opening",
+      finishText: "Opened",
+      fn: () =>
+        openInBrowser(`https://www.google.com/search?q=${keyword}+site:docs.solidjs.com+OR+site:start.solidjs.com`),
     });
   },
 });

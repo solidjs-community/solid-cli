@@ -1,6 +1,7 @@
 import { createData } from "../../lib/start/add_data";
 import { isSolidStart } from "../../lib/utils/solid_start";
 import * as p from "@clack/prompts";
+import { spinnerify } from "../../lib/utils/ui";
 const handleAutocompleteData = async () => {
   const path = (
     await p.text({ message: "Enter the path in which the data file will be created", placeholder: "/user/login" })
@@ -20,8 +21,9 @@ export const handleData = async (path?: string, name?: string) => {
     await handleAutocompleteData();
     return;
   }
-  const s = p.spinner();
-  s.start("Creating new route");
-  await createData(path, name);
-  s.stop("Route created");
+  await spinnerify({
+    startText: "Creating new data file",
+    finishText: "Data file created",
+    fn: () => createData(path, name),
+  });
 };
