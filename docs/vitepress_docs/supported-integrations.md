@@ -16,3 +16,4 @@
 These packages will be automatically installed and configured with sensible defaults:
 
 - [UnoCss](https://unocss.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
