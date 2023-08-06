@@ -75,7 +75,9 @@ const docs = command({
       startText: "Opening",
       finishText: "Opened",
       fn: () =>
-        openInBrowser(`https://www.google.com/search?q=${keyword}+site:docs.solidjs.com+OR+site:start.solidjs.com`),
+        openInBrowser(
+          `https://www.google.com/search?q=${keyword}+site:docs.solidjs.com+OR+site:start.solidjs.com+OR+site:solidjs.com`,
+        ),
     });
   },
 });
