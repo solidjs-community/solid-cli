@@ -30,7 +30,7 @@ describe("Update config", () => {
   afterEach(() => {
     writes = {};
   });
-  it("Adds unocss correctly to the config", async () => {
+  it("Adds a plugin properly to the config", async () => {
     await handleAdd(["unocss"]);
     const newConfig = writes["vite.config.ts"];
     const expected = await readFile("./packages/core/tests/assets/sample_unocss_result.txt");

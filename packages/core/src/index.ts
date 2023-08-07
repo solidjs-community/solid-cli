@@ -10,10 +10,11 @@ import { handleData } from "./command_handlers/start/data";
 import { handleRoute } from "./command_handlers/start/route";
 
 import { t, setLocale } from "./translations";
-import { version } from "../package.json";
+import { name, version } from "../package.json";
 import { configInst } from "./config";
 import loadCommands from "./plugins/plugins_entry";
-
+import updater from "tiny-updater";
+import { createAsync } from "@solid-cli/reactivity";
 const possibleActions = () =>
   [
     { value: "add", label: t.ACTION_ADD, hint: "solid add ..." },
@@ -75,6 +76,7 @@ const provideSuggestions = async () => {
 const main = async () => {
   p.intro(`${color.bgCyan(color.black(" Solid-CLI "))}`);
   await configInst.parseConfig();
+  const needsUpdate = createAsync(async () => await updater({ name, version }));
   setLocale(configInst.field("lang"));
   const cli = subcommands({
     name: "solid",

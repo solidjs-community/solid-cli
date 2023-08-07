@@ -1,6 +1,6 @@
 {
   "name": "@solid-cli/core",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A CLI for Solid",
   "main": "dist/index.mjs",
   "bin": {
@@ -19,7 +19,8 @@
     "detect-package-manager": "^2.0.1",
     "execa": "^7.2.0",
     "picocolors": "^1.0.0",
-    "smol-toml": "^1.1.1"
+    "smol-toml": "^1.1.1",
+    "tiny-updater": "^3.5.1"
   },
   "scripts": {
     "start": "jiti ./src/index.ts",
