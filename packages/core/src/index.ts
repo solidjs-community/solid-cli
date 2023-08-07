@@ -14,11 +14,12 @@ import { setLocale, t } from "./translations";
 import { version } from "../package.json";
 import { configInst } from "../config";
 
-const possibleActions = [
-  { value: "add", label: t.ACTION_ADD, hint: "solid add ..." },
-  { value: "new", label: t.ACTION_NEW, hint: "solid new ..." },
-  { value: "start", label: t.ACTION_START, hint: "solid start ..." },
-] as const;
+const possibleActions = () =>
+  [
+    { value: "add", label: t.ACTION_ADD, hint: "solid add ..." },
+    { value: "new", label: t.ACTION_NEW, hint: "solid new ..." },
+    { value: "start", label: t.ACTION_START, hint: "solid start ..." },
+  ] as const;
 
 export const provideStartSuggestions = async () => {
   let startAction = await p.select({
@@ -51,11 +52,11 @@ export const provideStartSuggestions = async () => {
 };
 
 const provideSuggestions = async () => {
-  type ActionType = (typeof possibleActions)[number]["value"];
+  type ActionType = ReturnType<typeof possibleActions>[number]["value"];
   let action = (await p.select({
-    message: t.ACTION_START,
+    message: t.SELECT_ACTION,
     // This thing really doesn't like `as const` things
-    options: possibleActions as any,
+    options: possibleActions() as any,
   })) as ActionType;
   if (!action) return;
   switch (action) {
@@ -72,13 +73,13 @@ const provideSuggestions = async () => {
 };
 
 const main = async () => {
+  await configInst.parseConfig();
+  setLocale(configInst.field("lang"));
   const cli = subcommands({
     name: "solid",
     cmds: commands,
     version: version,
   });
-  await configInst.parseConfig();
-  setLocale(configInst.field("lang"));
   p.intro(`${color.bgCyan(color.black(" Solid-CLI "))}`);
   const args = process.argv.slice(2);
 
