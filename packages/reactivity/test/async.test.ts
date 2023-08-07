@@ -14,4 +14,11 @@ describe("createAsync", () => {
 		});
 		expect(res).toBe(123);
 	});
+	test("An async function has a loading state", async () => {
+		const asyncFn = createAsync(async () => {
+			return 123;
+		});
+		expect(asyncFn.loading).toBe(true);
+		queueMicrotask(() => expect(asyncFn.loading).toBe(false));
+	});
 });

@@ -46,9 +46,20 @@ export function createMemo<T>(fn: () => T) {
 	return comp.get;
 }
 export function createAsync<T>(fn: () => Promise<T>) {
-	const comp = new Computation<T | null>(() => null);
-	fn().then((val) => comp.set(val));
-	return comp.get;
+	const [get, set] = createSignal<T | null>(null);
+	const [loading, setLoading] = createSignal(true);
+	fn().then((val) => {
+		set(val);
+		setLoading(false);
+	});
+	Object.defineProperties(get, {
+		loading: {
+			get() {
+				return loading();
+			},
+		},
+	});
+	return get as Getter<T> & { loading: boolean };
 }
 export function untrack<T>(fn: () => T) {
 	return runWithListener(null, fn);
