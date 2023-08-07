@@ -1,6 +1,8 @@
 import { writeFile } from "fs/promises";
 import { transformPlugins } from "../../lib/transform";
 import * as p from "@clack/prompts";
+import { cancelable } from "@solid-cli/ui";
+
 export const supportedAdapters = [
 	"aws",
 	"cloudflare-pages",
@@ -11,14 +13,19 @@ export const supportedAdapters = [
 	"static",
 	"vercel",
 ] as const;
+
 type SupportedAdapters = (typeof supportedAdapters)[number];
+
 const handleAutocompleteAdapter = async () => {
-	const name = (await p.select({
-		message: "Select an adapter",
-		options: supportedAdapters.map((a) => ({ value: a, label: a })),
-	})) as SupportedAdapters;
+	const name = (await cancelable(
+		p.select({
+			message: "Select an adapter",
+			options: supportedAdapters.map((a) => ({ value: a, label: a })),
+		}),
+	)) as SupportedAdapters;
 	await handleAdapter(name, true);
 };
+
 export const handleAdapter = async (name?: string, forceTransform = false) => {
 	if (!name) {
 		await handleAutocompleteAdapter();
