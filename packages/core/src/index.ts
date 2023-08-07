@@ -76,7 +76,7 @@ const provideSuggestions = async () => {
 const main = async () => {
   p.intro(`${color.bgCyan(color.black(" Solid-CLI "))}`);
   await configInst.parseConfig();
-  const needsUpdate = createAsync(async () => await updater({ name, version }));
+  const needsUpdate = createAsync(async () => await updater({ name, version, ttl: 86_400_000 }));
   setLocale(configInst.field("lang"));
   const cli = subcommands({
     name: "solid",
