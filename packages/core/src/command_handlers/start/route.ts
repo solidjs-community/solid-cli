@@ -1,6 +1,7 @@
 import * as p from "@clack/prompts";
 import { isSolidStart } from "../../lib/utils/solid_start";
 import { createRoute } from "../../lib/start/add_route";
+import { spinnerify } from "../../lib/utils/ui";
 const handleAutocompleteRoute = async () => {
   const path = (
     await p.text({ message: "Please provide a path for the route", placeholder: "/user/login" })
@@ -18,8 +19,9 @@ export const handleRoute = async (path?: string, name?: string) => {
     await handleAutocompleteRoute();
     return;
   }
-  const s = p.spinner();
-  s.start("Creating new route");
-  await createRoute(path, name);
-  s.stop("Route created");
+  await spinnerify({
+    startText: "Creating new route",
+    finishText: "Route created",
+    fn: () => createRoute(path, name),
+  });
 };

@@ -9,7 +9,10 @@ import { handleMode } from "./command_handlers/start/mode";
 import { handleAdapter } from "./command_handlers/start/adapter";
 import { handleData } from "./command_handlers/start/data";
 import { handleRoute } from "./command_handlers/start/route";
+
 import { t } from "./translations";
+import { version } from "../package.json";
+
 
 const possibleActions = [
   { value: "add", label: t.ACTION_ADD, hint: "solid add ..." },
@@ -72,6 +75,7 @@ const main = async () => {
   const cli = subcommands({
     name: "solid",
     cmds: commands,
+    version: version,
   });
   p.intro(`${color.bgCyan(color.black(" Solid-CLI "))}`);
   const args = process.argv.slice(2);

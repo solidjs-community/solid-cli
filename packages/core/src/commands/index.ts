@@ -1,14 +1,13 @@
-import { PM, detect } from "detect-package-manager";
 import { openInBrowser } from "../lib/utils/open";
 import { startCommands } from "./start";
 import * as p from "@clack/prompts";
-import { execa } from "execa";
 import { boolean, command, flag, optional, positional, restPositionals, string } from "cmd-ts";
 import { oneOf } from "../lib/utils/oneOf";
 import { handleAdd } from "../command_handlers/add";
 import { handleNew } from "../command_handlers/new";
 import { cancelable } from "../components/autocomplete/utils";
 import { t } from "../translations";
+import { spinnerify } from "../lib/utils/ui";
 
 const add = command({
   name: "add",
@@ -57,14 +56,30 @@ const new_ = command({
 const docs = command({
   name: "docs",
   args: {
+    keyword: positional({ type: optional(string), displayName: "Keyword" }),
     open: flag({ type: boolean, long: "open", short: "o" }),
   },
-  async handler({ open }) {
-    if (open) {
-      await openInBrowser("https://docs.solidjs.com");
+  async handler({ keyword, open }) {
+    if (!keyword) {
+      if (open) {
+        await spinnerify({
+          startText: "Opening",
+          finishText: "Opened",
+          fn: () => openInBrowser("https://docs.solidjs.com"),
+        });
+        return;
+      }
+      p.log.message("The solid documentation is available at https://docs.solidjs.com");
       return;
     }
-    p.log.message("The solid documentation is available at https://docs.solidjs.com");
+    await spinnerify({
+      startText: "Opening",
+      finishText: "Opened",
+      fn: () =>
+        openInBrowser(
+          `https://www.google.com/search?q=${keyword}+site:docs.solidjs.com+OR+site:start.solidjs.com+OR+site:solidjs.com`,
+        ),
+    });
   },
 });
 export default {

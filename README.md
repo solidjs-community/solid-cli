@@ -16,7 +16,7 @@ A custom CLI built for the purpose of installing and managing SolidJS apps and p
   - [x] Search list of primitives
 - [ ] Integrations
   - [ ] Auth.js
-  - [ ] Tailwind
+  - [x] Tailwind
   - [ ] PandaCSS
   - [ ] Cypress
   - [ ] PostCSS
