@@ -1,5 +1,5 @@
-export declare const locale: import("@solid-cli/reactivity/types/core").Getter<"en" | "fr" | "es" | "de" | "ru" | "zh" | "ja" | "ko" | null>, setLocale: import("@solid-cli/reactivity/types/core").Setter<"en" | "fr" | "es" | "de" | "ru" | "zh" | "ja" | "ko" | null>;
-export declare const validatedLocale: () => "en" | "fr" | "es" | "de" | "ru" | "zh" | "ja" | "ko" | null;
+export declare const locale: any, setLocale: any;
+export declare const validatedLocale: any;
 export declare const t: {
     readonly AUTOCOMPLETE_SELECTED: string;
     readonly AUTOCOMPLETE_NO_RESULTS: string;
@@ -23,6 +23,9 @@ export declare const t: {
     readonly START_ADAPTER: string;
     readonly START_ADAPTER_HINT: string;
     readonly START_ADAPTER_DISPLAYNAME: string;
+    readonly START_API: string;
+    readonly START_API_HINT: string;
+    readonly START_API_DISPLAYNAME: string;
     readonly CANCELED: string;
     readonly CONFIRM_INSTALL: (n: number) => string;
     readonly NEW_START: string;
