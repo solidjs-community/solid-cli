@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/swc-plugin-solid-cli",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "An SWC plugin for transforming a project's vite config",
 	"author": "Thomas Beer",
 	"license": "MIT",
