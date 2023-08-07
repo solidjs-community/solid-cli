@@ -15,6 +15,7 @@ import { configInst } from "./config";
 import loadCommands from "./plugins/plugins_entry";
 import updater from "tiny-updater";
 import { createAsync } from "@solid-cli/reactivity";
+import { handleApi } from "./command_handlers/start/api";
 const possibleActions = () =>
 	[
 		{ value: "add", label: t.ACTION_ADD, hint: "solid add ..." },
@@ -34,6 +35,11 @@ export const provideStartSuggestions = async () => {
 				label: t.START_ADAPTER,
 				hint: t.START_ADAPTER_HINT,
 			},
+			{
+				value: "api",
+				label: t.START_API,
+				hint: t.START_API_HINT,
+			},
 		],
 	});
 	switch (startAction) {
@@ -48,6 +54,9 @@ export const provideStartSuggestions = async () => {
 			break;
 		case "adapter":
 			await handleAdapter();
+			break;
+		case "api":
+			await handleApi();
 			break;
 	}
 };

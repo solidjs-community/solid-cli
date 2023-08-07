@@ -5,6 +5,7 @@ import { handleRoute } from "../command_handlers/start/route";
 import { handleData } from "../command_handlers/start/data";
 import { handleAdapter, supportedAdapters } from "../command_handlers/start/adapter";
 import { t } from "../translations";
+import { handleApi } from "../command_handlers/start/api";
 const mode = command({
 	name: "mode",
 	args: {
@@ -59,6 +60,22 @@ const adapter = command({
 		await handleAdapter(name, forceTransform);
 	},
 });
+
+const api = command({
+	name: "api",
+	args: {
+		path: positional({ type: optional(string), displayName: "Api Path" }),
+		name: positional({
+			type: optional(string),
+			displayName: t.START_API_DISPLAYNAME,
+			description: t.START_API_HINT,
+		}),
+	},
+	async handler({ path, name }) {
+		await handleApi(path, name);
+	},
+});
+
 export const startCommands = subcommands({
 	name: "start",
 	description: "Commands specific to solid start",
@@ -67,5 +84,6 @@ export const startCommands = subcommands({
 		route,
 		data,
 		adapter,
+		api,
 	},
 });

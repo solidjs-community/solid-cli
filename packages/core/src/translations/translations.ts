@@ -156,6 +156,24 @@ const TRANSLATIONS = {
 		fr: "Nom de l'adaptateur",
 		ja: "アダプター名",
 	},
+	START_API: {
+		en: "API",
+		es: "API",
+		fr: "API",
+		ja: "API",
+	},
+	START_API_HINT: {
+		en: "Create an API route",
+		es: "Crear una ruta API",
+		fr: "Créer une route d'API",
+		ja: "APIルートを作成する",
+	},
+	START_API_DISPLAYNAME: {
+		en: "API file name",
+		es: "Nombre de archivo API",
+		fr: "Nom du fichier API",
+		ja: "APIファイル名",
+	},
 	CANCELED: {
 		en: "Canceled",
 		es: "Cancelado",
