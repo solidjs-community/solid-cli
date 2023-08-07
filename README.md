@@ -4,6 +4,8 @@
 
 # Solid CLI (This is currently very much still in beta)
 
+[![Build and Test](https://github.com/Tommypop2/solid-cli/actions/workflows/tests.yml/badge.svg)](https://github.com/Tommypop2/solid-cli/actions/workflows/tests.yml)
+
 A custom CLI built for the purpose of installing and managing SolidJS apps and projects. The goal of the CLI is to provide a useful and powerful utility to installing any dependencies, searching the Solid ecosystem etc.
 
 # Roadmap/Features
