@@ -3,7 +3,7 @@ export type Setter<T> = (val: T | ((val: T | null) => T)) => void;
 export type Signal<T> = [Getter<T>, Setter<T>];
 let OBSERVER: Computation<any> | null = null;
 let BATCHING = false;
-const EFFECTSQUEUE: Set<Computation<any>> = new Set();
+const UPDATEQUEUE: Set<Computation<any>> = new Set();
 export class Computation<T> {
 	fn: () => T;
 	value: T | null = null;
@@ -21,6 +21,7 @@ export class Computation<T> {
 		OBSERVER.sources.add(this);
 	}
 	get = () => {
+		// We need to make sure memos update if they're accessed during a `batch`
 		if (this.dirty) {
 			const prev = BATCHING;
 			BATCHING = false;
@@ -42,7 +43,7 @@ export class Computation<T> {
 	}
 	update() {
 		if (BATCHING) {
-			EFFECTSQUEUE.add(this);
+			UPDATEQUEUE.add(this);
 			this.dirty = true;
 			return;
 		}
@@ -74,8 +75,8 @@ export class Computation<T> {
 	}
 }
 function stabilize() {
-	EFFECTSQUEUE.forEach((e) => e.update());
-	EFFECTSQUEUE.clear();
+	UPDATEQUEUE.forEach((u) => u.update());
+	UPDATEQUEUE.clear();
 }
 export function batch<T>(fn: () => T) {
 	BATCHING = true;
