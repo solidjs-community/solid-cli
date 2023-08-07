@@ -2,10 +2,13 @@ export type Getter<T> = () => T;
 export type Setter<T> = (val: T | ((val: T | null) => T)) => void;
 export type Signal<T> = [Getter<T>, Setter<T>];
 let OBSERVER: Computation<any> | null = null;
+let BATCHING = false;
+const EFFECTSQUEUE: Set<Computation<any>> = new Set();
 export class Computation<T> {
 	fn: () => T;
 	value: T | null = null;
 	state: number = 0;
+	dirty: boolean = false;
 	sources: Set<Computation<any>> = new Set();
 	observers: Set<Computation<any>> = new Set();
 	constructor(fn: () => T) {
@@ -18,6 +21,12 @@ export class Computation<T> {
 		OBSERVER.sources.add(this);
 	}
 	get = () => {
+		if (this.dirty) {
+			const prev = BATCHING;
+			BATCHING = false;
+			this.update();
+			BATCHING = prev;
+		}
 		this.track();
 		return this.value;
 	};
@@ -32,6 +41,11 @@ export class Computation<T> {
 		this.sources.clear();
 	}
 	update() {
+		if (BATCHING) {
+			EFFECTSQUEUE.add(this);
+			this.dirty = true;
+			return;
+		}
 		this.removeParentObservers();
 		const prev = OBSERVER;
 		OBSERVER = this;
@@ -58,6 +72,17 @@ export class Computation<T> {
 		this.observers.forEach((o) => o.increment());
 		this.observers.forEach((o) => o.decrement());
 	}
+}
+function stabilize() {
+	EFFECTSQUEUE.forEach((e) => e.update());
+	EFFECTSQUEUE.clear();
+}
+export function batch<T>(fn: () => T) {
+	BATCHING = true;
+	const res = fn();
+	BATCHING = false;
+	stabilize();
+	return res;
 }
 export function getListener() {
 	return OBSERVER;

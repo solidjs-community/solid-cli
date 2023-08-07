@@ -2,6 +2,8 @@
   "name": "@solid-cli/core",
   "version": "0.0.8",
   "description": "A CLI for Solid",
+  "author": "Thomas Beer",
+  "license": "MIT",
   "main": "dist/index.mjs",
   "bin": {
     "solid": "./dist/index.mjs"

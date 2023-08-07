@@ -13,7 +13,6 @@
 		"build": "",
 		"test": "cargo +nightly test"
 	},
-	"files": [],
 	"preferUnplugged": true,
 	"publishConfig": {
 		"access": "public"

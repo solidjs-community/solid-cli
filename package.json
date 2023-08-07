@@ -11,7 +11,7 @@
 		"start": "cd packages/core && pnpm start"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "Thomas Beer",
 	"license": "MIT",
 	"workspaces": [
 		"./packages/*"

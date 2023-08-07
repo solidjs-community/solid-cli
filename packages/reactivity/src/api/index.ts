@@ -1,4 +1,5 @@
-import { Computation, Getter, Signal, runWithListener } from "../core";
+import { Computation, Getter, Signal, batch, runWithListener } from "../core";
+export { batch, getListener } from "../core";
 type OnOptions = { defer: boolean };
 export function on<T, G>(
 	deps: Getter<G>,
@@ -49,8 +50,10 @@ export function createAsync<T>(fn: () => Promise<T>) {
 	const [get, set] = createSignal<T | null>(null);
 	const [loading, setLoading] = createSignal(true);
 	fn().then((val) => {
-		set(val);
-		setLoading(false);
+		batch(() => {
+			set(val);
+			setLoading(false);
+		});
 	});
 	Object.defineProperties(get, {
 		loading: {
