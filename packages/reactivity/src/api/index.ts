@@ -1,11 +1,28 @@
 import { Computation, Getter, Signal, runWithListener } from "../core";
-
-export function on<T>(deps: Getter<unknown>[] | Getter<unknown>, fn: () => T) {
+type OnOptions = { defer: boolean };
+export function on<T, G>(
+	deps: Getter<G>,
+	fn: (val: G) => T,
+	options?: OnOptions
+): () => T | undefined;
+export function on<T>(
+	deps: Getter<unknown>[] | Getter<unknown>,
+	fn: (val: any) => T,
+	options?: OnOptions
+) {
+	let shouldDefer = options?.defer ?? false;
 	return () => {
 		// Track all getters on call
-		Array.isArray(deps) ? deps.forEach((d) => d()) : deps();
+		let args: any[] = [];
+		Array.isArray(deps)
+			? deps.forEach((d) => args.push(d()))
+			: args.push(deps());
+		if (shouldDefer) {
+			shouldDefer = false;
+			return;
+		}
 		// Ensure that the function isn't tracked
-		return untrack(fn);
+		return untrack(() => fn(args.length === 1 ? args[0] : args));
 	};
 }
 export function createSignal<T>(val: T) {

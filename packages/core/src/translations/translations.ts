@@ -1,7 +1,23 @@
-import { createSignal } from "@solid-cli/reactivity";
-import { SL, TemplateFunction, Translations } from "./types";
-export const [locale, setLocale] = createSignal(Intl.DateTimeFormat().resolvedOptions().locale.split("-")[0]);
-
+import { createEffect, createMemo, createSignal } from "@solid-cli/reactivity";
+import { SL, SupportedLanguages, TemplateFunction, Translations } from "./types";
+import { on } from "@solid-cli/reactivity";
+import { configInst } from "../../config";
+export const [locale, setLocale] = createSignal<SL | null>(null);
+export const validatedLocale = createMemo(() => {
+  const l = locale();
+  if (!l) return "en";
+  return SupportedLanguages.find((lang) => lang.toLowerCase() === l.toLowerCase()) ? l : "en";
+});
+createEffect(
+  on(
+    validatedLocale,
+    (l) => {
+      configInst.setField("lang", l);
+      configInst.writeConfig();
+    },
+    { defer: true },
+  ),
+);
 const TRANSLATIONS = {
   AUTOCOMPLETE_SELECTED: {
     en: "Selected Packages",
@@ -289,7 +305,7 @@ const TRANSLATIONS = {
 
 export const t = new Proxy(TRANSLATIONS, {
   get(target, p, receiver) {
-    const l = locale() as SL;
+    const l = validatedLocale() as SL;
     let text = target[p as keyof typeof target];
 
     if (typeof text === "function") {

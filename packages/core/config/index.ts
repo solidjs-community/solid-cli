@@ -2,7 +2,7 @@ import { readFile, writeFile } from "fs/promises";
 import { homedir } from "os";
 import { parse, stringify } from "smol-toml";
 const defaultConfig = {
-  lang: "en",
+  lang: Intl.DateTimeFormat().resolvedOptions().locale.split("-")[0],
 } as Record<string, any>;
 export class ConfigHandler {
   private config: Record<string, any> = defaultConfig;
@@ -31,6 +31,9 @@ export class ConfigHandler {
     const res = this.config[field];
     if (!res && defaultConfig[field]) this.config[field] = defaultConfig[field];
     return this.config[field];
+  }
+  setField(field: string, value: any) {
+    this.config[field] = value;
   }
 }
 // Kinda hacky

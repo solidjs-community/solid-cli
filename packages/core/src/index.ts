@@ -10,7 +10,7 @@ import { handleAdapter } from "./command_handlers/start/adapter";
 import { handleData } from "./command_handlers/start/data";
 import { handleRoute } from "./command_handlers/start/route";
 
-import { setLocale, t } from "./translations";
+import { t, setLocale } from "./translations";
 import { version } from "../package.json";
 import { configInst } from "../config";
 
