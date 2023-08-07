@@ -2,11 +2,16 @@ import { createEffect, createMemo, createSignal } from "@solid-cli/reactivity";
 import { SL, SupportedLanguages, TemplateFunction, Translations } from "./types";
 import { on } from "@solid-cli/reactivity";
 import { configInst } from "../../config";
+import { log } from "@clack/prompts";
 export const [locale, setLocale] = createSignal<SL | null>(null);
 export const validatedLocale = createMemo(() => {
   const l = locale();
   if (!l) return "en";
-  return SupportedLanguages.find((lang) => lang.toLowerCase() === l.toLowerCase()) ? l : "en";
+  const supported = !!SupportedLanguages.find((lang) => lang.toLowerCase() === l.toLowerCase());
+  if (!supported) {
+    log.warn(`Unsupported language: ${l}. Defaulting to English.`);
+  }
+  return supported ? l : "en";
 });
 createEffect(
   on(
