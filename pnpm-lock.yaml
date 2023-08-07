@@ -47,6 +47,9 @@ importers:
       picocolors:
         specifier: ^1.0.0
         version: 1.0.0
+      smol-toml:
+        specifier: ^1.1.1
+        version: 1.1.1
     devDependencies:
       '@chialab/esbuild-plugin-meta-url':
         specifier: ^0.17.7
@@ -2552,6 +2555,11 @@ packages:
       wcwidth: 1.0.1
       yargs: 15.4.1
     dev: true
+
+  /smol-toml@1.1.1:
+    resolution: {integrity: sha512-qyYMygHyDKiy82iiKTH/zXr0DZmEpsou0AMZnkXdYhA/0LhPLoZ/xHaOBrbecLbAJ/Gd5KhMWWH8TXtgv1g+DQ==}
+    engines: {node: '>= 18', pnpm: '>= 8'}
+    dev: false
 
   /source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
