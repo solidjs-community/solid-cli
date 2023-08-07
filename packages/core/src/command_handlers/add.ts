@@ -60,7 +60,7 @@ const transformPrimitives = async (ps: string[]) => {
   if (!primitives().length) {
     await spinnerify({
       startText: t.LOADING_PRIMITIVES,
-      finishText: t.PRIMITIVES_LOADED",
+      finishText: t.PRIMITIVES_LOADED,
       fn: loadPrimitives,
     });
   }
