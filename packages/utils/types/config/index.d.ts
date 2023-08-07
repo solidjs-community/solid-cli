@@ -1,9 +1,9 @@
 export declare class ConfigHandler {
     private config;
     private configPath;
-    readConfig(): Promise<string>;
+    readConfig(): Promise<any>;
     parseConfig(): Promise<void>;
-    stringifyConfig(): string;
+    stringifyConfig(): any;
     writeConfig(): Promise<void>;
     field(field: string): any;
     setField(field: string, value: any): void;
