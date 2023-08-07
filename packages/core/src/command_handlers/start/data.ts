@@ -18,9 +18,6 @@ const handleAutocompleteData = async () => {
 	const name = await cancelable(
 		p.text({
 			message: "Enter the name for the data file (leave this blank for the default)",
-			validate(value) {
-				if (!value.length) return "Name is required";
-			},
 		}),
 	);
 
