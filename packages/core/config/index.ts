@@ -33,6 +33,9 @@ export class ConfigHandler {
     return this.config[field];
   }
   setField(field: string, value: any) {
+    if (!(field in defaultConfig)) {
+      throw new Error(`Field ${field} is not a supported field`);
+    }
     this.config[field] = value;
   }
 }

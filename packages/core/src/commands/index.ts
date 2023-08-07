@@ -8,6 +8,7 @@ import { handleNew } from "../command_handlers/new";
 import { cancelable } from "../components/autocomplete/utils";
 import { t } from "../translations";
 import { spinnerify } from "../lib/utils/ui";
+import { configInst } from "../../config";
 
 const add = command({
   name: "add",
@@ -82,9 +83,23 @@ const docs = command({
     });
   },
 });
+const set = command({
+  name: "set",
+  args: { field: positional({ type: string }), value: positional({ type: string }) },
+  async handler({ field, value }) {
+    try {
+      configInst.setField(field, value);
+    } catch (e) {
+      if (e instanceof Error) p.log.error(e.message);
+      return;
+    }
+    await configInst.writeConfig();
+  },
+});
 export default {
   add,
   docs,
   new: new_,
+  set,
   start: startCommands,
 };
