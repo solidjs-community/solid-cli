@@ -1,0 +1,19 @@
+{
+	"name": "test_plugin",
+	"version": "1.0.0",
+	"description": "",
+	"module": "./dist/index.mjs",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsup"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"cmd-ts": "^0.13.0"
+	},
+	"devDependencies": {
+		"tsup": "^7.2.0"
+	}
+}
