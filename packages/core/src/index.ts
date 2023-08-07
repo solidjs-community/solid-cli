@@ -9,9 +9,9 @@ import { handleAdapter } from "./command_handlers/start/adapter";
 import { handleData } from "./command_handlers/start/data";
 import { handleRoute } from "./command_handlers/start/route";
 
-import { t, setLocale } from "./translations";
+import { t, setLocale } from "@solid-cli/utils";
 import { name, version } from "../package.json";
-import { configInst } from "./config";
+import { configInst } from "@solid-cli/utils";
 import loadCommands from "./plugins/plugins_entry";
 import updater from "tiny-updater";
 import { createAsync } from "@solid-cli/reactivity";

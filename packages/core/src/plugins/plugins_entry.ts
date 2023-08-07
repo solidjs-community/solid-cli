@@ -1,5 +1,5 @@
 import { join } from "path";
-import { configInst } from "../config";
+import { configInst } from "@solid-cli/utils";
 import defaultCommands from "../commands";
 
 const resolveImport = async (packagePath: string) => {

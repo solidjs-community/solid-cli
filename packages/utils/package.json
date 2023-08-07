@@ -1,0 +1,34 @@
+{
+	"name": "@solid-cli/utils",
+	"version": "0.0.1",
+	"description": "A collection of utilities for the Solid CLI",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./types/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"test": "vitest run",
+		"build": "tsc && tsup"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "20.4.8",
+		"tsup": "^7.2.0",
+		"typescript": "^5.1.6"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"dependencies": {
+		"@clack/core": "0.3.2",
+		"@clack/prompts": "0.6.3",
+		"@solid-cli/reactivity": "workspace:*",
+		"picocolors": "^1.0.0",
+		"smol-toml": "^1.1.1"
+	}
+}

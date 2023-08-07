@@ -3,12 +3,12 @@ export type Setter<T> = (val: T | ((val: T | null) => T)) => void;
 export type Signal<T> = [Getter<T>, Setter<T>];
 let OBSERVER: Computation<any> | null = null;
 let BATCHING = false;
-const UPDATEQUEUE: Set<Computation<any>> = new Set();
+const UPDATEQUEUE: Computation<any>[] = [];
 export class Computation<T> {
 	fn: () => T;
 	value: T | null = null;
 	state: number = 0;
-	dirty: boolean = false;
+	isQueued: boolean = false;
 	sources: Set<Computation<any>> = new Set();
 	observers: Set<Computation<any>> = new Set();
 	constructor(fn: () => T) {
@@ -22,7 +22,7 @@ export class Computation<T> {
 	}
 	get = () => {
 		// We need to make sure memos update if they're accessed during a `batch`
-		if (this.dirty) {
+		if (this.isQueued) {
 			const prev = BATCHING;
 			BATCHING = false;
 			this.update();
@@ -43,8 +43,9 @@ export class Computation<T> {
 	}
 	update() {
 		if (BATCHING) {
-			UPDATEQUEUE.add(this);
-			this.dirty = true;
+			if(this.isQueued) return;
+			UPDATEQUEUE.push(this);
+			this.isQueued = true;
 			return;
 		}
 		this.removeParentObservers();
@@ -76,7 +77,7 @@ export class Computation<T> {
 }
 function stabilize() {
 	UPDATEQUEUE.forEach((u) => u.update());
-	UPDATEQUEUE.clear();
+	UPDATEQUEUE.length = 0
 }
 export function batch<T>(fn: () => T) {
 	BATCHING = true;
