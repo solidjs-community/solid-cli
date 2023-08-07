@@ -4,6 +4,7 @@ import { TextOptions } from "@clack/prompts";
 import { S_CHECKBOX_ACTIVE, S_CHECKBOX_SELECTED, S_CHECKBOX_INACTIVE, S_BAR, S_BAR_END, box, S_INFO } from "./utils";
 import color from "picocolors";
 import { createEffect } from "@solid-cli/reactivity";
+import { t } from "../../translations";
 
 export type Option = { value: any; label?: string; hint?: string; group?: string };
 
@@ -257,7 +258,7 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
     render() {
       const selected =
         this.selected.length === 0
-          ? color.gray("Nothing selected")
+          ? color.gray(t.NOTHING_SELECTED)
           : this.selected.map((option, i) => `${color.red(option.label)}`).join(" ");
       const placeholder = opts.placeholder
         ? color.inverse(opts.placeholder[0]) + color.dim(opts.placeholder.slice(1))
@@ -267,7 +268,7 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
 
       const textView = `${color.cyan("?")} Filter: ` + value + "\n";
 
-      const noResults = color.red("No results");
+      const noResults = color.red(t.AUTOCOMPLETE_NO_RESULTS);
 
       let uniqueGroups = new Set();
       let start = Math.max(0, this.cursor - 11);
@@ -301,9 +302,9 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
       const options = `${color.cyan(S_BAR)}  ${this.filteredOptions.length ? filteredOptions : noResults}\n${color.cyan(S_BAR_END,)}\n`;
 
       return (
-        `${color.cyan(S_BAR)} \n ${color.cyan(S_BAR)} ${color.yellow(
-          S_CHECKBOX_SELECTED,
-        )} Selected Packages: ${selected}\n${color.cyan(S_BAR)} \n` +
+        `${color.cyan(S_BAR)} \n ${color.cyan(S_BAR)} ${color.yellow(S_CHECKBOX_SELECTED)} ${
+          t.AUTOCOMPLETE_SELECTED
+        }: ${selected}\n${color.cyan(S_BAR)} \n` +
         (this.mode === "search" ? `${color.cyan(S_BAR)} ` + textView : "") +
         options +
         "\n" +

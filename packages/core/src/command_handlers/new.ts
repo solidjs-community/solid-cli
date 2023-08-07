@@ -3,6 +3,7 @@ import { openInBrowser } from "../lib/utils/open";
 import { PM, detect } from "detect-package-manager";
 import { execa } from "execa";
 import { cancelable } from "../components/autocomplete/utils";
+import { t } from "../translations";
 import { spinnerify } from "../lib/utils/ui";
 
 const startSupported = [
@@ -37,7 +38,7 @@ export const getRunner = (pM: PM) => {
 const handleNewStartProject = async (projectName: string) => {
   const template = await cancelable(
     p.select({
-      message: "Which template would you like to use?",
+      message: t.NEW_START,
       initialValue: "ts",
       options: startSupported.map((s) => ({ label: s, value: s })),
     }),
@@ -45,15 +46,15 @@ const handleNewStartProject = async (projectName: string) => {
 
   const pM = await detect();
   await spinnerify({
-    startText: "Creating Project",
-    finishText: "Project successfully created! 🎉",
+    startText: t.CREATING_PROJECT,
+    finishText: t.PROJECT_CREATED,
     fn: () =>
       execa(
         getRunner(pM),
         ["degit", `solidjs/solid-start/examples/${template}#main`, projectName].filter((e) => e !== null) as string[],
       ),
   });
-  p.log.info(`To get started, run:
+  p.log.info(`${t.GET_STARTED}
   - cd ${projectName}
   - npm install
   - npm run dev`);
@@ -61,10 +62,10 @@ const handleNewStartProject = async (projectName: string) => {
 
 const handleAutocompleteNew = async () => {
   const name = await cancelable(
-    p.text({ message: "Project Name", placeholder: "solid-project", defaultValue: "solid-project" }),
+    p.text({ message: t.PROJECT_NAME, placeholder: "solid-project", defaultValue: "solid-project" }),
   );
 
-  const isStart = await cancelable(p.confirm({ message: "Is this a Solid-Start project?" }));
+  const isStart = await cancelable(p.confirm({ message: t.IS_START_PROJECT }));
 
   if (isStart) {
     handleNewStartProject(name);
@@ -73,7 +74,7 @@ const handleAutocompleteNew = async () => {
 
   const template = await cancelable(
     p.select({
-      message: "Template",
+      message: t.TEMPLATE,
       initialValue: "ts",
       options: localSupported.map((s) => ({ label: s, value: s })),
     }),
@@ -82,8 +83,8 @@ const handleAutocompleteNew = async () => {
   const pM = await detect();
   const projectName = name ?? "solid-project";
   await spinnerify({
-    startText: "Creating project",
-    finishText: "Project successfully created! 🎉",
+    startText: t.CREATING_PROJECT,
+    finishText: t.PROJECT_CREATED,
     fn: () =>
       execa(
         getRunner(pM),
@@ -91,7 +92,7 @@ const handleAutocompleteNew = async () => {
       ),
   });
 
-  p.log.info(`To get started, run:
+  p.log.info(`${t.GET_STARTED}
   - cd ${projectName}
   - npm install
   - npm run dev`);
@@ -104,24 +105,25 @@ export const handleNew = async (variation?: AllSupported, name?: string, stackbl
 
   if (stackblitz) {
     await spinnerify({
-      startText: `Opening ${variation} in browser`,
-      finishText: "Successfully Opened in Browser",
+      startText: t.OPENING_IN_BROWSER(variation),
+      finishText: t.OPENED_IN_BROWSER,
       fn: () => openInBrowser(`https://solid.new/${variation}`),
     });
     return;
   }
 
   const pM = await detect();
+
   await spinnerify({
-    startText: "Creating project",
-    finishText: "Project successfully created! 🎉",
+    startText: t.CREATING_PROJECT,
+    finishText: t.PROJECT_CREATED,
     fn: () =>
       execa(
         getRunner(pM),
         ["degit", `solidjs/templates/${variation}`, name ?? null].filter((e) => e !== null) as string[],
       ),
   });
-  p.log.info(`To get started, run:
+  p.log.info(`${t.GET_STARTED}
   - cd ${name}
   - npm install
   - npm run dev`);

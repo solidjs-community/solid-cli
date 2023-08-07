@@ -4,13 +4,14 @@ import { handleMode, supportedModes } from "../command_handlers/start/mode";
 import { handleRoute } from "../command_handlers/start/route";
 import { handleData } from "../command_handlers/start/data";
 import { handleAdapter, supportedAdapters } from "../command_handlers/start/adapter";
+import { t } from "../translations";
 const mode = command({
   name: "mode",
   args: {
     mode: positional({
       type: optional(oneOf(supportedModes)),
       displayName: "Mode",
-      description: "The rendering mode for solid to build for, and use.",
+      description: t.START_MODE_DESC,
     }),
   },
   async handler({ mode }) {
@@ -24,7 +25,7 @@ const route = command({
     name: positional({
       type: optional(string),
       displayName: "Route name",
-      description: "The name of the `.tsx` file to be generated",
+      description: t.START_ROUTE_DESC,
     }),
   },
   async handler({ path, name }) {
@@ -38,7 +39,7 @@ const data = command({
     name: positional({
       type: optional(string),
       displayName: "Data name",
-      description: "The name of the `.data.ts` file to be generated",
+      description: t.START_DATA_DESC,
     }),
   },
   async handler({ path, name }) {
@@ -50,7 +51,7 @@ const adapter = command({
   args: {
     name: positional({
       type: optional(oneOf(supportedAdapters)),
-      displayName: "Adapter name",
+      displayName: t.START_ADAPTER_DISPLAYNAME,
     }),
     forceTransform: flag({ short: "f", long: "force" }),
   },

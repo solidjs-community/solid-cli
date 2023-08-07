@@ -6,11 +6,12 @@ import { oneOf } from "../lib/utils/oneOf";
 import { handleAdd } from "../command_handlers/add";
 import { handleNew } from "../command_handlers/new";
 import { cancelable } from "../components/autocomplete/utils";
+import { t } from "../translations";
 import { spinnerify } from "../lib/utils/ui";
 
 const add = command({
   name: "add",
-  description: "Can add and install integrations: `solid add unocss`.",
+  description: t.ADD_DESC,
   args: {
     packages: restPositionals({
       type: string,
@@ -24,17 +25,17 @@ const add = command({
 });
 const new_ = command({
   name: "new",
-  description: "Creates a new solid project",
+  description: t.NEW_DESC,
   args: {
     variation: positional({
       type: optional(oneOf(["bare", "ts", "js"] as const)),
-      displayName: "The variation to create, for example `bare`",
+      displayName: t.NEW_VARIATION_DESC,
       description: "",
     }),
     name: positional({
       type: optional(string),
-      displayName: "Project Name",
-      description: "The name of the folder to create",
+      displayName: t.PROJECT_NAME,
+      description: t.NEW_NAME_DESC,
     }),
     stackblitz: flag({ type: boolean, long: "stackblitz", short: "s" }),
   },
@@ -42,7 +43,7 @@ const new_ = command({
     if (!name && variation) {
       const _name = await cancelable(
         p.text({
-          message: "Project Name",
+          message: t.PROJECT_NAME,
           placeholder: `solid-${variation}`,
           defaultValue: `solid-${variation}`,
         }),
