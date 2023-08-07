@@ -1,24 +1,24 @@
 {
-	"name": "solid-cli",
-	"private": true,
-	"version": "0.0.1",
-	"description": "A CLI for making the solidjs development experience easier, faster, and less error prone.",
-	"scripts": {
-		"test": "vitest",
-		"test:all": "turbo run test",
-		"build": "turbo run build",
-		"release": "pnpm build && changeset publish",
-		"start": "cd packages/core && pnpm start"
-	},
-	"keywords": [],
-	"author": "Thomas Beer",
-	"license": "MIT",
-	"workspaces": [
-		"./packages/*"
-	],
-	"devDependencies": {
-		"@changesets/cli": "2.26.2",
-		"turbo": "^1.10.12",
-		"vitest": "^0.33.0"
-	}
+  "name": "solid-cli",
+  "private": true,
+  "version": "0.0.1",
+  "description": "A CLI for making the solidjs development experience easier, faster, and less error prone.",
+  "scripts": {
+    "test": "vitest",
+    "test:all": "turbo run test",
+    "build": "turbo run build",
+    "release": "pnpm build && changeset publish",
+    "start": "cd packages/core && pnpm start"
+  },
+  "keywords": [],
+  "author": "Thomas Beer & Rahul Batra",
+  "license": "MIT",
+  "workspaces": [
+    "./packages/*"
+  ],
+  "devDependencies": {
+    "@changesets/cli": "2.26.2",
+    "turbo": "^1.10.12",
+    "vitest": "^0.33.0"
+  }
 }
