@@ -59,6 +59,9 @@ export class Computation<T> {
 		this.observers.forEach((o) => o.decrement());
 	}
 }
+export function getListener() {
+	return OBSERVER;
+}
 export function runWithListener<T>(
 	listener: Computation<any> | null,
 	fn: () => T
