@@ -6,8 +6,8 @@ const handleAutocompleteRoute = async () => {
 	const path = (
 		await p.text({ message: "Please provide a path for the route", placeholder: "/user/login" })
 	).toString();
-	const res = (await p.text({ message: "Please provide a name for the route" })).toString();
-	const name = res === "" ? undefined : res;
+	const res = await p.text({ message: "Please provide a name for the route" });
+	const name = typeof res === "string" ? res : res.toString();
 	await handleRoute(path, name);
 };
 export const handleRoute = async (path?: string, name?: string) => {
