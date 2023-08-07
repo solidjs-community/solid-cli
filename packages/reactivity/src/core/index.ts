@@ -4,7 +4,7 @@ export type Signal<T> = [Getter<T>, Setter<T>];
 let OBSERVER: Computation<any> | null = null;
 export class Computation<T> {
 	fn: () => T;
-	value!: T;
+	value: T | null = null;
 	state: number = 0;
 	sources: Set<Computation<any>> = new Set();
 	observers: Set<Computation<any>> = new Set();

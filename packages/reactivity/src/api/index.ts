@@ -45,6 +45,11 @@ export function createMemo<T>(fn: () => T) {
 	const comp = new Computation(fn);
 	return comp.get;
 }
+export function createAsync<T>(fn: () => Promise<T>) {
+	const comp = new Computation<T | null>(() => null);
+	fn().then((val) => comp.set(val));
+	return comp.get;
+}
 export function untrack<T>(fn: () => T) {
 	return runWithListener(null, fn);
 }

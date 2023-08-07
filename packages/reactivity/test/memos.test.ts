@@ -1,33 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { createEffect, createMemo, createSignal } from "../src";
-describe("createSignal", () => {
-	test("A signal should hold a value that can be updated", () => {
-		const [value, setValue] = createSignal(0);
-		expect(value()).toBe(0);
-		setValue(1);
-		expect(value()).toBe(1);
-	});
-});
-describe("createEffect", () => {
-	test("An effect executes once when created", () => {
-		let updates = 0;
-		createEffect(() => {
-			updates++;
-		});
-		expect(updates).toBe(1);
-	});
-	test("An effect re-executes when a dependency changes", () => {
-		let updates = 0;
-		const [value, setValue] = createSignal(0);
-		createEffect(() => {
-			value();
-			updates++;
-		});
-		expect(updates).toBe(1);
-		setValue(1);
-		expect(updates).toBe(2);
-	});
-});
+import { createMemo, createSignal } from "../src";
 describe("createMemo", () => {
 	test("A memo is executed once on creation", () => {
 		let updates = 0;
