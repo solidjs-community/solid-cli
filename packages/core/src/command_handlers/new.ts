@@ -2,8 +2,8 @@ import * as p from "@clack/prompts";
 import { openInBrowser } from "../lib/utils/open";
 import { PM, detect } from "detect-package-manager";
 import { execa } from "execa";
-import { cancelable } from "../components/autocomplete/utils";
-import { t } from "../translations";
+import { cancelable } from "@solid-cli/ui";
+import { t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
 
 const startSupported = [

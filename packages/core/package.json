@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/core",
-	"version": "0.0.8",
+	"version": "0.0.9",
 	"description": "A CLI for Solid",
 	"author": "Thomas Beer & Rahul Batra",
 	"license": "MIT",
@@ -22,7 +22,9 @@
 		"execa": "^7.2.0",
 		"picocolors": "^1.0.0",
 		"smol-toml": "^1.1.1",
-		"tiny-updater": "^3.5.1"
+		"tiny-updater": "^3.5.1",
+		"@solid-cli/utils": "workspace:*",
+		"@solid-cli/ui": "workspace:*"
 	},
 	"scripts": {
 		"start": "jiti ./src/index.ts",

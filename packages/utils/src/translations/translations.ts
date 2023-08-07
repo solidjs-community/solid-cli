@@ -309,7 +309,7 @@ const TRANSLATIONS = {
 } as const satisfies Translations;
 
 export const t = new Proxy(TRANSLATIONS, {
-	get(target, p, receiver) {
+	get(target, p, _receiver) {
 		const l = validatedLocale() as SL;
 		let text = target[p as keyof typeof target];
 

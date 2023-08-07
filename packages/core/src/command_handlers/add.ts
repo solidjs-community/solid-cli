@@ -1,6 +1,6 @@
 import { writeFile } from "fs/promises";
-import { autocomplete } from "../components/autocomplete/autocomplete";
-import { S_BAR, cancelable } from "../components/autocomplete/utils";
+import { autocomplete } from "@solid-cli/ui";
+import { S_BAR, cancelable } from "@solid-cli/ui";
 import { Integrations, PluginOptions, Supported, integrations, transformPlugins } from "../lib/transform";
 import * as p from "@clack/prompts";
 import color from "picocolors";
@@ -8,7 +8,7 @@ import { detect } from "detect-package-manager";
 import { $ } from "execa";
 import { loadPrimitives } from "../lib/utils/primitives";
 import { primitives } from "../lib/utils/primitives";
-import { t } from "../translations";
+import { t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
 const handleAutocompleteAdd = async () => {
 	const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));

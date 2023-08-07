@@ -5,10 +5,10 @@ import { boolean, command, flag, optional, positional, restPositionals, string }
 import { oneOf } from "../lib/utils/oneOf";
 import { handleAdd } from "../command_handlers/add";
 import { handleNew } from "../command_handlers/new";
-import { cancelable } from "../components/autocomplete/utils";
-import { t } from "../translations";
+import { cancelable } from "@solid-cli/ui";
+import { t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
-import { configInst } from "../config";
+import { configInst } from "@solid-cli/utils";
 
 const add = command({
 	name: "add",
