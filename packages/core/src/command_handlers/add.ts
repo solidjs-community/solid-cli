@@ -10,6 +10,7 @@ import { loadPrimitives } from "../lib/utils/primitives";
 import { primitives } from "../lib/utils/primitives";
 import { t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
+
 const handleAutocompleteAdd = async () => {
 	const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
 	const opts = () => [...supportedIntegrations, ...primitives()];

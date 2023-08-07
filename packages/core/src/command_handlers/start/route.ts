@@ -2,12 +2,27 @@ import * as p from "@clack/prompts";
 import { isSolidStart } from "../../lib/utils/solid_start";
 import { createRoute } from "../../lib/start/add_route";
 import { spinnerify } from "../../lib/utils/ui";
+import { cancelable } from "@solid-cli/ui";
 const handleAutocompleteRoute = async () => {
-	const path = (
-		await p.text({ message: "Please provide a path for the route", placeholder: "/user/login" })
-	).toString();
-	const res = await p.text({ message: "Please provide a name for the route" });
-	const name = typeof res === "string" ? res : res.toString();
+	const path = await cancelable(
+		p.text({
+			message: "Please provide a path for the route",
+			placeholder: "/user/login",
+			validate(value) {
+				if (!value.length) return "Path is required";
+			},
+		}),
+	);
+	const name = await cancelable(
+		p.text({
+			message: "Please provide a name for the route",
+
+			validate(value) {
+				if (!value.length) return "Name for route is required";
+			},
+		}),
+	);
+
 	await handleRoute(path, name);
 };
 export const handleRoute = async (path?: string, name?: string) => {
