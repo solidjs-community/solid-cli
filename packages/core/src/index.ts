@@ -2,7 +2,6 @@
 import { run, subcommands } from "cmd-ts";
 import * as p from "@clack/prompts";
 import color from "picocolors";
-import commands from "./plugins/plugins_entry";
 import { handleAdd } from "./command_handlers/add";
 import { handleNew } from "./command_handlers/new";
 import { handleMode } from "./command_handlers/start/mode";
@@ -12,7 +11,8 @@ import { handleRoute } from "./command_handlers/start/route";
 
 import { t, setLocale } from "./translations";
 import { version } from "../package.json";
-import { configInst } from "../config";
+import { configInst } from "./config";
+import loadCommands from "./plugins/plugins_entry";
 
 const possibleActions = () =>
   [
@@ -78,7 +78,7 @@ const main = async () => {
   setLocale(configInst.field("lang"));
   const cli = subcommands({
     name: "solid",
-    cmds: commands,
+    cmds: await loadCommands(),
     version: version,
   });
   const args = process.argv.slice(2);

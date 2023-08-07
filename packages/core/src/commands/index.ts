@@ -8,7 +8,7 @@ import { handleNew } from "../command_handlers/new";
 import { cancelable } from "../components/autocomplete/utils";
 import { t } from "../translations";
 import { spinnerify } from "../lib/utils/ui";
-import { configInst } from "../../config";
+import { configInst } from "../config";
 
 const add = command({
   name: "add",

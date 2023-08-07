@@ -1,7 +1,7 @@
 import { createEffect, createMemo, createSignal } from "@solid-cli/reactivity";
 import { SL, SupportedLanguages, TemplateFunction, Translations } from "./types";
 import { on } from "@solid-cli/reactivity";
-import { configInst } from "../../config";
+import { configInst } from "../config";
 import { log } from "@clack/prompts";
 export const [locale, setLocale] = createSignal<SL | null>(null);
 export const validatedLocale = createMemo(() => {
