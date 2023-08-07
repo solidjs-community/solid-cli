@@ -11,95 +11,95 @@ import { spinnerify } from "../lib/utils/ui";
 import { configInst } from "../config";
 
 const add = command({
-  name: "add",
-  description: t.ADD_DESC,
-  args: {
-    packages: restPositionals({
-      type: string,
-      displayName: "Package Name",
-    }),
-    forceTransform: flag({ type: boolean, long: "force", short: "f" }),
-  },
-  handler: async ({ packages, forceTransform }) => {
-    await handleAdd(packages, forceTransform);
-  },
+	name: "add",
+	description: t.ADD_DESC,
+	args: {
+		packages: restPositionals({
+			type: string,
+			displayName: "Package Name",
+		}),
+		forceTransform: flag({ type: boolean, long: "force", short: "f" }),
+	},
+	handler: async ({ packages, forceTransform }) => {
+		await handleAdd(packages, forceTransform);
+	},
 });
 const new_ = command({
-  name: "new",
-  description: t.NEW_DESC,
-  args: {
-    variation: positional({
-      type: optional(oneOf(["bare", "ts", "js"] as const)),
-      displayName: t.NEW_VARIATION_DESC,
-      description: "",
-    }),
-    name: positional({
-      type: optional(string),
-      displayName: t.PROJECT_NAME,
-      description: t.NEW_NAME_DESC,
-    }),
-    stackblitz: flag({ type: boolean, long: "stackblitz", short: "s" }),
-  },
-  async handler({ variation, name, stackblitz }) {
-    if (!name && variation) {
-      const _name = await cancelable(
-        p.text({
-          message: t.PROJECT_NAME,
-          placeholder: `solid-${variation}`,
-          defaultValue: `solid-${variation}`,
-        }),
-      );
-      name = _name;
-    }
-    await handleNew(variation, name, stackblitz);
-  },
+	name: "new",
+	description: t.NEW_DESC,
+	args: {
+		variation: positional({
+			type: optional(oneOf(["bare", "ts", "js"] as const)),
+			displayName: t.NEW_VARIATION_DESC,
+			description: "",
+		}),
+		name: positional({
+			type: optional(string),
+			displayName: t.PROJECT_NAME,
+			description: t.NEW_NAME_DESC,
+		}),
+		stackblitz: flag({ type: boolean, long: "stackblitz", short: "s" }),
+	},
+	async handler({ variation, name, stackblitz }) {
+		if (!name && variation) {
+			const _name = await cancelable(
+				p.text({
+					message: t.PROJECT_NAME,
+					placeholder: `solid-${variation}`,
+					defaultValue: `solid-${variation}`,
+				}),
+			);
+			name = _name;
+		}
+		await handleNew(variation, name, stackblitz);
+	},
 });
 const docs = command({
-  name: "docs",
-  args: {
-    keyword: positional({ type: optional(string), displayName: "Keyword" }),
-    open: flag({ type: boolean, long: "open", short: "o" }),
-  },
-  async handler({ keyword, open }) {
-    if (!keyword) {
-      if (open) {
-        await spinnerify({
-          startText: "Opening",
-          finishText: "Opened",
-          fn: () => openInBrowser("https://docs.solidjs.com"),
-        });
-        return;
-      }
-      p.log.message("The solid documentation is available at https://docs.solidjs.com");
-      return;
-    }
-    await spinnerify({
-      startText: "Opening",
-      finishText: "Opened",
-      fn: () =>
-        openInBrowser(
-          `https://www.google.com/search?q=${keyword}+site:docs.solidjs.com+OR+site:start.solidjs.com+OR+site:solidjs.com`,
-        ),
-    });
-  },
+	name: "docs",
+	args: {
+		keyword: positional({ type: optional(string), displayName: "Keyword" }),
+		open: flag({ type: boolean, long: "open", short: "o" }),
+	},
+	async handler({ keyword, open }) {
+		if (!keyword) {
+			if (open) {
+				await spinnerify({
+					startText: "Opening",
+					finishText: "Opened",
+					fn: () => openInBrowser("https://docs.solidjs.com"),
+				});
+				return;
+			}
+			p.log.message("The solid documentation is available at https://docs.solidjs.com");
+			return;
+		}
+		await spinnerify({
+			startText: "Opening",
+			finishText: "Opened",
+			fn: () =>
+				openInBrowser(
+					`https://www.google.com/search?q=${keyword}+site:docs.solidjs.com+OR+site:start.solidjs.com+OR+site:solidjs.com`,
+				),
+		});
+	},
 });
 const set = command({
-  name: "set",
-  args: { field: positional({ type: string }), value: positional({ type: string }) },
-  async handler({ field, value }) {
-    try {
-      configInst.setField(field, value);
-    } catch (e) {
-      if (e instanceof Error) p.log.error(e.message);
-      return;
-    }
-    await configInst.writeConfig();
-  },
+	name: "set",
+	args: { field: positional({ type: string }), value: positional({ type: string }) },
+	async handler({ field, value }) {
+		try {
+			configInst.setField(field, value);
+		} catch (e) {
+			if (e instanceof Error) p.log.error(e.message);
+			return;
+		}
+		await configInst.writeConfig();
+	},
 });
 export default {
-  add,
-  docs,
-  new: new_,
-  set,
-  start: startCommands,
+	add,
+	docs,
+	new: new_,
+	set,
+	start: startCommands,
 };

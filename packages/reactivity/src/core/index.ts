@@ -88,10 +88,7 @@ export function batch<T>(fn: () => T) {
 export function getListener() {
 	return OBSERVER;
 }
-export function runWithListener<T>(
-	listener: Computation<any> | null,
-	fn: () => T
-) {
+export function runWithListener<T>(listener: Computation<any> | null, fn: () => T) {
 	const prev = OBSERVER;
 	OBSERVER = listener;
 	const res = fn();

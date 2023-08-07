@@ -1,12 +1,6 @@
 import { test, expect } from "vitest";
 import { describe } from "vitest";
-import {
-	batch,
-	createAsync,
-	createEffect,
-	createMemo,
-	createSignal,
-} from "../src";
+import { batch, createAsync, createEffect, createMemo, createSignal } from "../src";
 
 describe("batch", () => {
 	test("Multiple updates should only trigger an effect once", () => {
@@ -43,7 +37,7 @@ describe("batch", () => {
 				const loading = data.loading;
 				updates++;
 				if (d === 123 && loading === false) res(d);
-			})
+			}),
 		);
 		expect(updates).toBe(2);
 	});
