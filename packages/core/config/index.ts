@@ -1,12 +1,13 @@
 import { readFile, writeFile } from "fs/promises";
 import { homedir } from "os";
+import { join } from "path";
 import { parse, stringify } from "smol-toml";
 const defaultConfig = {
   lang: Intl.DateTimeFormat().resolvedOptions().locale.split("-")[0],
 } as Record<string, any>;
 export class ConfigHandler {
   private config: Record<string, any> = defaultConfig;
-  private configPath: string = homedir() + "/solid-cli.config.toml";
+  private configPath: string = join(homedir(), "/solid-cli.config.toml");
   async readConfig() {
     return await readFile(this.configPath, "utf-8");
   }
