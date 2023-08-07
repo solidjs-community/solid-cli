@@ -1,0 +1,9 @@
+import UnoCss from "unocss/vite";
+import solid from "solid-start/vite";
+// Simulates a vite config
+export default defineConfig({
+    plugins: [
+        solid(),
+        UnoCss({})
+    ]
+});
