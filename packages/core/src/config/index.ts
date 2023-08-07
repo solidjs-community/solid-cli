@@ -5,6 +5,7 @@ import { parse, stringify } from "smol-toml";
 const defaultConfig = {
   lang: Intl.DateTimeFormat().resolvedOptions().locale.split("-")[0],
 } as Record<string, any>;
+
 export class ConfigHandler {
   private config: Record<string, any> = defaultConfig;
   private configPath: string = join(homedir(), "/solid-cli.config.toml");
@@ -29,8 +30,7 @@ export class ConfigHandler {
     await writeFile(this.configPath, this.stringifyConfig());
   }
   field(field: string) {
-    const res = this.config[field];
-    if (!res && defaultConfig[field]) this.config[field] = defaultConfig[field];
+    if (!this.config[field] && defaultConfig[field]) this.config[field] = defaultConfig[field];
     return this.config[field];
   }
   setField(field: string, value: any) {
