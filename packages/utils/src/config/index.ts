@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "fs/promises";
-import { homedir } from "os";
+import { homedir } from "../paths";
 import { join } from "path";
 import { parse, stringify } from "smol-toml";
 const defaultConfig = {
