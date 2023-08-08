@@ -1,9 +1,9 @@
 import { homedir as oshomedir, tmpdir as ostmpdir } from "os";
 
 export const homedir = () => {
-	return oshomedir();
+	return process.env.XDG_CONFIG_HOME ?? oshomedir();
 };
 
 export const tmpdir = () => {
-	return ostmpdir();
+	return process.env.XDG_CACHE_HOME ?? ostmpdir();
 };
