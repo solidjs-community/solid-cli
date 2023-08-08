@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"baseUrl": ".",
 		"noEmit": true,
 		"module": "ESNext",
 		"target": "ESNext",

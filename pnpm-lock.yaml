@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  detect-package-manager@2.0.1:
+    hash: z3ggdkumlo4f7lrrhi5q7ehiyi
+    path: patches/detect-package-manager@2.0.1.patch
+
 importers:
 
   .:
@@ -49,7 +54,7 @@ importers:
         version: 0.12.1
       detect-package-manager:
         specifier: ^2.0.1
-        version: 2.0.1
+        version: 2.0.1(patch_hash=z3ggdkumlo4f7lrrhi5q7ehiyi)
       execa:
         specifier: ^7.2.0
         version: 7.2.0
@@ -1258,12 +1263,13 @@ packages:
     hasBin: true
     dev: true
 
-  /detect-package-manager@2.0.1:
+  /detect-package-manager@2.0.1(patch_hash=z3ggdkumlo4f7lrrhi5q7ehiyi):
     resolution: {integrity: sha512-j/lJHyoLlWi6G1LDdLgvUtz60Zo5GEj+sVYtTVXnYLDPuzgC3llMxonXym9zIwhhUII8vjdw0LXxavpLqTbl1A==}
     engines: {node: '>=12'}
     dependencies:
       execa: 5.1.1
     dev: false
+    patched: true
 
   /didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
