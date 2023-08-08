@@ -8,7 +8,7 @@
 		"skipLibCheck": true,
 		"declaration": true,
 		"emitDeclarationOnly": true,
-		"moduleResolution": "node",
+		"moduleResolution": "Node",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"allowSyntheticDefaultImports": true,
@@ -18,5 +18,5 @@
 		"noFallthroughCasesInSwitch": true,
 		"outDir": "types"
 	},
-	"include": ["src/*"]
+	"include": ["src/*", "src/**/*"]
 }
