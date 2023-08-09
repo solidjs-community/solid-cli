@@ -61,4 +61,19 @@ describe("batch", () => {
 		});
 		expect(updates).toBe(3);
 	});
+	test.skip("Diamond problem with memos accessed in a batch", () => {
+		const [get, set] = createSignal(0);
+		let updates = 0;
+		const A = createMemo(() => {
+			updates++;
+			get();
+		});
+		const B = createMemo(() => A()! * 2);
+		const C = createMemo(() => A()! * 3);
+		const D = createMemo(() => B()! + C()!);
+		batch(() => {
+			set(2);
+		});
+		expect(updates).toBe(2);
+	});
 });
