@@ -41,4 +41,24 @@ describe("batch", () => {
 		);
 		expect(updates).toBe(2);
 	});
+	test("A derived memo accessed within a batch should resolve to the correct value", () => {
+		const [get, set] = createSignal(0);
+		const memo = createMemo(() => get() * 2);
+		let updates = 0;
+		// First update on initial run
+		const derived = createMemo(() => {
+			updates++;
+			return memo()! * 2;
+		});
+		batch(() => {
+			set(1);
+			set(2);
+			// 2nd Update on access
+			expect(derived()).toBe(8);
+			set(3);
+			// 3rd update on access
+			expect(derived()).toBe(12);
+		});
+		expect(updates).toBe(3);
+	});
 });

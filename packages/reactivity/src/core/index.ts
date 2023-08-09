@@ -8,7 +8,7 @@ export class Computation<T> {
 	fn: () => T;
 	value: T | null = null;
 	state: number = 0;
-	isQueued: boolean = false;
+	queueSlot: number = -1;
 	sources: Set<Computation<any>> = new Set();
 	observers: Set<Computation<any>> = new Set();
 	constructor(fn: () => T) {
@@ -22,11 +22,13 @@ export class Computation<T> {
 	}
 	get = () => {
 		// We need to make sure memos update if they're accessed during a `batch`
-		if (this.isQueued) {
+		if (this.queueSlot != -1) {
+			UPDATEQUEUE.splice(this.queueSlot, 1);
 			const prev = BATCHING;
 			BATCHING = false;
 			this.update();
 			BATCHING = prev;
+			this.queueSlot = -1;
 		}
 		this.track();
 		return this.value;
@@ -41,11 +43,15 @@ export class Computation<T> {
 		this.sources.forEach((s) => s.observers.delete(this));
 		this.sources.clear();
 	}
+	pullSourceUpdates() {
+		if (!this.sources) return;
+		this.sources.forEach((s) => s.update());
+	}
 	update() {
 		if (BATCHING) {
-			if (this.isQueued) return;
+			if (this.queueSlot != -1) return;
+			this.queueSlot = UPDATEQUEUE.length;
 			UPDATEQUEUE.push(this);
-			this.isQueued = true;
 			return;
 		}
 		// this.removeParentObservers();
