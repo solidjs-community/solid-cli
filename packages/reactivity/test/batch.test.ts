@@ -74,6 +74,7 @@ describe("batch", () => {
 		batch(() => {
 			set(2);
 		});
+		// Actually currently get 3 here
 		expect(updates).toBe(2);
 	});
 });
