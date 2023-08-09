@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/reactivity",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"description": "The minimal, eager reactive system that powers the Solid CLI",
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
