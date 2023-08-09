@@ -19,4 +19,17 @@ describe("createEffect", () => {
 		setValue(1);
 		expect(updates).toBe(2);
 	});
+	test("Changes propagate correctly", () => {
+		const [get, set] = createSignal(0);
+		let updates = 0;
+		createEffect(() => {
+			get();
+			updates++;
+		});
+		expect(updates).toBe(1);
+		set(1);
+		expect(updates).toBe(2);
+		set(2);
+		expect(updates).toBe(3);
+	});
 });

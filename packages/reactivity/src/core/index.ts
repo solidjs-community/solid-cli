@@ -48,7 +48,7 @@ export class Computation<T> {
 			this.isQueued = true;
 			return;
 		}
-		this.removeParentObservers();
+		// this.removeParentObservers();
 		const prev = OBSERVER;
 		OBSERVER = this;
 		const newVal = this.fn();
