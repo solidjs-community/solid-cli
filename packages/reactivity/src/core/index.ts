@@ -43,7 +43,7 @@ export class Computation<T> {
 	}
 	update() {
 		if (BATCHING) {
-			if(this.isQueued) return;
+			if (this.isQueued) return;
 			UPDATEQUEUE.push(this);
 			this.isQueued = true;
 			return;
@@ -77,7 +77,7 @@ export class Computation<T> {
 }
 function stabilize() {
 	UPDATEQUEUE.forEach((u) => u.update());
-	UPDATEQUEUE.length = 0
+	UPDATEQUEUE.length = 0;
 }
 export function batch<T>(fn: () => T) {
 	BATCHING = true;
