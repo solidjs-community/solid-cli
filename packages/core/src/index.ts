@@ -9,7 +9,7 @@ import { handleAdapter } from "./command_handlers/start/adapter";
 import { handleData } from "./command_handlers/start/data";
 import { handleRoute } from "./command_handlers/start/route";
 
-import { t, setLocale } from "@solid-cli/utils";
+import { t, setLocale, getField } from "@solid-cli/utils";
 import { name, version } from "../package.json";
 import { config, readConfig } from "@solid-cli/utils";
 import loadCommands from "./plugins/plugins_entry";
@@ -86,7 +86,7 @@ const main = async () => {
 	p.intro(`${color.bgCyan(color.black(" Solid-CLI "))}`);
 	await readConfig();
 	const needsUpdate = createAsync(async () => await updater({ name, version, ttl: 86_400_000 }));
-	setLocale(config()["lang"]);
+	setLocale(getField("lang"));
 	const cli = subcommands({
 		name: "solid",
 		cmds: await loadCommands(),

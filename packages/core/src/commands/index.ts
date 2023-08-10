@@ -6,9 +6,8 @@ import { oneOf } from "../lib/utils/oneOf";
 import { handleAdd } from "../command_handlers/add";
 import { handleNew } from "../command_handlers/new";
 import { cancelable } from "@solid-cli/ui";
-import { t } from "@solid-cli/utils";
+import { PossibleFields, setField, t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
-import { config, setConfig } from "@solid-cli/utils";
 
 const add = command({
 	name: "add",
@@ -85,16 +84,9 @@ const docs = command({
 });
 const set = command({
 	name: "set",
-	args: { field: positional({ type: string }), value: positional({ type: string }) },
+	args: { field: positional({ type: oneOf(PossibleFields) }), value: positional({ type: string }) },
 	async handler({ field, value }) {
-		try {
-			const cfg = config();
-			cfg[field] = value;
-			setConfig({ ...cfg });
-		} catch (e) {
-			if (e instanceof Error) p.log.error(e.message);
-			return;
-		}
+		setField(field, value);
 	},
 });
 export default {
