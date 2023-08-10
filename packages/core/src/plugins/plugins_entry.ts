@@ -1,5 +1,5 @@
 import { join } from "path";
-import { configInst } from "@solid-cli/utils";
+import { config } from "@solid-cli/utils";
 import defaultCommands from "../commands";
 
 const resolveImport = async (packagePath: string) => {
@@ -7,7 +7,7 @@ const resolveImport = async (packagePath: string) => {
 	return await import(join(packagePath, packageJson.module));
 };
 const loadUserCommands = async () => {
-	const pluginPaths = configInst.field("plugins") as string[];
+	const pluginPaths = config()["plugins"] as string[];
 	if (!pluginPaths) return null;
 	const imports = await Promise.all(pluginPaths.map((p) => resolveImport(p)));
 	const importedCommands = imports.map((i) => i.default);

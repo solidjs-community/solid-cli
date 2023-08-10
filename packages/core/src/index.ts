@@ -11,7 +11,7 @@ import { handleRoute } from "./command_handlers/start/route";
 
 import { t, setLocale } from "@solid-cli/utils";
 import { name, version } from "../package.json";
-import { configInst } from "@solid-cli/utils";
+import { config, readConfig } from "@solid-cli/utils";
 import loadCommands from "./plugins/plugins_entry";
 import updater from "tiny-updater";
 import { createAsync } from "@solid-cli/reactivity";
@@ -84,9 +84,9 @@ const provideSuggestions = async () => {
 
 const main = async () => {
 	p.intro(`${color.bgCyan(color.black(" Solid-CLI "))}`);
-	await configInst.parseConfig();
+	await readConfig();
 	const needsUpdate = createAsync(async () => await updater({ name, version, ttl: 86_400_000 }));
-	setLocale(configInst.field("lang"));
+	setLocale(config()["lang"]);
 	const cli = subcommands({
 		name: "solid",
 		cmds: await loadCommands(),
