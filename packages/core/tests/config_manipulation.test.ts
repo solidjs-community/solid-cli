@@ -24,7 +24,18 @@ vi.mock("fs/promises", () => {
 	};
 });
 vi.mock("execa", () => {
-	return { $: async () => {} };
+	return { $: async () => ({ stdout: "" }) };
+});
+vi.mock("../src/lib/utils/helpers.ts", () => {
+	return {
+		getViteConfig: async (): Promise<string> => new Promise((r) => r("vite.config.ts")),
+		fileExists: (path: string) => {
+			return path.includes("vite_config") || path.includes("root.tsx") || path.includes("index.tsx");
+		},
+		getRootFile: () => {
+			return "./src/root.tsx";
+		},
+	};
 });
 describe("Update config", () => {
 	afterEach(() => {
