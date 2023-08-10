@@ -1,7 +1,13 @@
-import { writeFile } from "fs/promises";
 import { autocomplete } from "@solid-cli/ui";
 import { S_BAR, cancelable } from "@solid-cli/ui";
-import { Integrations, PluginOptions, Supported, integrations, transformPlugins } from "../lib/transform";
+import {
+	Integrations,
+	PluginOptions,
+	Supported,
+	integrations,
+	setProjectRoot,
+	transformPlugins,
+} from "../lib/transform";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { detect } from "detect-package-manager";
@@ -10,6 +16,32 @@ import { loadPrimitives } from "../lib/utils/primitives";
 import { primitives } from "../lib/utils/primitives";
 import { t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
+import { fileExists, getProjectRoot, validateFilePath } from "../lib/utils/helpers";
+import { writeFile } from "fs/promises";
+
+const getViteConfig = async () => {
+	let config = "vite.config.ts";
+
+	const exists = fileExists(config);
+
+	if (!exists) {
+		p.log.error(color.red(`Can't find vite config`));
+		await cancelable(
+			p.text({
+				message: "Type path to vite config: ",
+				validate(value) {
+					const path = validateFilePath(value, "vite.config");
+					if (!path) return `Vite config not found. Please try again`;
+					else {
+						config = path;
+					}
+				},
+			}),
+		);
+	}
+
+	return config;
+};
 
 const handleAutocompleteAdd = async () => {
 	const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
@@ -95,11 +127,15 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 		})
 		.filter((p) => p) as Configs;
 
+	const viteConfig = await getViteConfig();
+
 	const code = await transformPlugins(
 		configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
 		forceTransform,
+		undefined,
+		viteConfig,
 	);
-	await writeFile("vite.config.ts", code);
+	await writeFile(viteConfig, code);
 	p.log.success(t.CONFIG_UPDATED);
 	const pM = await detect();
 	await spinnerify([
@@ -117,14 +153,33 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 				}
 			},
 		},
-		{
-			startText: t.POST_INSTALL,
-			finishText: t.POST_INSTALL_COMPLETE,
-			fn: async () => {
-				for (const cfg of configs) {
-					await cfg.postInstall?.();
-				}
-			},
-		},
 	]);
+	p.log.info("Preparing post install steps");
+	let projectRoot = await getProjectRoot();
+
+	if (!fileExists(projectRoot)) {
+		p.log.error(color.red(`Can't find root file \`${projectRoot.split("/")[1]}\`.`));
+		await cancelable(
+			p.text({
+				message: `Type path to root: `,
+				validate(value) {
+					if (!value.length) return `Path can not be empty`;
+					const path = validateFilePath(value, ["root.tsx", "index.tsx"]);
+					if (!path) return `File at \`${value}\` not found. Please try again`;
+					else {
+						setProjectRoot(path);
+					}
+				},
+			}),
+		);
+	}
+	await spinnerify({
+		startText: t.POST_INSTALL,
+		finishText: t.POST_INSTALL_COMPLETE,
+		fn: async () => {
+			for (const cfg of configs) {
+				await cfg.postInstall?.();
+			}
+		},
+	});
 };

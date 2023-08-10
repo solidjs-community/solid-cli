@@ -2,10 +2,14 @@ import { transform } from "@swc/core";
 import { readFile } from "fs/promises";
 import { fileURLToPath } from "url";
 import { insertAfter, insertAtBeginning } from "./utils/file_ops";
-import { getProjectRoot } from "./utils/helpers";
+import { fileExists, getProjectRoot, validateFilePath } from "./utils/helpers";
 import { $ } from "execa";
 import { detect } from "detect-package-manager";
 import { getRunner } from "../command_handlers/new";
+import { cancelable } from "@solid-cli/ui";
+import * as p from "@clack/prompts";
+import color from "picocolors";
+import { createSignal } from "@solid-cli/reactivity";
 
 export const transformPlugins = async (
 	new_plugins: PluginOptions[],
@@ -57,6 +61,8 @@ export type IntegrationsValue = {
 
 export type Integrations = Record<Supported, IntegrationsValue>;
 
+export const [projectRoot, setProjectRoot] = createSignal<string | undefined>(undefined);
+
 export const integrations = {
 	"tailwind": {
 		installs: ["tailwindcss", "postcss", "autoprefixer"],
@@ -76,7 +82,7 @@ export const integrations = {
 		},
 		installs: ["unocss"],
 		postInstall: async () => {
-			await insertAtBeginning(await getProjectRoot(), `import "virtual:uno.css";\n`);
+			await insertAtBeginning(projectRoot() ?? (await getProjectRoot()), `import "virtual:uno.css";\n`);
 		},
 	},
 	"vitepwa": {
@@ -88,7 +94,7 @@ export const integrations = {
 		},
 		installs: ["vite-plugin-pwa"],
 		postInstall: async () => {
-			await insertAtBeginning(await getProjectRoot(), `import "solid-devtools";\n`);
+			await insertAtBeginning(projectRoot() ?? (await getProjectRoot()), `import "solid-devtools";\n`);
 		},
 	},
 	"solid-devtools": {
