@@ -2,6 +2,9 @@ import { existsSync, lstatSync, readdirSync } from "fs";
 import { isSolidStart } from "./solid_start";
 import { join, resolve } from "path";
 import { $ } from "execa";
+import { cancelable } from "@solid-cli/ui";
+import * as p from "@clack/prompts";
+import color from "picocolors";
 
 export const getProjectRoot = async () => {
 	const { stdout } = await $`npm root`;
@@ -86,3 +89,38 @@ export async function findFiles(
 
 	return filePaths;
 }
+
+export const getViteConfig = async () => {
+	let configFile = "vite.config.ts";
+
+	const existsHere = fileExists(configFile);
+
+	if (!existsHere) {
+		const root = await getProjectRoot();
+		const existsInRoot = validateFilePath(root, "vite.config");
+		if (existsInRoot) {
+			const correctConfig = await cancelable(
+				p.confirm({
+					message: `Could not find vite config in current directory, but found vite config in \`${root}\`. Is this the correct vite config?`,
+				}),
+			);
+			if (correctConfig) return existsInRoot;
+		}
+
+		p.log.error(color.red(`Can't find vite config`));
+		await cancelable(
+			p.text({
+				message: "Type path to vite config: ",
+				validate(value) {
+					const path = validateFilePath(value, "vite.config");
+					if (!path) return `Vite config not found. Please try again`;
+					else {
+						configFile = path;
+					}
+				},
+			}),
+		);
+	}
+
+	return configFile;
+};

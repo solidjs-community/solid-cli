@@ -9,43 +9,8 @@ import { loadPrimitives } from "../lib/utils/primitives";
 import { primitives } from "../lib/utils/primitives";
 import { t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
-import { fileExists, getProjectRoot, getRootFile, validateFilePath } from "../lib/utils/helpers";
+import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";
 import { writeFile } from "fs/promises";
-
-const getViteConfig = async () => {
-	let configFile = "vite.config.ts";
-
-	const existsHere = fileExists(configFile);
-
-	if (!existsHere) {
-		const root = await getProjectRoot();
-		const existsInRoot = validateFilePath(root, "vite.config");
-		if (existsInRoot) {
-			const correctConfig = await cancelable(
-				p.confirm({
-					message: `Could not find vite config in current directory, but found vite config in \`${root}\`. Is this the correct vite config?`,
-				}),
-			);
-			if (correctConfig) return existsInRoot;
-		}
-
-		p.log.error(color.red(`Can't find vite config`));
-		await cancelable(
-			p.text({
-				message: "Type path to vite config: ",
-				validate(value) {
-					const path = validateFilePath(value, "vite.config");
-					if (!path) return `Vite config not found. Please try again`;
-					else {
-						configFile = path;
-					}
-				},
-			}),
-		);
-	}
-
-	return configFile;
-};
 
 const handleAutocompleteAdd = async () => {
 	const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
@@ -158,32 +123,34 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 			},
 		},
 	]);
-	p.log.info("Preparing post install steps");
-	let projectRoot = await getRootFile();
+	if (configs.length) {
+		p.log.info("Preparing post install steps for integrations");
+		let projectRoot = await getRootFile();
 
-	if (!fileExists(projectRoot)) {
-		p.log.error(color.red(`Can't find root file \`${projectRoot.split("/")[1]}\`.`));
-		await cancelable(
-			p.text({
-				message: `Type path to root: `,
-				validate(value) {
-					if (!value.length) return `Path can not be empty`;
-					const path = validateFilePath(value, ["root.tsx", "index.tsx"]);
-					if (!path) return `File at \`${value}\` not found. Please try again`;
-					else {
-						setRootFile(path);
-					}
-				},
-			}),
-		);
+		if (!fileExists(projectRoot)) {
+			p.log.error(color.red(`Can't find root file \`${projectRoot.split("/")[1]}\`.`));
+			await cancelable(
+				p.text({
+					message: `Type path to root: `,
+					validate(value) {
+						if (!value.length) return `Path can not be empty`;
+						const path = validateFilePath(value, ["root.tsx", "index.tsx"]);
+						if (!path) return `File at \`${value}\` not found. Please try again`;
+						else {
+							setRootFile(path);
+						}
+					},
+				}),
+			);
+		}
+		await spinnerify({
+			startText: t.POST_INSTALL,
+			finishText: t.POST_INSTALL_COMPLETE,
+			fn: async () => {
+				for (const cfg of configs) {
+					await cfg.postInstall?.();
+				}
+			},
+		});
 	}
-	await spinnerify({
-		startText: t.POST_INSTALL,
-		finishText: t.POST_INSTALL_COMPLETE,
-		fn: async () => {
-			for (const cfg of configs) {
-				await cfg.postInstall?.();
-			}
-		},
-	});
 };

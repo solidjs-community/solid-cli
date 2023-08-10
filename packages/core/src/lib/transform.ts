@@ -2,11 +2,14 @@ import { transform } from "@swc/core";
 import { readFile } from "fs/promises";
 import { fileURLToPath } from "url";
 import { insertAfter, insertAtBeginning } from "./utils/file_ops";
-import { getRootFile } from "./utils/helpers";
+import { fileExists, getRootFile, validateFilePath } from "./utils/helpers";
 import { $ } from "execa";
 import { detect } from "detect-package-manager";
 import { getRunner } from "../command_handlers/new";
 import { createSignal } from "@solid-cli/reactivity";
+import * as p from "@clack/prompts";
+import color from "picocolors";
+import { cancelable } from "@solid-cli/ui";
 
 export const transformPlugins = async (
 	new_plugins: PluginOptions[],
@@ -66,8 +69,43 @@ export const integrations = {
 		postInstall: async () => {
 			const pM = await detect();
 			await $`${getRunner(pM)} tailwindcss init -p`;
-			await insertAfter("tailwind.config.js", "content: [", '"./index.html", "./src/**/*.{js,ts,jsx,tsx}"');
-			await insertAtBeginning("./src/index.css", "@tailwind base;\n@tailwind components;\n@tailwind utilities;\n");
+			let tailwindConfig = "tailwind.config.js";
+			if (!fileExists(tailwindConfig)) {
+				p.log.error(color.red(`Can't find tailwind config file`));
+				await cancelable(
+					p.text({
+						message: `Type path to tailwind config: `,
+						validate(value) {
+							if (!value.length) return `Path can not be empty`;
+							const path = validateFilePath(value, "tailwind.config");
+							if (!path) return `Tailwind config at \`${value}\` not found. Please try again`;
+							else {
+								tailwindConfig = path;
+							}
+						},
+					}),
+				);
+			}
+
+			let indexCss = "./src/index.css";
+			if (!fileExists(indexCss)) {
+				p.log.error(color.red(`Can't find index.css`));
+				await cancelable(
+					p.text({
+						message: `Type path to index.css: `,
+						validate(value) {
+							if (!value.length) return `Path can not be empty`;
+							const path = validateFilePath(value, "index.css");
+							if (!path) return `index.css at \`${value}\` not found. Please try again`;
+							else {
+								indexCss = path;
+							}
+						},
+					}),
+				);
+			}
+			await insertAfter(tailwindConfig, "content: [", '"./index.html", "./src/**/*.{js,ts,jsx,tsx}"');
+			await insertAtBeginning(indexCss, "@tailwind base;\n@tailwind components;\n@tailwind utilities;\n");
 		},
 	},
 	"unocss": {
