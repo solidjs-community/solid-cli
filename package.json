@@ -3,6 +3,12 @@
 	"private": true,
 	"version": "0.0.1",
 	"description": "A CLI for making the solidjs development experience easier, faster, and less error prone.",
+	"license": "MIT",
+	"homepage": "https://solid-cli.netlify.app",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/solidjs-community/solid-cli"
+	},
 	"scripts": {
 		"test": "vitest",
 		"test:all": "turbo run test",
@@ -13,7 +19,6 @@
 	},
 	"keywords": [],
 	"author": "Thomas Beer & Rahul Batra",
-	"license": "MIT",
 	"workspaces": [
 		"./packages/*"
 	],

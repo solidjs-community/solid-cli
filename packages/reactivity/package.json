@@ -1,7 +1,13 @@
 {
 	"name": "@solid-cli/reactivity",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"description": "The minimal, eager reactive system that powers the Solid CLI",
+	"license": "MIT",
+	"homepage": "https://solid-cli.netlify.app",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/solidjs-community/solid-cli"
+	},
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
 	"types": "./types/index.d.ts",
@@ -17,7 +23,6 @@
 		"build": "tsc && tsup"
 	},
 	"author": "Thomas Beer",
-	"license": "MIT",
 	"devDependencies": {
 		"tsup": "^7.2.0",
 		"typescript": "^5.1.6"
