@@ -46,3 +46,43 @@ export function validateFilePath(path: string, lookingFor: string | string[]): s
 
 	return exists ? path : undefined;
 }
+
+export async function findFiles(
+	startPath: string,
+	lookingFor: string | string[],
+	opts: { depth?: number; ignoreDirs: string[] },
+): Promise<string[]> {
+	let { depth = Infinity, ignoreDirs = ["node_modules", "."] } = opts;
+
+	startPath = resolve(startPath);
+
+	const isDir = lstatSync(startPath).isDirectory();
+
+	if (!isDir) {
+		startPath = resolve(startPath.slice(0, startPath.lastIndexOf("/")));
+	}
+
+	let filePaths: string[] = [];
+
+	const files = readdirSync(startPath, { withFileTypes: true });
+
+	for (const file of files) {
+		if (file.isDirectory() && !ignoreDirs.some((s) => file.name.includes(s))) {
+			if (Number.isFinite(depth) && depth-- <= 0) continue;
+			filePaths = filePaths.concat(await findFiles(resolve(startPath, file.name), lookingFor, opts));
+			continue;
+		}
+
+		if (file.isFile()) {
+			const fileMatch = Array.isArray(lookingFor)
+				? lookingFor.some((s) => file.name.startsWith(s))
+				: file.name.startsWith(lookingFor);
+
+			if (fileMatch) {
+				filePaths.push(resolve(startPath, file.name));
+			}
+		}
+	}
+
+	return filePaths;
+}
