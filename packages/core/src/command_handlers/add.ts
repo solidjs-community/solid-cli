@@ -3,7 +3,7 @@ import { S_BAR, cancelable } from "@solid-cli/ui";
 import { Integrations, PluginOptions, Supported, integrations, setRootFile, transformPlugins } from "../lib/transform";
 import * as p from "@clack/prompts";
 import color from "picocolors";
-import { detect } from "detect-package-manager";
+import { PM, detect } from "detect-package-manager";
 import { $ } from "execa";
 import { loadPrimitives } from "../lib/utils/primitives";
 import { primitives } from "../lib/utils/primitives";
@@ -69,6 +69,16 @@ const transformPrimitives = async (ps: string[]) => {
 	const mappedInput = ps.map((p) => p.replace("@solid-primitives/", ""));
 	return primitives().filter((p) => mappedInput.includes(p.value.replace("@solid-primitives/", "")));
 };
+const installCommand = async (pM: PM): Promise<string> => {
+	switch (pM) {
+		case "npm":
+			return "install";
+		case "yarn":
+			return "add";
+		case "pnpm":
+			return "add";
+	}
+};
 type Configs = Integrations[keyof Integrations][];
 export const handleAdd = async (packages?: string[], forceTransform: boolean = false) => {
 	if (!packages?.length) {
@@ -103,13 +113,14 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 		startText: t.INSTALLING_VIA(pM),
 		finishText: t.PACKAGES_INSTALLED,
 		fn: async () => {
+			const instlCmd = await installCommand(pM);
 			for (let i = 0; i < configs.length; i++) {
 				const config = configs[i];
-				await $`${pM} install ${config.installs}`;
+				await $`${pM} ${instlCmd} ${config.installs}`;
 			}
 			// Install primitives
 			for (const primitive of await transformPrimitives(possiblePrimitives)) {
-				await $`${pM} install ${primitive.value}`;
+				await $`${pM} ${instlCmd} ${primitive.value}`;
 			}
 		},
 	});
