@@ -2,13 +2,10 @@ import { transform } from "@swc/core";
 import { readFile } from "fs/promises";
 import { fileURLToPath } from "url";
 import { insertAfter, insertAtBeginning } from "./utils/file_ops";
-import { fileExists, getProjectRoot, validateFilePath } from "./utils/helpers";
+import { getProjectRoot } from "./utils/helpers";
 import { $ } from "execa";
 import { detect } from "detect-package-manager";
 import { getRunner } from "../command_handlers/new";
-import { cancelable } from "@solid-cli/ui";
-import * as p from "@clack/prompts";
-import color from "picocolors";
 import { createSignal } from "@solid-cli/reactivity";
 
 export const transformPlugins = async (
@@ -93,9 +90,6 @@ export const integrations = {
 			options: {},
 		},
 		installs: ["vite-plugin-pwa"],
-		postInstall: async () => {
-			await insertAtBeginning(projectRoot() ?? (await getProjectRoot()), `import "solid-devtools";\n`);
-		},
 	},
 	"solid-devtools": {
 		pluginOptions: {
@@ -105,5 +99,8 @@ export const integrations = {
 			options: {},
 		},
 		installs: ["solid-devtools"],
+		postInstall: async () => {
+			await insertAtBeginning(projectRoot() ?? (await getProjectRoot()), `import "solid-devtools";\n`);
+		},
 	},
 };
