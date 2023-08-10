@@ -1,9 +1,14 @@
 {
 	"name": "@solid-cli/core",
-	"version": "0.0.9",
+	"version": "0.0.10",
 	"description": "A CLI for Solid",
 	"author": "Thomas Beer & Rahul Batra",
 	"license": "MIT",
+	"homepage": "https://solid-cli.netlify.app",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/solidjs-community/solid-cli"
+	},
 	"main": "dist/index.mjs",
 	"bin": {
 		"solid": "./dist/index.mjs"

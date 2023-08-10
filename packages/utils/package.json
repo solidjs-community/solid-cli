@@ -1,7 +1,13 @@
 {
 	"name": "@solid-cli/utils",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "A collection of utilities for the Solid CLI",
+	"license": "MIT",
+	"homepage": "https://solid-cli.netlify.app",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/solidjs-community/solid-cli"
+	},
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
 	"types": "./types/index.d.ts",
@@ -21,7 +27,6 @@
 		"test": "vitest run",
 		"build": "tsc && tsup"
 	},
-	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "20.4.8",
 		"tsup": "^7.2.0",

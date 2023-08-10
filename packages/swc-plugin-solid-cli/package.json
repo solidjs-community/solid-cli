@@ -4,6 +4,11 @@
 	"description": "An SWC plugin for transforming a project's vite config",
 	"author": "Thomas Beer",
 	"license": "MIT",
+	"homepage": "https://solid-cli.netlify.app",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/solidjs-community/solid-cli"
+	},
 	"keywords": [
 		"swc-plugin"
 	],
