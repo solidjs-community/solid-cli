@@ -2,7 +2,7 @@ import { readFile, writeFile } from "fs/promises";
 import { homedir } from "../paths";
 import { join } from "path";
 import { parse, stringify } from "smol-toml";
-import { createEffect, createSignal, on } from "@solid-cli/reactivity";
+import { createSignal } from "@solid-cli/reactivity";
 export const PossibleFields = ["lang"] as const;
 const defaultConfig = {
 	lang: Intl.DateTimeFormat().resolvedOptions().locale.split("-")[0],
@@ -21,22 +21,14 @@ export const readConfig = async () => {
 export const writeConfig = async () => {
 	await writeFile(configPath, stringify(config()));
 };
-export const setField = (field: Field, value: any) => {
+export const setField = async (field: Field, value: any) => {
 	if (!(field in defaultConfig)) {
 		throw new Error(`Field ${field} does not exist`);
 	}
 	setConfig((prev) => ({ ...prev, [field]: value }));
+	await writeConfig();
 };
 export const getField = (field: Field) => {
 	if (!config()[field] && defaultConfig[field]) setField(field, defaultConfig[field]);
 	return config()[field];
 };
-createEffect(
-	on(
-		config,
-		() => {
-			writeConfig();
-		},
-		{ defer: true },
-	),
-);

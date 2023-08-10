@@ -86,7 +86,7 @@ const set = command({
 	name: "set",
 	args: { field: positional({ type: oneOf(PossibleFields) }), value: positional({ type: string }) },
 	async handler({ field, value }) {
-		setField(field, value);
+		await setField(field, value);
 	},
 });
 export default {
