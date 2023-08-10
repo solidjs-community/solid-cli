@@ -98,31 +98,35 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 
 	const viteConfig = await getViteConfig();
 
-	const code = await transformPlugins(
-		configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
-		forceTransform,
-		undefined,
-		viteConfig,
-	);
-	await writeFile(viteConfig, code);
-	p.log.success(t.CONFIG_UPDATED);
 	const pM = await detect();
-	await spinnerify([
-		{
-			startText: t.INSTALLING_VIA(pM),
-			finishText: t.PACKAGES_INSTALLED,
-			fn: async () => {
-				for (let i = 0; i < configs.length; i++) {
-					const config = configs[i];
-					await $`${pM} install ${config.installs}`;
-				}
-				// Install primitives
-				for (const primitive of await transformPrimitives(possiblePrimitives)) {
-					await $`${pM} install ${primitive.value}`;
-				}
-			},
+	await spinnerify({
+		startText: t.INSTALLING_VIA(pM),
+		finishText: t.PACKAGES_INSTALLED,
+		fn: async () => {
+			for (let i = 0; i < configs.length; i++) {
+				const config = configs[i];
+				await $`${pM} install ${config.installs}`;
+			}
+			// Install primitives
+			for (const primitive of await transformPrimitives(possiblePrimitives)) {
+				await $`${pM} install ${primitive.value}`;
+			}
 		},
-	]);
+	});
+	await spinnerify({
+		startText: "Updating config",
+		finishText: t.CONFIG_UPDATED,
+		fn: async () => {
+			const code = await transformPlugins(
+				configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
+				forceTransform,
+				undefined,
+				viteConfig,
+			);
+			await writeFile(viteConfig, code);
+		},
+	});
+
 	if (configs.length) {
 		p.log.info("Preparing post install steps for integrations");
 		let projectRoot = await getRootFile();
