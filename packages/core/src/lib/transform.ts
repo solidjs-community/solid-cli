@@ -2,7 +2,7 @@ import { transform } from "@swc/core";
 import { readFile } from "fs/promises";
 import { fileURLToPath } from "url";
 import { insertAfter, insertAtBeginning } from "./utils/file_ops";
-import { fileExists, getRootFile, validateFilePath } from "./utils/helpers";
+import { fileExists, validateFilePath } from "./utils/helpers";
 import { $ } from "execa";
 import { detect } from "detect-package-manager";
 import { getRunner } from "../command_handlers/new";
@@ -117,7 +117,9 @@ export const integrations = {
 		},
 		installs: ["unocss"],
 		postInstall: async () => {
-			await insertAtBeginning(rootFile() ?? (await getRootFile()), `import "virtual:uno.css";\n`);
+			const path = rootFile();
+			if (!path) return;
+			await insertAtBeginning(path, `import "virtual:uno.css";\n`);
 		},
 	},
 	"vitepwa": {
@@ -138,7 +140,9 @@ export const integrations = {
 		},
 		installs: ["solid-devtools"],
 		postInstall: async () => {
-			await insertAtBeginning(rootFile() ?? (await getRootFile()), `import "solid-devtools";\n`);
+			const path = rootFile();
+			if (!path) return;
+			await insertAtBeginning(path, `import "solid-devtools";\n`);
 		},
 	},
 };
