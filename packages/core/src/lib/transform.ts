@@ -2,7 +2,7 @@ import { transform } from "@swc/core";
 import { readFile } from "fs/promises";
 import { fileURLToPath } from "url";
 import { insertAfter, insertAtBeginning } from "./utils/file_ops";
-import { getProjectRoot } from "./utils/helpers";
+import { getRootFile } from "./utils/helpers";
 import { $ } from "execa";
 import { detect } from "detect-package-manager";
 import { getRunner } from "../command_handlers/new";
@@ -58,7 +58,7 @@ export type IntegrationsValue = {
 
 export type Integrations = Record<Supported, IntegrationsValue>;
 
-export const [projectRoot, setProjectRoot] = createSignal<string | undefined>(undefined);
+export const [rootFile, setRootFile] = createSignal<string | undefined>(undefined);
 
 export const integrations = {
 	"tailwind": {
@@ -79,7 +79,7 @@ export const integrations = {
 		},
 		installs: ["unocss"],
 		postInstall: async () => {
-			await insertAtBeginning(projectRoot() ?? (await getProjectRoot()), `import "virtual:uno.css";\n`);
+			await insertAtBeginning(rootFile() ?? (await getRootFile()), `import "virtual:uno.css";\n`);
 		},
 	},
 	"vitepwa": {
@@ -100,7 +100,7 @@ export const integrations = {
 		},
 		installs: ["solid-devtools"],
 		postInstall: async () => {
-			await insertAtBeginning(projectRoot() ?? (await getProjectRoot()), `import "solid-devtools";\n`);
+			await insertAtBeginning(rootFile() ?? (await getRootFile()), `import "solid-devtools";\n`);
 		},
 	},
 };

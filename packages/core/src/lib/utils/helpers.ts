@@ -1,8 +1,15 @@
 import { existsSync, lstatSync, readdirSync } from "fs";
 import { isSolidStart } from "./solid_start";
 import { join, resolve } from "path";
+import { $ } from "execa";
 
 export const getProjectRoot = async () => {
+	const { stdout } = await $`npm root`;
+
+	return stdout.slice(0, stdout.lastIndexOf("/"));
+};
+
+export const getRootFile = async () => {
 	if (await isSolidStart()) {
 		return "src/root.tsx";
 	}

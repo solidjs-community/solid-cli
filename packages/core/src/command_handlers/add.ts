@@ -1,13 +1,6 @@
 import { autocomplete } from "@solid-cli/ui";
 import { S_BAR, cancelable } from "@solid-cli/ui";
-import {
-	Integrations,
-	PluginOptions,
-	Supported,
-	integrations,
-	setProjectRoot,
-	transformPlugins,
-} from "../lib/transform";
+import { Integrations, PluginOptions, Supported, integrations, setRootFile, transformPlugins } from "../lib/transform";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { detect } from "detect-package-manager";
@@ -16,15 +9,26 @@ import { loadPrimitives } from "../lib/utils/primitives";
 import { primitives } from "../lib/utils/primitives";
 import { t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
-import { fileExists, getProjectRoot, validateFilePath } from "../lib/utils/helpers";
+import { fileExists, getProjectRoot, getRootFile, validateFilePath } from "../lib/utils/helpers";
 import { writeFile } from "fs/promises";
 
 const getViteConfig = async () => {
-	let config = "vite.config.ts";
+	let configFile = "vite.config.ts";
 
-	const exists = fileExists(config);
+	const existsHere = fileExists(configFile);
 
-	if (!exists) {
+	if (!existsHere) {
+		const root = await getProjectRoot();
+		const existsInRoot = validateFilePath(root, "vite.config");
+		if (existsInRoot) {
+			const correctConfig = await cancelable(
+				p.confirm({
+					message: `Could not find vite config in current directory, but found vite config in \`${root}\`. Is this the correct vite config?`,
+				}),
+			);
+			if (correctConfig) return existsInRoot;
+		}
+
 		p.log.error(color.red(`Can't find vite config`));
 		await cancelable(
 			p.text({
@@ -33,14 +37,14 @@ const getViteConfig = async () => {
 					const path = validateFilePath(value, "vite.config");
 					if (!path) return `Vite config not found. Please try again`;
 					else {
-						config = path;
+						configFile = path;
 					}
 				},
 			}),
 		);
 	}
 
-	return config;
+	return configFile;
 };
 
 const handleAutocompleteAdd = async () => {
@@ -155,7 +159,7 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 		},
 	]);
 	p.log.info("Preparing post install steps");
-	let projectRoot = await getProjectRoot();
+	let projectRoot = await getRootFile();
 
 	if (!fileExists(projectRoot)) {
 		p.log.error(color.red(`Can't find root file \`${projectRoot.split("/")[1]}\`.`));
@@ -167,7 +171,7 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 					const path = validateFilePath(value, ["root.tsx", "index.tsx"]);
 					if (!path) return `File at \`${value}\` not found. Please try again`;
 					else {
-						setProjectRoot(path);
+						setRootFile(path);
 					}
 				},
 			}),
