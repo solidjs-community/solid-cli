@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi, beforeEach } from "vitest";
 import { handleAdd } from "../src/command_handlers/add";
 import { readFile as readFile1 } from "fs";
 const readFile = async (path: string): Promise<string> => {
