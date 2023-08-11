@@ -1,4 +1,4 @@
-import { writeFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
 import { transformPlugins } from "@solid-cli/utils/transform";
 import * as p from "@clack/prompts";
 import { cancelable } from "@solid-cli/ui";
@@ -41,6 +41,7 @@ export const handleAdapter = async (name?: string, forceTransform = false) => {
 				options: { adapter: sym },
 			},
 		],
+		{ name: "vite.config.ts", contents: (await readFile("vite.config.ts")).toString() },
 		forceTransform,
 	);
 	code = `import ${name} from "solid-start-${name}";\n` + code;

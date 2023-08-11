@@ -1,19 +1,20 @@
 import { transform } from "@swc/core";
-import { readFile } from "fs/promises";
 import { fileURLToPath } from "url";
-
+export type Config = {
+	name: string;
+	contents: string;
+};
 export const transformPlugins = async (
 	new_plugins: PluginOptions[],
+	config: Config,
 	force_transform = false,
 	merge_configs = false,
-	config_path = "vite.config.ts",
 	wasm_path = fileURLToPath(
 		new URL("../../../swc-plugin-solid-cli/output/swc_plugin_solid_cli.wasm", import.meta.url),
 	).replace("transform\\", ""),
 ) => {
-	const configData = (await readFile(config_path)).toString();
-	const res = await transform(configData, {
-		filename: config_path,
+	const res = await transform(config.contents, {
+		filename: config.name,
 		jsc: {
 			parser: {
 				syntax: "typescript",

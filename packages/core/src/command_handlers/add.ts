@@ -10,7 +10,7 @@ import { primitives } from "../lib/utils/primitives";
 import { t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
 import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";
-import { writeFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
 import { transformPlugins, type PluginOptions } from "@solid-cli/utils/transform";
 const handleAutocompleteAdd = async () => {
 	const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
@@ -133,9 +133,9 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 		fn: async () => {
 			const code = await transformPlugins(
 				configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
+				{ name: viteConfig, contents: (await readFile(viteConfig)).toString() },
 				forceTransform,
 				undefined,
-				viteConfig,
 			);
 			await writeFile(viteConfig, code);
 		},
