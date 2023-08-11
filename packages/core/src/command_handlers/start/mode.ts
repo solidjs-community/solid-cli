@@ -1,5 +1,5 @@
 import { writeFile } from "fs/promises";
-import { transformPlugins } from "../../lib/transform";
+import { transformPlugins } from "@solid-cli/utils/transform";
 import { isSolidStart } from "../../lib/utils/solid_start";
 import * as p from "@clack/prompts";
 import { cancelable } from "@solid-cli/ui";

@@ -1,6 +1,6 @@
 import { autocomplete } from "@solid-cli/ui";
 import { S_BAR, cancelable } from "@solid-cli/ui";
-import { Integrations, PluginOptions, Supported, integrations, setRootFile, transformPlugins } from "../lib/transform";
+import { Integrations, Supported, integrations, setRootFile } from "../lib/integrations";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { PM, detect } from "detect-package-manager";
@@ -11,7 +11,7 @@ import { t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
 import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";
 import { writeFile } from "fs/promises";
-
+import { transformPlugins, type PluginOptions } from "@solid-cli/utils/transform";
 const handleAutocompleteAdd = async () => {
 	const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
 	const opts = () => [...supportedIntegrations, ...primitives()];

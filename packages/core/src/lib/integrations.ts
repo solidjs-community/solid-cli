@@ -1,6 +1,3 @@
-import { transform } from "@swc/core";
-import { readFile } from "fs/promises";
-import { fileURLToPath } from "url";
 import { insertAfter, insertAtBeginning } from "./utils/file_ops";
 import { fileExists, validateFilePath } from "./utils/helpers";
 import { $ } from "execa";
@@ -10,48 +7,10 @@ import { createSignal } from "@solid-cli/reactivity";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { cancelable } from "@solid-cli/ui";
+import { PluginOptions } from "@chialab/esbuild-plugin-meta-url";
 
-export const transformPlugins = async (
-	new_plugins: PluginOptions[],
-	force_transform = false,
-	merge_configs = false,
-	config_path = "vite.config.ts",
-	wasm_path = fileURLToPath(new URL("../../../swc-plugin-solid-cli/output/swc_plugin_solid_cli.wasm", import.meta.url)),
-) => {
-	const configData = (await readFile(config_path)).toString();
-	const res = await transform(configData, {
-		filename: config_path,
-		jsc: {
-			parser: {
-				syntax: "typescript",
-				tsx: false,
-			},
-			target: "es2022",
-			experimental: {
-				plugins: [
-					[
-						wasm_path,
-						{
-							additionalPlugins: new_plugins,
-							forceTransform: force_transform,
-							mergeConfigs: merge_configs,
-						},
-					],
-				],
-			},
-		},
-	});
-	return res.code;
-};
 // All the integrations/packages that we support
-// export const supported = ["unocss", "vitepwa", "solid-devtools"] as const;
 export type Supported = keyof typeof integrations;
-export type PluginOptions = {
-	importName: string;
-	importSource: string;
-	isDefault: boolean;
-	options: object;
-};
 
 export type IntegrationsValue = {
 	pluginOptions?: PluginOptions;
