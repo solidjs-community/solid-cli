@@ -122,9 +122,6 @@ importers:
 
   packages/utils:
     dependencies:
-      '@chialab/esbuild-plugin-meta-url':
-        specifier: ^0.17.7
-        version: 0.17.7
       '@clack/core':
         specifier: 0.3.2
         version: 0.3.2
@@ -144,9 +141,15 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
     devDependencies:
+      '@chialab/esbuild-plugin-meta-url':
+        specifier: ^0.17.7
+        version: 0.17.7
       '@types/node':
         specifier: 20.4.8
         version: 20.4.8
+      jiti:
+        specifier: ^1.19.1
+        version: 1.19.1
       tsup:
         specifier: ^7.2.0
         version: 7.2.0(@swc/core@1.3.76)(typescript@5.1.6)
@@ -380,6 +383,7 @@ packages:
       '@chialab/estransform': 0.17.4
       '@chialab/node-resolve': 0.17.1
       mime-types: 2.1.35
+    dev: true
 
   /@chialab/esbuild-rna@0.17.8:
     resolution: {integrity: sha512-hovU4W5zlyMnbJjexdczpQ9mcUfFsJuv9FWUhzpXiQwPprlp5lul+frTed9s8AyVDTDq2yq3Gx2Ac411QsXYGA==}
@@ -387,16 +391,19 @@ packages:
     dependencies:
       '@chialab/estransform': 0.17.4
       '@chialab/node-resolve': 0.17.1
+    dev: true
 
   /@chialab/estransform@0.17.4:
     resolution: {integrity: sha512-p4nf8ECdmanwbRK6A/X/VYtJfkBk5vgChPh0GiCyZAPt6/mKPbe0v3y9WjLHfFdkv1bzjJzP3pjTJ1SZ1E1U8Q==}
     engines: {node: '>=13'}
     dependencies:
       '@parcel/source-map': 2.1.1
+    dev: true
 
   /@chialab/node-resolve@0.17.1:
     resolution: {integrity: sha512-YWaK0MKKeB0FILI6j7qiAlGoSC9MqJZDFXzlAgfOaMCbn8Feqh6njxv7mI3oVkdi7QwV6zPRaTN6hKig/NriMA==}
     engines: {node: '>=13'}
+    dev: true
 
   /@clack/core@0.3.2:
     resolution: {integrity: sha512-FZnsNynwGDIDktx6PEZK1EuCkFpY4ldEX6VYvfl0dqeoLPb9Jpw1xoUXaVcGR8ExmYNm1w2vdGdJkEUYD/2pqg==}
@@ -696,6 +703,7 @@ packages:
     engines: {node: ^12.18.3 || >=14}
     dependencies:
       detect-libc: 1.0.3
+    dev: true
 
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
@@ -1371,6 +1379,7 @@ packages:
     resolution: {integrity: sha512-pGjwhsmsp4kL2RTz08wcOlGN83otlqHeD/Z5T8GXZB+/YcpQ/dgo+lbU8ZsGxV0HIvqqxo9l7mqYwyYMD9bKDg==}
     engines: {node: '>=0.10'}
     hasBin: true
+    dev: true
 
   /detect-package-manager@2.0.1(patch_hash=z3ggdkumlo4f7lrrhi5q7ehiyi):
     resolution: {integrity: sha512-j/lJHyoLlWi6G1LDdLgvUtz60Zo5GEj+sVYtTVXnYLDPuzgC3llMxonXym9zIwhhUII8vjdw0LXxavpLqTbl1A==}
@@ -2195,12 +2204,14 @@ packages:
   /mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
+    dev: true
 
   /mime-types@2.1.35:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
     dependencies:
       mime-db: 1.52.0
+    dev: true
 
   /mimic-fn@2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}

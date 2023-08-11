@@ -30,10 +30,12 @@
 	},
 	"scripts": {
 		"test": "vitest run",
-		"build": "tsc && tsup"
+		"build": "tsc && tsup && jiti ./scripts/postBuild.ts"
 	},
 	"devDependencies": {
+		"@chialab/esbuild-plugin-meta-url": "^0.17.7",
 		"@types/node": "20.4.8",
+		"jiti": "^1.19.1",
 		"tsup": "^7.2.0",
 		"typescript": "^5.1.6",
 		"vitest": "^0.33.0"
@@ -42,7 +44,6 @@
 		"access": "public"
 	},
 	"dependencies": {
-		"@chialab/esbuild-plugin-meta-url": "^0.17.7",
 		"@clack/core": "0.3.2",
 		"@clack/prompts": "0.6.3",
 		"@solid-cli/reactivity": "workspace:*",
