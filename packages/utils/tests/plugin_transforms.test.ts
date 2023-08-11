@@ -9,7 +9,7 @@ const examplePlugin: PluginOptions = {
 	isDefault: true,
 	options: {},
 };
-describe("transformConfig", () => {
+describe("transformPlugins", () => {
 	test("Config is updated properly", async () => {
 		const config: Config = {
 			name: "vite.config.ts",
