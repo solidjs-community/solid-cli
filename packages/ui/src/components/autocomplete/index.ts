@@ -106,6 +106,8 @@ class AutocompleteText<T extends Option> extends Prompt {
 	constructor(opts: AutocompleteTextOptions<T>) {
 		super(opts);
 
+		// // @ts-ignore
+		// this.rl?.clearLine();
 		this.options = opts.options();
 		this.filteredOptions = opts.options();
 		this.selected = [];
