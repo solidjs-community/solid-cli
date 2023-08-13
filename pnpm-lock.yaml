@@ -137,6 +137,12 @@ importers:
       '@swc/core':
         specifier: ^1.3.76
         version: 1.3.76
+      detect-package-manager:
+        specifier: ^2.0.1
+        version: 2.0.1(patch_hash=z3ggdkumlo4f7lrrhi5q7ehiyi)
+      execa:
+        specifier: ^7.2.0
+        version: 7.2.0
       picocolors:
         specifier: ^1.0.0
         version: 1.0.0

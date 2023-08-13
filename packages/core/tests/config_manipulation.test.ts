@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi, beforeEach } from "vitest";
 import { handleAdd } from "../src/command_handlers/add";
 import { readFile as readFile1 } from "fs";
+import { UPDATESQUEUE } from "@solid-cli/utils/updates";
 const readFile = async (path: string): Promise<string> => {
 	return await new Promise((res) =>
 		// Can't use readFile from fs/promises because we've mocked it
@@ -8,7 +9,6 @@ const readFile = async (path: string): Promise<string> => {
 	);
 };
 const removeWhitespace = (str: string) => str.replace(/\s/g, "");
-let writes: Record<string, string> = {};
 vi.mock("fs/promises", () => {
 	return {
 		readFile: async (name: string) => {
@@ -17,9 +17,6 @@ vi.mock("fs/promises", () => {
 				return sampleConfig;
 			}
 			return "{}";
-		},
-		writeFile: async (name: string, contents: string) => {
-			writes[name] = contents;
 		},
 	};
 });
@@ -38,14 +35,12 @@ vi.mock("../src/lib/utils/helpers.ts", () => {
 	};
 });
 describe("Update config", () => {
-	afterEach(() => {
-		writes = {};
-	});
 	it("Adds a plugin properly to the config", async () => {
 		await handleAdd(["unocss"]);
-		const newConfig = writes["vite.config.ts"];
-		const expected = await readFile("./packages/core/tests/assets/sample_unocss_result.txt");
 
+		const expected = await readFile("./packages/core/tests/assets/sample_unocss_result.txt");
+		// @ts-ignore
+		const newConfig = UPDATESQUEUE.find((u) => u.name === "vite.config.ts")?.contents;
 		expect(removeWhitespace(expected)).toBe(removeWhitespace(newConfig));
 	});
 });

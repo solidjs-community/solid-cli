@@ -8,6 +8,7 @@ import * as p from "@clack/prompts";
 import color from "picocolors";
 import { cancelable } from "@solid-cli/ui";
 import { PluginOptions } from "@chialab/esbuild-plugin-meta-url";
+import { queueUpdate } from "@solid-cli/utils/updates";
 
 // All the integrations/packages that we support
 export type Supported = keyof typeof integrations;
@@ -27,7 +28,7 @@ export const integrations = {
 		installs: ["tailwindcss", "postcss", "autoprefixer"],
 		postInstall: async () => {
 			const pM = await detect();
-			await $`${getRunner(pM)} tailwindcss init -p`;
+			queueUpdate({ type: "command", name: `${getRunner(pM)} tailwindcss init -p` });
 			let tailwindConfig = "tailwind.config.js";
 			if (!fileExists(tailwindConfig)) {
 				p.log.error(color.red(`Can't find tailwind config file`));

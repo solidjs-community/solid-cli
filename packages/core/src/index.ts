@@ -11,11 +11,13 @@ import { handleRoute } from "./command_handlers/start/route";
 
 import { t, setLocale, getField } from "@solid-cli/utils";
 import { name, version } from "../package.json";
-import { config, readConfig } from "@solid-cli/utils";
+import { readConfig } from "@solid-cli/utils";
 import loadCommands from "./plugins/plugins_entry";
 import updater from "tiny-updater";
 import { createAsync } from "@solid-cli/reactivity";
 import { handleApi } from "./command_handlers/start/api";
+import { flushCommandUpdates, flushFileUpdates, flushPackageUpdates, summarizeUpdates } from "@solid-cli/utils/updates";
+import { spinnerify } from "./lib/utils/ui";
 const possibleActions = () =>
 	[
 		{ value: "add", label: t.ACTION_ADD, hint: "solid add ..." },
@@ -104,6 +106,12 @@ const main = async () => {
 		return;
 	}
 
-	run(cli, args);
+	await run(cli, args);
+	console.log("The following things will be updated:", summarizeUpdates());
+	const confirmed = await p.confirm({ message: "Do you wish to continue?" });
+	if (!confirmed) return;
+	await spinnerify({ startText: "Writing files...", finishText: "Updates written", fn: flushFileUpdates });
+	await spinnerify({ startText: "Installing packages...", finishText: "Packages installed", fn: flushPackageUpdates });
+	await spinnerify({ startText: "Running setup commands", finishText: "Setup commands ran", fn: flushCommandUpdates });
 };
 main();

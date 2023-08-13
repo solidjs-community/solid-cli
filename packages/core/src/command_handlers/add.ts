@@ -10,8 +10,10 @@ import { primitives } from "../lib/utils/primitives";
 import { t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
 import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";
-import { readFile, writeFile } from "fs/promises";
+import { readFile } from "fs/promises";
+import { writeFile } from "../lib/utils/file_ops";
 import { transformPlugins, type PluginOptions } from "@solid-cli/utils/transform";
+import { queueUpdate } from "@solid-cli/utils/updates";
 const handleAutocompleteAdd = async () => {
 	const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
 	const opts = () => [...supportedIntegrations, ...primitives()];
@@ -113,14 +115,13 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 		startText: t.INSTALLING_VIA(pM),
 		finishText: t.PACKAGES_INSTALLED,
 		fn: async () => {
-			const instlCmd = await installCommand(pM);
 			for (let i = 0; i < configs.length; i++) {
 				const config = configs[i];
-				await $`${pM} ${instlCmd} ${config.installs}`;
+				queueUpdate({ type: "package", name: config.installs.join(" ") });
 			}
-			// Install primitives
+			// Queue primitives
 			for (const primitive of await transformPrimitives(possiblePrimitives)) {
-				await $`${pM} ${instlCmd} ${primitive.value}`;
+				queueUpdate({ type: "package", name: primitive.value });
 			}
 		},
 	});
@@ -137,7 +138,7 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 				forceTransform,
 				undefined,
 			);
-			await writeFile(viteConfig, code);
+			writeFile(viteConfig, code);
 		},
 	});
 

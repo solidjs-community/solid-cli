@@ -26,6 +26,11 @@
 			"import": "./dist/transform/index.mjs",
 			"require": "./dist/transform/index.js",
 			"types": "./types/transform/index.d.ts"
+		},
+		"./updates": {
+			"import": "./dist/updates/index.mjs",
+			"require": "./dist/updates/index.js",
+			"types": "./types/updates/index.d.ts"
 		}
 	},
 	"scripts": {
@@ -48,6 +53,8 @@
 		"@clack/prompts": "0.6.3",
 		"@solid-cli/reactivity": "workspace:*",
 		"@swc/core": "^1.3.76",
+		"detect-package-manager": "^2.0.1",
+		"execa": "^7.2.0",
 		"picocolors": "^1.0.0",
 		"smol-toml": "^1.1.1"
 	}
