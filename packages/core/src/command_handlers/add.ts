@@ -3,8 +3,7 @@ import { S_BAR, cancelable } from "@solid-cli/ui";
 import { Integrations, Supported, integrations, setRootFile } from "../lib/integrations";
 import * as p from "@clack/prompts";
 import color from "picocolors";
-import { PM, detect } from "detect-package-manager";
-import { $ } from "execa";
+import { PM } from "detect-package-manager";
 import { loadPrimitives } from "../lib/utils/primitives";
 import { primitives } from "../lib/utils/primitives";
 import { t } from "@solid-cli/utils";
@@ -110,27 +109,20 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 
 	const viteConfig = await getViteConfig();
 
-	const pM = await detect();
-	await spinnerify({
-		startText: t.INSTALLING_VIA(pM),
-		finishText: t.PACKAGES_INSTALLED,
-		fn: async () => {
-			for (let i = 0; i < configs.length; i++) {
-				const config = configs[i];
-				queueUpdate({ type: "package", name: config.installs.join(" ") });
-			}
-			// Queue primitives
-			for (const primitive of await transformPrimitives(possiblePrimitives)) {
-				queueUpdate({ type: "package", name: primitive.value });
-			}
-		},
-	});
+	for (let i = 0; i < configs.length; i++) {
+		const config = configs[i];
+		queueUpdate({ type: "package", name: config.installs.join(" ") });
+	}
+	// Queue primitives
+	for (const primitive of await transformPrimitives(possiblePrimitives)) {
+		queueUpdate({ type: "package", name: primitive.value });
+	}
 
 	if (!configs.length) return;
 
 	await spinnerify({
-		startText: "Updating config",
-		finishText: t.CONFIG_UPDATED,
+		startText: "Processing config",
+		finishText: "Config processed",
 		fn: async () => {
 			const code = await transformPlugins(
 				configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
