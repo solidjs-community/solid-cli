@@ -116,9 +116,11 @@ const main = async () => {
 	if (UPDATESQUEUE.length === 0) return;
 	const { fileUpdates, packageUpdates, commandUpdates } = summarizeUpdates();
 	// Inspired by Qwik's CLI
-	p.log.message([`${color.cyan("Modify")}`, ...fileUpdates.map((f) => `  - ${f}`)].join("\n"));
-	p.log.message([`${color.cyan("Install")}`, ...packageUpdates.map((p) => `  - ${p}`)].join("\n"));
-	p.log.message([`${color.cyan("Run commands")}`, ...commandUpdates.map((p) => `  - ${p}`)].join("\n"));
+	if (fileUpdates.length) p.log.message([`${color.cyan("Modify")}`, ...fileUpdates.map((f) => `  - ${f}`)].join("\n"));
+	if (packageUpdates.length)
+		p.log.message([`${color.cyan("Install")}`, ...packageUpdates.map((p) => `  - ${p}`)].join("\n"));
+	if (commandUpdates.length)
+		p.log.message([`${color.cyan("Run commands")}`, ...commandUpdates.map((p) => `  - ${p}`)].join("\n"));
 	const confirmed = await p.confirm({ message: "Do you wish to continue?" });
 	if (!confirmed || p.isCancel(confirmed)) return;
 	await spinnerify({ startText: "Writing files...", finishText: "Updates written", fn: flushFileUpdates });
