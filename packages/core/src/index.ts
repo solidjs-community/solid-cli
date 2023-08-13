@@ -16,7 +16,13 @@ import loadCommands from "./plugins/plugins_entry";
 import updater from "tiny-updater";
 import { createAsync } from "@solid-cli/reactivity";
 import { handleApi } from "./command_handlers/start/api";
-import { flushCommandUpdates, flushFileUpdates, flushPackageUpdates, summarizeUpdates } from "@solid-cli/utils/updates";
+import {
+	UPDATESQUEUE,
+	flushCommandUpdates,
+	flushFileUpdates,
+	flushPackageUpdates,
+	summarizeUpdates,
+} from "@solid-cli/utils/updates";
 import { spinnerify } from "./lib/utils/ui";
 const possibleActions = () =>
 	[
@@ -107,9 +113,14 @@ const main = async () => {
 	}
 
 	await run(cli, args);
-	console.log("The following things will be updated:", summarizeUpdates());
+	if (UPDATESQUEUE.length === 0) return;
+	const { fileUpdates, packageUpdates, commandUpdates } = summarizeUpdates();
+	// Inspired by Qwik's CLI
+	p.log.message([`${color.cyan("Modify")}`, ...fileUpdates.map((f) => `  - ${f}`)].join("\n"));
+	p.log.message([`${color.cyan("Install")}`, ...packageUpdates.map((p) => `  - ${p}`)].join("\n"));
+	p.log.message([`${color.cyan("Run commands")}`, ...commandUpdates.map((p) => `  - ${p}`)].join("\n"));
 	const confirmed = await p.confirm({ message: "Do you wish to continue?" });
-	if (!confirmed) return;
+	if (!confirmed || p.isCancel(confirmed)) return;
 	await spinnerify({ startText: "Writing files...", finishText: "Updates written", fn: flushFileUpdates });
 	await spinnerify({ startText: "Installing packages...", finishText: "Packages installed", fn: flushPackageUpdates });
 	await spinnerify({ startText: "Running setup commands", finishText: "Setup commands ran", fn: flushCommandUpdates });

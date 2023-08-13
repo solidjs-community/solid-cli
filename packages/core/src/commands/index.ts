@@ -89,10 +89,22 @@ const set = command({
 		await setField(field, value);
 	},
 });
+const playground = command({
+	name: "playground",
+	args: {},
+	async handler() {
+		await spinnerify({
+			startText: "Opening",
+			finishText: "Opened",
+			fn: () => openInBrowser("https://playground.solidjs.com"),
+		});
+	},
+});
 export default {
 	add,
 	docs,
 	new: new_,
 	set,
 	start: startCommands,
+	playground,
 };
