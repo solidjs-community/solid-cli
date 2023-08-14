@@ -1,7 +1,14 @@
-import { readFile } from "fs/promises";
-import { queueUpdate } from "@solid-cli/utils/updates";
+import { readFile as readFile1 } from "fs/promises";
+import { queueUpdate, readQueuedFile, unqueueUpdate } from "@solid-cli/utils/updates";
 export const writeFile = (path: string, data: string, checked: boolean = false) => {
+	// First, unqueue all previous updates to this file
+	unqueueUpdate(path, "file");
 	queueUpdate({ type: "file", name: path, contents: data, checked });
+};
+export const readFile = async (path: string) => {
+	const queued = readQueuedFile(path);
+	if (queued) return queued.contents;
+	return await readFile1(path);
 };
 export const readFileToString = async (path: string) => {
 	return (await readFile(path)).toString();

@@ -9,8 +9,7 @@ import { primitives } from "../lib/utils/primitives";
 import { t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
 import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";
-import { readFile } from "fs/promises";
-import { writeFile } from "../lib/utils/file_ops";
+import { writeFile, readFile } from "../lib/utils/file_ops";
 import { transformPlugins, type PluginOptions } from "@solid-cli/utils/transform";
 import { queueUpdate } from "@solid-cli/utils/updates";
 const handleAutocompleteAdd = async () => {

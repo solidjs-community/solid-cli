@@ -1,4 +1,4 @@
-import { writeFile, readFile } from "fs/promises";
+import { writeFile, readFile } from "../../lib/utils/file_ops";
 import { transformPlugins } from "@solid-cli/utils/transform";
 import { isSolidStart } from "../../lib/utils/solid_start";
 import * as p from "@clack/prompts";
@@ -37,7 +37,7 @@ export const handleMode = async (mode?: SupportedModes) => {
 					options: { ssr: mode === "ssr" },
 				},
 			],
-			{ name: "vite.config.ts", contents: (await readFile("vite.config.ts")).toString()},
+			{ name: "vite.config.ts", contents: (await readFile("vite.config.ts")).toString() },
 			true,
 			true,
 		);

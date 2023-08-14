@@ -33,6 +33,19 @@ export const summarizeUpdates = (): UpdateSummary => {
 export const queueUpdate = (update: Update) => {
 	UPDATESQUEUE.push(update);
 };
+export const unqueueUpdate = (name: string, type: Update["type"]) => {
+	const index = UPDATESQUEUE.findIndex((u) => u.name === name && u.type === type);
+	if (index === -1) return;
+	UPDATESQUEUE.splice(index, 1);
+};
+export const readQueued = (name: string) => {
+	return UPDATESQUEUE.find((u) => u.name === name);
+};
+export const readQueuedFile = (name: string) => {
+	const queued = readQueued(name);
+	if (!queued || queued.type !== "file") return null;
+	return queued;
+};
 export const flushFileUpdates = async () => {
 	const fileUpdates = UPDATESQUEUE.filter((u) => u.type === "file") as FileUpdate[];
 	// const commandUpdates = UPDATESQUEUE.filter((u) => u.type === "command") as CommandUpdate[];
