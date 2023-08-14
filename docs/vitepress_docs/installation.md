@@ -21,8 +21,11 @@ solid <subcommand>
 where <subcommand> can be one of:
 
 - add - Can add and install integrations: `solid add unocss`.
+- docs
 - new - Creates a new solid project
+- set
 - start - Commands specific to solid start
+- playground
 
 For more help, try running `solid <subcommand> --help`
 ```
