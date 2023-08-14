@@ -39,3 +39,46 @@ This can also be used to spin up a new stackblitz or codesandbox instance.
 | `<variation>`              | The variation you want to start the project from. One of the following: "bare", "js", "ts". |
 | `<name>`                   | The name of the project and the folder to create it in.                                     |
 | `--stackblitz (short: -s)` | Create the project with the variation in a stackblitz instance. `(boolean)`                 |
+
+---
+
+### `Docs`
+
+```sh
+solid docs
+```
+
+Searches for a given keyword within the main solid documentation sites
+
+**Options**
+
+| Option      | Description                                    |
+| ----------- | ---------------------------------------------- |
+| `<keyword>` | The keyword to search within the docs websites |
+
+---
+
+### `Set`
+
+```sh
+solid set
+```
+
+Sets a specified config parameter to a specified value
+
+**Options**
+
+| Option    | Description                      |
+| --------- | -------------------------------- |
+| `<key>`   | The key within the config to set |
+| `<value>` | The value to set that key to     |
+
+---
+
+### `Playground`
+
+```sh
+solid playground
+```
+
+Attempts to open the [Solid Playground](https://playground.solidjs.com) in the browser
