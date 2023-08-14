@@ -14,6 +14,7 @@ export const readFileToString = async (path: string) => {
 	return (await readFile(path)).toString();
 };
 export const writeChecked = async (path: string, contents: string) => {
+	unqueueUpdate(path, "file");
 	queueUpdate({ type: "file", name: path, contents, checked: true });
 };
 export const insertAtBeginning = async (path: string, text: string) => {
