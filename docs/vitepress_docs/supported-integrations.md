@@ -17,3 +17,5 @@ These packages will be automatically installed and configured with sensible defa
 
 - [UnoCss](https://unocss.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [Solid Devtools](https://github.com/thetarnav/solid-devtools)
+- [VitePWA](https://vite-pwa-org.netlify.app)
