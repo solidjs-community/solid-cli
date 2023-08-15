@@ -182,8 +182,13 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 	await spinnerify({ startText: "Installing packages...", finishText: "Packages installed", fn: flushPackageUpdates });
 	await spinnerify({ startText: "Running setup commands", finishText: "Setup commands ran", fn: flushCommandUpdates });
 	clearQueue();
-	const packagesWithPostInstall = configs.filter((c) => c.postInstall);
-	p.log.message(`${packagesWithPostInstall.length} packages have post install steps that need to run.`);
+	const postInstalls = configs.filter((c) => c.postInstall);
+	if (postInstalls.length === 0) return;
+	p.log.message(
+		`${postInstalls.length} ${
+			postInstalls.length === 1 ? "package has" : "packages have"
+		} post install steps that need to run.`,
+	);
 	const pInstallConfirmed = await p.confirm({ message: "Do you wish to continue?" });
 	if (!pInstallConfirmed || p.isCancel(pInstallConfirmed)) return;
 	p.log.info("Running post installs");
