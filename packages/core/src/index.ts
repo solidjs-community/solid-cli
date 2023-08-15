@@ -16,14 +16,7 @@ import loadCommands from "./plugins/plugins_entry";
 import updater from "tiny-updater";
 import { createAsync } from "@solid-cli/reactivity";
 import { handleApi } from "./command_handlers/start/api";
-import {
-	UPDATESQUEUE,
-	flushCommandUpdates,
-	flushFileUpdates,
-	flushPackageUpdates,
-	summarizeUpdates,
-} from "@solid-cli/utils/updates";
-import { spinnerify } from "./lib/utils/ui";
+
 const possibleActions = () =>
 	[
 		{ value: "add", label: t.ACTION_ADD, hint: "solid add ..." },
@@ -113,18 +106,5 @@ const main = async () => {
 	}
 
 	await run(cli, args);
-	if (UPDATESQUEUE.length === 0) return;
-	const { fileUpdates, packageUpdates, commandUpdates } = summarizeUpdates();
-	// Inspired by Qwik's CLI
-	if (fileUpdates.length) p.log.message([`${color.cyan("Modify")}`, ...fileUpdates.map((f) => `  - ${f}`)].join("\n"));
-	if (packageUpdates.length)
-		p.log.message([`${color.cyan("Install")}`, ...packageUpdates.map((p) => `  - ${p}`)].join("\n"));
-	if (commandUpdates.length)
-		p.log.message([`${color.cyan("Run commands")}`, ...commandUpdates.map((p) => `  - ${p}`)].join("\n"));
-	const confirmed = await p.confirm({ message: "Do you wish to continue?" });
-	if (!confirmed || p.isCancel(confirmed)) return;
-	await spinnerify({ startText: "Writing files...", finishText: "Updates written", fn: flushFileUpdates });
-	await spinnerify({ startText: "Installing packages...", finishText: "Packages installed", fn: flushPackageUpdates });
-	await spinnerify({ startText: "Running setup commands", finishText: "Setup commands ran", fn: flushCommandUpdates });
 };
 main();

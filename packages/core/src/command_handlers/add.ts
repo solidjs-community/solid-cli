@@ -11,7 +11,15 @@ import { spinnerify } from "../lib/utils/ui";
 import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";
 import { writeFile, readFile } from "../lib/utils/file_ops";
 import { transformPlugins, type PluginOptions } from "@solid-cli/utils/transform";
-import { queueUpdate } from "@solid-cli/utils/updates";
+import {
+	UPDATESQUEUE,
+	clearQueue,
+	flushCommandUpdates,
+	flushFileUpdates,
+	flushPackageUpdates,
+	queueUpdate,
+	summarizeUpdates,
+} from "@solid-cli/utils/updates";
 const handleAutocompleteAdd = async () => {
 	const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
 	const opts = () => [...supportedIntegrations, ...primitives()];
@@ -110,7 +118,7 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 
 	for (let i = 0; i < configs.length; i++) {
 		const config = configs[i];
-		queueUpdate({ type: "package", name: config.installs.join(" ") });
+		config.installs.forEach((p) => queueUpdate({ type: "package", name: p }));
 	}
 	// Queue primitives
 	for (const primitive of await transformPrimitives(possiblePrimitives)) {
@@ -150,13 +158,47 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 			}),
 		);
 	}
+	// Run our additional configs
 	await spinnerify({
-		startText: t.POST_INSTALL,
-		finishText: t.POST_INSTALL_COMPLETE,
+		startText: "Running additional config steps",
+		finishText: "Additional config steps complete",
 		fn: async () => {
 			for (const cfg of configs) {
-				await cfg.postInstall?.();
+				await cfg.additionalConfig?.();
 			}
 		},
 	});
+	if (UPDATESQUEUE.length === 0) return;
+	const { fileUpdates, packageUpdates, commandUpdates } = summarizeUpdates();
+	// Inspired by Qwik's CLI
+	if (fileUpdates.length) p.log.message([`${color.cyan("Modify")}`, ...fileUpdates.map((f) => `  - ${f}`)].join("\n"));
+	if (packageUpdates.length)
+		p.log.message([`${color.cyan("Install")}`, ...packageUpdates.map((p) => `  - ${p}`)].join("\n"));
+	if (commandUpdates.length)
+		p.log.message([`${color.cyan("Run commands")}`, ...commandUpdates.map((p) => `  - ${p}`)].join("\n"));
+	const confirmed = await p.confirm({ message: "Do you wish to continue?" });
+	if (!confirmed || p.isCancel(confirmed)) return;
+	await spinnerify({ startText: "Writing files...", finishText: "Updates written", fn: flushFileUpdates });
+	await spinnerify({ startText: "Installing packages...", finishText: "Packages installed", fn: flushPackageUpdates });
+	await spinnerify({ startText: "Running setup commands", finishText: "Setup commands ran", fn: flushCommandUpdates });
+	clearQueue();
+	const packagesWithPostInstall = configs.filter((c) => c.postInstall);
+	p.log.message(`${packagesWithPostInstall.length} packages have post install steps that need to run.`);
+	const pInstallConfirmed = await p.confirm({ message: "Do you wish to continue?" });
+	if (!pInstallConfirmed || p.isCancel(pInstallConfirmed)) return;
+	p.log.info("Running post installs");
+	// Run postInstalls
+	for (const cfg of configs) {
+		await cfg.postInstall?.();
+	}
+	p.log.success("Post install steps complete!");
+	// await spinnerify({
+	// 	startText: t.POST_INSTALL,
+	// 	finishText: t.POST_INSTALL_COMPLETE,
+	// 	fn: async () => {
+	// 		for (const cfg of configs) {
+	// 			await cfg.postInstall?.();
+	// 		}
+	// 	},
+	// });
 };

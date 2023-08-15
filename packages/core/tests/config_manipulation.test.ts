@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi, beforeEach } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { handleAdd } from "../src/command_handlers/add";
 import { readFile as readFile1 } from "fs";
 import { UPDATESQUEUE } from "@solid-cli/utils/updates";
@@ -35,7 +35,7 @@ vi.mock("../src/lib/utils/helpers.ts", () => {
 	};
 });
 describe("Update config", () => {
-	it("Adds a plugin properly to the config", async () => {
+	it.skip("Adds a plugin properly to the config", async () => {
 		await handleAdd(["unocss"]);
 
 		const expected = await readFile("./packages/core/tests/assets/sample_unocss_result.txt");

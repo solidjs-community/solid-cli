@@ -8,7 +8,7 @@ import * as p from "@clack/prompts";
 import color from "picocolors";
 import { cancelable } from "@solid-cli/ui";
 import { PluginOptions } from "@chialab/esbuild-plugin-meta-url";
-import { queueUpdate } from "@solid-cli/utils/updates";
+import { flushQueue } from "@solid-cli/utils/updates";
 
 // All the integrations/packages that we support
 export type Supported = keyof typeof integrations;
@@ -16,6 +16,7 @@ export type Supported = keyof typeof integrations;
 export type IntegrationsValue = {
 	pluginOptions?: PluginOptions;
 	installs: string[];
+	additionalConfig?: () => Promise<void>;
 	postInstall?: () => Promise<void>;
 };
 
@@ -28,7 +29,7 @@ export const integrations = {
 		installs: ["tailwindcss", "postcss", "autoprefixer"],
 		postInstall: async () => {
 			const pM = await detect();
-			queueUpdate({ type: "command", name: `${getRunner(pM)} tailwindcss init -p` });
+			await $`${getRunner(pM)} tailwindcss init -p`;
 			let tailwindConfig = "tailwind.config.js";
 			if (!fileExists(tailwindConfig)) {
 				p.log.error(color.red(`Can't find tailwind config file`));
@@ -64,8 +65,11 @@ export const integrations = {
 					}),
 				);
 			}
+			p.log.info("Updating tailwind config");
 			await insertAfter(tailwindConfig, "content: [", '"./index.html", "./src/**/*.{js,ts,jsx,tsx}"');
 			await insertAtBeginning(indexCss, "@tailwind base;\n@tailwind components;\n@tailwind utilities;\n");
+			// Instantly flush queue
+			await flushQueue();
 		},
 	},
 	"unocss": {
@@ -76,7 +80,7 @@ export const integrations = {
 			options: {},
 		},
 		installs: ["unocss"],
-		postInstall: async () => {
+		additionalConfig: async () => {
 			const path = rootFile();
 			if (!path) return;
 			await insertAtBeginning(path, `import "virtual:uno.css";\n`);
@@ -99,7 +103,7 @@ export const integrations = {
 			options: {},
 		},
 		installs: ["solid-devtools"],
-		postInstall: async () => {
+		additionalConfig: async () => {
 			const path = rootFile();
 			if (!path) return;
 			await insertAtBeginning(path, `import "solid-devtools";\n`);

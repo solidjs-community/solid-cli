@@ -24,6 +24,9 @@ const installCommand = (pM: PM): string => {
 			return "add";
 	}
 };
+export const clearQueue = () => {
+	UPDATESQUEUE.length = 0;
+};
 export const summarizeUpdates = (): UpdateSummary => {
 	const fileUpdates = UPDATESQUEUE.filter((u) => u.type === "file").map((s) => s.name);
 	const packageUpdates = UPDATESQUEUE.filter((u) => u.type === "package").map((s) => s.name);
@@ -75,4 +78,12 @@ export const flushCommandUpdates = async () => {
 	for (const update of commandUpdates) {
 		await $`${update.name}`;
 	}
+};
+/**
+ * Flushes every operation in the queue
+ */
+export const flushQueue = async () => {
+	await flushFileUpdates();
+	await flushPackageUpdates();
+	await flushCommandUpdates();
 };
