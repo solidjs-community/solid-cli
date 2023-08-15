@@ -86,4 +86,5 @@ export const flushQueue = async () => {
 	await flushFileUpdates();
 	await flushPackageUpdates();
 	await flushCommandUpdates();
+	clearQueue();
 };
