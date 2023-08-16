@@ -5,6 +5,8 @@ import { execa } from "execa";
 import { cancelable } from "@solid-cli/ui";
 import { t } from "@solid-cli/utils";
 import { spinnerify } from "../lib/utils/ui";
+import { insertAtEnd } from "../lib/utils/file_ops";
+import { flushQueue } from "@solid-cli/utils/updates";
 
 const startSupported = [
 	"bare",
@@ -34,7 +36,13 @@ export const getRunner = (pM: PM) => {
 			return "pnpx";
 	}
 };
-
+const modifyReadme = async (name: string) => {
+	await insertAtEnd(
+		`${name}/README.md`,
+		"\n## This project was created with the [Solid CLI](https://solid-cli.netlify.app)\n",
+	);
+	await flushQueue();
+};
 const handleNewStartProject = async (projectName: string) => {
 	const template = await cancelable(
 		p.select({
@@ -54,6 +62,7 @@ const handleNewStartProject = async (projectName: string) => {
 				["degit", `solidjs/solid-start/examples/${template}#main`, projectName].filter((e) => e !== null) as string[],
 			),
 	});
+	await modifyReadme(projectName);
 	p.log.info(`${t.GET_STARTED}
   - cd ${projectName}
   - npm install
@@ -72,30 +81,15 @@ const handleAutocompleteNew = async () => {
 		return;
 	}
 
-	const template = await cancelable(
+	const template = (await cancelable(
 		p.select({
 			message: t.TEMPLATE,
 			initialValue: "ts",
 			options: localSupported.map((s) => ({ label: s, value: s })),
 		}),
-	);
+	)) as unknown as AllSupported;
 
-	const pM = await detect();
-	const projectName = name ?? "solid-project";
-	await spinnerify({
-		startText: t.CREATING_PROJECT,
-		finishText: t.PROJECT_CREATED,
-		fn: () =>
-			execa(
-				getRunner(pM),
-				["degit", `solidjs/templates/${template}`, projectName].filter((e) => e !== null) as string[],
-			),
-	});
-
-	p.log.info(`${t.GET_STARTED}
-  - cd ${projectName}
-  - npm install
-  - npm run dev`);
+	await handleNew(template, name);
 };
 export const handleNew = async (variation?: AllSupported, name?: string, stackblitz: boolean = false) => {
 	if (!variation) {
@@ -123,6 +117,7 @@ export const handleNew = async (variation?: AllSupported, name?: string, stackbl
 				["degit", `solidjs/templates/${variation}`, name ?? null].filter((e) => e !== null) as string[],
 			),
 	});
+	await modifyReadme(name ?? variation);
 	p.log.info(`${t.GET_STARTED}
   - cd ${name}
   - npm install
