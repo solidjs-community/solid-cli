@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/utils",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "A collection of utilities for the Solid CLI",
 	"license": "MIT",
 	"homepage": "https://solid-cli.netlify.app",
