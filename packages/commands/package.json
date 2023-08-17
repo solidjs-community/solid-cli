@@ -37,6 +37,7 @@
 		"@solid-cli/reactivity": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
 		"@solid-cli/utils": "workspace:*",
+		"@solid-cli/transpiler": "workspace:*",
 		"detect-package-manager": "^2.0.1",
 		"execa": "^7.2.0",
 		"picocolors": "^1.0.0"

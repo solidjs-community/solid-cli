@@ -1,12 +1,18 @@
 import * as p from "@clack/prompts";
 import { openInBrowser } from "@solid-cli/utils";
 import { detect } from "detect-package-manager";
-import { execa } from "execa";
+import { execa, $ } from "execa";
 import { cancelable, spinnerify } from "@solid-cli/ui";
 import { t } from "@solid-cli/utils";
-import { insertAtEnd } from "@solid-cli/utils/fs";
+import { insertAtEnd, readFileToString, writeFile } from "@solid-cli/utils/fs";
 import { flushQueue } from "@solid-cli/utils/updates";
 import { getRunner } from "@solid-cli/utils/paths";
+import { rm } from "fs/promises";
+import { resolve } from "path";
+import { findFiles } from "../lib/utils/helpers";
+import { writeFileSync } from "fs";
+import { transpile } from "@solid-cli/transpiler";
+
 const startSupported = [
 	"bare",
 	"hackernews",
@@ -42,6 +48,8 @@ const handleNewStartProject = async (projectName: string) => {
 		}),
 	);
 
+	const withTs = await cancelable(p.confirm({ message: "Use Typescript?" }));
+
 	const pM = await detect();
 	await spinnerify({
 		startText: t.CREATING_PROJECT,
@@ -52,6 +60,35 @@ const handleNewStartProject = async (projectName: string) => {
 				["degit", `solidjs/solid-start/examples/${template}#main`, projectName].filter((e) => e !== null) as string[],
 			),
 	});
+
+	if (!withTs) {
+		writeFileSync(
+			resolve(projectName, "jsconfig.json"),
+			JSON.stringify(
+				{
+					compilerOptions: {
+						jsx: "preserve",
+						jsxImportSource: "solid-js",
+						paths: {
+							"~/*": ["./src/*"],
+						},
+					},
+				},
+				null,
+				2,
+			),
+			{ flag: "wx" },
+		);
+
+		const tsFiles = await findFiles(projectName, [".ts", ".tsx"], { startsWith: false });
+
+		for (const file of tsFiles) {
+			const compiled = transpile(await readFileToString(resolve(projectName, file)), file);
+			console.log(compiled);
+		}
+		await rm(resolve(projectName, "tsconfig.json"));
+	}
+
 	await modifyReadme(projectName);
 	p.log.info(`${t.GET_STARTED}
   - cd ${projectName}

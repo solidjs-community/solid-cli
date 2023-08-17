@@ -29,6 +29,7 @@
 		"@solid-cli/swc-plugin-solid-cli": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
 		"@solid-cli/utils": "workspace:*",
+		"@solid-cli/transpiler": "workspace:*",
 		"@swc/core": "^1.3.75",
 		"cmd-ts": "^0.12.1",
 		"detect-package-manager": "^2.0.1",

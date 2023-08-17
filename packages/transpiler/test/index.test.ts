@@ -9,6 +9,10 @@ describe("transpiler", () => {
 	});
 	test("Type declarations should be removed", () => {
 		let res = transpile("type Thing = {param: number}", "index.ts");
-        expect(res).toBe("");
+		expect(res).toBe("");
+	});
+	test("TSX should work", () => {
+		let res = transpile("export default function Counter(){}", "index.ts");
+		expect(res).toBe("export default function Counter(){}");
 	});
 });
