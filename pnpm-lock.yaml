@@ -132,16 +132,7 @@ importers:
       '@solid-cli/commands':
         specifier: workspace:*
         version: link:../commands
-      cmd-ts:
-        specifier: ^0.12.1
-        version: 0.12.1
     devDependencies:
-      '@chialab/esbuild-plugin-meta-url':
-        specifier: ^0.17.7
-        version: 0.17.7
-      '@types/node':
-        specifier: ^20.4.9
-        version: 20.5.0
       jiti:
         specifier: ^1.19.1
         version: 1.19.1

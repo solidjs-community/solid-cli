@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/create-solid",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "A stripped down Solid CLI just for creating new projects",
 	"author": "Thomas Beer & Rahul Batra",
 	"license": "MIT",
@@ -17,7 +17,6 @@
 		"dist"
 	],
 	"dependencies": {
-		"cmd-ts": "^0.12.1",
 		"@solid-cli/commands": "workspace:*"
 	},
 	"scripts": {
@@ -25,8 +24,6 @@
 		"build": "tsc && tsup"
 	},
 	"devDependencies": {
-		"@chialab/esbuild-plugin-meta-url": "^0.17.7",
-		"@types/node": "^20.4.9",
 		"jiti": "^1.19.1",
 		"tsup": "^7.2.0",
 		"typescript": "^5.1.6"
