@@ -1,5 +1,5 @@
 import { readFile as readFile1 } from "fs/promises";
-import { queueUpdate, readQueuedFile, unqueueUpdate } from "@solid-cli/utils/updates";
+import { queueUpdate, readQueuedFile, unqueueUpdate } from "../updates";
 export const writeFile = (path: string, data: string, checked: boolean = false) => {
 	// First, unqueue all previous updates to this file
 	unqueueUpdate(path, "file");

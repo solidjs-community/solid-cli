@@ -1,5 +1,5 @@
 import { existsSync, lstatSync, readdirSync } from "fs";
-import { isSolidStart } from "./solid_start";
+import { isSolidStart } from "@solid-cli/utils";
 import { join, resolve } from "path";
 import { $ } from "execa";
 import { cancelable } from "@solid-cli/ui";

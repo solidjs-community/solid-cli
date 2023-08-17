@@ -31,6 +31,21 @@
 			"import": "./dist/updates/index.mjs",
 			"require": "./dist/updates/index.js",
 			"types": "./types/updates/index.d.ts"
+		},
+		"./fs": {
+			"import": "./dist/fs/index.mjs",
+			"require": "./dist/fs/index.js",
+			"types": "./types/fs/index.d.ts"
+		},
+		"./util-types": {
+			"import": "./dist/util-types/index.mjs",
+			"require": "./dist/util-types/index.js",
+			"types": "./types/util-types/index.d.ts"
+		},
+		"./primitives": {
+			"import": "./dist/primitives/index.mjs",
+			"require": "./dist/primitives/index.js",
+			"types": "./types/primitives/index.d.ts"
 		}
 	},
 	"scripts": {
@@ -53,6 +68,7 @@
 		"@clack/prompts": "0.6.3",
 		"@solid-cli/reactivity": "workspace:*",
 		"@swc/core": "^1.3.76",
+		"cmd-ts": "^0.12.1",
 		"detect-package-manager": "^2.0.1",
 		"execa": "^7.2.0",
 		"picocolors": "^1.0.0",

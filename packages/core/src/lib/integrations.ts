@@ -1,4 +1,4 @@
-import { insertAfter, insertAtBeginning } from "./utils/file_ops";
+import { insertAfter, insertAtBeginning } from "@solid-cli/utils/fs";
 import { fileExists, validateFilePath } from "./utils/helpers";
 import { $ } from "execa";
 import { detect } from "detect-package-manager";

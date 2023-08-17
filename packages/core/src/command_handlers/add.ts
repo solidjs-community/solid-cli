@@ -1,15 +1,14 @@
 import { autocomplete } from "@solid-cli/ui";
-import { S_BAR, cancelable } from "@solid-cli/ui";
+import { S_BAR, cancelable, spinnerify } from "@solid-cli/ui";
 import { Integrations, Supported, integrations, setRootFile } from "../lib/integrations";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { PM } from "detect-package-manager";
-import { loadPrimitives } from "../lib/utils/primitives";
-import { primitives } from "../lib/utils/primitives";
+import { loadPrimitives } from "../../../utils/src/primitives/primitives";
+import { primitives } from "../../../utils/src/primitives/primitives";
 import { t } from "@solid-cli/utils";
-import { spinnerify } from "../lib/utils/ui";
 import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";
-import { writeFile, readFile } from "../lib/utils/file_ops";
+import { writeFile, readFile } from "@solid-cli/utils/fs";
 import { transformPlugins, type PluginOptions } from "@solid-cli/utils/transform";
 import {
 	UPDATESQUEUE,

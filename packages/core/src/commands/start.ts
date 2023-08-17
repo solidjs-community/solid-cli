@@ -1,5 +1,5 @@
 import { command, flag, optional, positional, string, subcommands } from "cmd-ts";
-import { oneOf } from "../lib/utils/oneOf";
+import { oneOf } from "@solid-cli/utils";
 import { handleMode, supportedModes } from "../command_handlers/start/mode";
 import { handleRoute } from "../command_handlers/start/route";
 import { handleData } from "../command_handlers/start/data";

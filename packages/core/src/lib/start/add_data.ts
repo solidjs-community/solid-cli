@@ -1,5 +1,5 @@
 import { mkdir } from "fs/promises";
-import { writeChecked } from "../utils/file_ops";
+import { writeChecked } from "@solid-cli/utils/fs";
 
 export const createData = async (path: string, name?: string) => {
 	const path_parts = path.split("/");

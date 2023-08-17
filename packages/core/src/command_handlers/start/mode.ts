@@ -1,6 +1,6 @@
-import { writeFile, readFile } from "../../lib/utils/file_ops";
+import { writeFile, readFile } from "@solid-cli/utils/fs";
 import { transformPlugins } from "@solid-cli/utils/transform";
-import { isSolidStart } from "../../lib/utils/solid_start";
+import { isSolidStart } from "@solid-cli/utils";
 import * as p from "@clack/prompts";
 import { cancelable } from "@solid-cli/ui";
 

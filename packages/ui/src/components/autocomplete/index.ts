@@ -5,8 +5,7 @@ import { S_CHECKBOX_ACTIVE, S_CHECKBOX_SELECTED, S_CHECKBOX_INACTIVE, S_BAR, S_B
 import color from "picocolors";
 import { createEffect } from "@solid-cli/reactivity";
 import { t } from "@solid-cli/utils";
-
-export type Option = { value: any; label?: string; hint?: string; group?: string };
+import { Option } from "@solid-cli/utils/util-types";
 
 const buildRegex = (str: string) => {
 	let s = "";
