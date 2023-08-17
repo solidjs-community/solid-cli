@@ -1,7 +1,15 @@
 import { command, flag, optional, positional, string, subcommands } from "cmd-ts";
 import { oneOf } from "@solid-cli/utils";
 import { t } from "@solid-cli/utils";
-import { handleAdapter, handleApi, handleData, handleMode, supportedAdapters, supportedModes } from "@solid-cli/commands";
+import {
+	handleAdapter,
+	handleApi,
+	handleData,
+	handleMode,
+	handleRoute,
+	supportedAdapters,
+	supportedModes,
+} from "@solid-cli/commands";
 
 const mode = command({
 	name: "mode",
@@ -84,7 +92,3 @@ export const startCommands = subcommands({
 		api,
 	},
 });
-function handleRoute(path: string | undefined, name: string | undefined) {
-	throw new Error("Function not implemented.");
-}
-

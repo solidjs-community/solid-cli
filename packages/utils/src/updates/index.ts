@@ -2,7 +2,10 @@ import { open, writeFile } from "fs/promises";
 import { $ } from "execa";
 import { detect, type PM } from "detect-package-manager";
 // Batch all updates here, so we can confirm with the user then flush
-export const UPDATESQUEUE: Update[] = [];
+// @ts-ignore
+export const UPDATESQUEUE: Update[] = globalThis.UPDATESQUEUE ?? [];
+// @ts-ignore
+globalThis.UPDATESQUEUE = UPDATESQUEUE;
 type PackageUpdate = { type: "package"; name: string };
 type CommandUpdate = { type: "command"; name: string };
 type FileUpdate = { type: "file"; name: string; contents: string; checked: boolean };
@@ -51,7 +54,7 @@ export const readQueuedFile = (name: string) => {
 };
 export const flushFileUpdates = async () => {
 	const fileUpdates = UPDATESQUEUE.filter((u) => u.type === "file") as FileUpdate[];
-	// const commandUpdates = UPDATESQUEUE.filter((u) => u.type === "command") as CommandUpdate[];
+	
 	for (const update of fileUpdates) {
 		if (!update.checked) {
 			await writeFile(update.name, update.contents);
