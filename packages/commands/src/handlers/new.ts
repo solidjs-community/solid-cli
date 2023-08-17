@@ -13,6 +13,36 @@ import { Dirent, copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSy
 import { transpile } from "@solid-cli/transpiler";
 import prettier from "prettier";
 
+const gitIgnore = `
+dist
+.solid
+.output
+.vercel
+.netlify
+netlify
+
+# Environment
+.env
+.env*.local
+
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+*.launch
+.settings/
+
+# Temp
+gitignore
+
+# System Files
+.DS_Store
+Thumbs.db
+`;
+
 const startSupported = [
 	"bare",
 	"hackernews",
@@ -143,7 +173,8 @@ const handleNewStartProject = async (projectName: string) => {
 			force: true,
 		});
 	}
-
+	// Add .gitignore
+	writeFileSync(join(projectName, ".gitignore"), gitIgnore);
 	await modifyReadme(projectName);
 
 	p.log.info(`${t.GET_STARTED}
