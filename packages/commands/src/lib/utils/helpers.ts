@@ -53,9 +53,9 @@ export function validateFilePath(path: string, lookingFor: string | string[]): s
 export async function findFiles(
 	startPath: string,
 	lookingFor: string | string[],
-	opts: { depth?: number; ignoreDirs: string[] },
+	opts: { depth?: number; ignoreDirs?: string[]; startsWith?: boolean },
 ): Promise<string[]> {
-	let { depth = Infinity, ignoreDirs = ["node_modules", "."] } = opts;
+	let { depth = Infinity, ignoreDirs = ["node_modules", "."], startsWith = true } = opts;
 
 	startPath = resolve(startPath);
 
@@ -78,8 +78,10 @@ export async function findFiles(
 
 		if (file.isFile()) {
 			const fileMatch = Array.isArray(lookingFor)
-				? lookingFor.some((s) => file.name.startsWith(s))
-				: file.name.startsWith(lookingFor);
+				? lookingFor.some((s) => (startsWith ? file.name.startsWith(s) : file.name.endsWith(s)))
+				: startsWith
+				? file.name.startsWith(lookingFor)
+				: file.name.endsWith(lookingFor);
 
 			if (fileMatch) {
 				filePaths.push(resolve(startPath, file.name));
