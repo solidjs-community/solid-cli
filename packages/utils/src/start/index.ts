@@ -12,3 +12,7 @@ export const isSolidStart = async () => {
 	}
 	return false;
 };
+
+export * from "./add_api";
+export * from "./add_data";
+export * from "./add_route";

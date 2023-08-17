@@ -1,8 +1,6 @@
-import { isSolidStart } from "@solid-cli/utils";
+import { isSolidStart, createApi } from "@solid-cli/utils";
 import * as p from "@clack/prompts";
-import { spinnerify } from "@solid-cli/ui";
-import { createApi } from "../../../../core/src/lib/start/add_api";
-import { cancelable } from "@solid-cli/ui";
+import { cancelable, spinnerify } from "@solid-cli/ui";
 
 const handleAutocompleteApi = async () => {
 	const path = await cancelable(

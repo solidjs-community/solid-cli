@@ -1,5 +1,4 @@
-import { createData } from "../../../../core/src/lib/start/add_data";
-import { isSolidStart } from "@solid-cli/utils";
+import { isSolidStart, createData } from "@solid-cli/utils";
 import * as p from "@clack/prompts";
 import { cancelable, spinnerify } from "@solid-cli/ui";
 

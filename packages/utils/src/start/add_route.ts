@@ -1,5 +1,5 @@
 import { mkdir } from "fs/promises";
-import { writeChecked } from "@solid-cli/utils/fs";
+import { writeChecked } from "../fs";
 const default_file = `export default function Route() {
 	return <></>;
 }

@@ -6,7 +6,7 @@ import { cancelable, spinnerify } from "@solid-cli/ui";
 import { t } from "@solid-cli/utils";
 import { insertAtEnd } from "@solid-cli/utils/fs";
 import { flushQueue } from "@solid-cli/utils/updates";
-
+import { getRunner } from "@solid-cli/utils/paths";
 const startSupported = [
 	"bare",
 	"hackernews",
@@ -25,16 +25,7 @@ const localSupported = ["ts", "js"] as const;
 const stackblitzSupported = ["bare"] as const;
 
 type AllSupported = (typeof localSupported)[number] | (typeof stackblitzSupported)[number];
-export const getRunner = (pM: PM) => {
-	switch (pM) {
-		case "npm":
-			return "npx";
-		case "yarn":
-			return "npx";
-		case "pnpm":
-			return "pnpx";
-	}
-};
+
 const modifyReadme = async (name: string) => {
 	await insertAtEnd(
 		`${name}/README.md`,

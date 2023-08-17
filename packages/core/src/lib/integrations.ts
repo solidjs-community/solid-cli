@@ -2,7 +2,7 @@ import { insertAfter, insertAtBeginning } from "@solid-cli/utils/fs";
 import { fileExists, validateFilePath } from "./utils/helpers";
 import { $ } from "execa";
 import { detect } from "detect-package-manager";
-import { getRunner } from "../command_handlers/new";
+import { getRunner } from "@solid-cli/utils/paths";
 import { createSignal } from "@solid-cli/reactivity";
 import * as p from "@clack/prompts";
 import color from "picocolors";

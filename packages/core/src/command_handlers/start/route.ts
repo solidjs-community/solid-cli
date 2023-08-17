@@ -1,6 +1,5 @@
 import * as p from "@clack/prompts";
-import { isSolidStart } from "@solid-cli/utils";
-import { createRoute } from "../../../../core/src/lib/start/add_route";
+import { isSolidStart, createRoute } from "@solid-cli/utils";
 import { cancelable, spinnerify } from "@solid-cli/ui";
 const handleAutocompleteRoute = async () => {
 	const path = await cancelable(
