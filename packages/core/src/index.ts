@@ -2,20 +2,21 @@
 import { run, subcommands } from "cmd-ts";
 import * as p from "@clack/prompts";
 import color from "picocolors";
-import { handleAdd } from "./command_handlers/add";
-import { handleNew } from "./command_handlers/new";
 import { t, setLocale, getField } from "@solid-cli/utils";
 import { name, version } from "../package.json";
 import { readConfig } from "@solid-cli/utils";
 import loadCommands from "./plugins/plugins_entry";
 import updater from "tiny-updater";
 import { createAsync } from "@solid-cli/reactivity";
-import { handleMode } from "./command_handlers/start/mode";
-import { handleRoute } from "./command_handlers/start/route";
-import { handleData } from "./command_handlers/start/data";
-import { handleAdapter } from "./command_handlers/start/adapter";
-import { handleApi } from "./command_handlers/start/api";
-
+import {
+	handleAdapter,
+	handleAdd,
+	handleApi,
+	handleData,
+	handleMode,
+	handleNew,
+	handleRoute,
+} from "@solid-cli/commands";
 const possibleActions = () =>
 	[
 		{ value: "add", label: t.ACTION_ADD, hint: "solid add ..." },

@@ -4,8 +4,7 @@ import { Integrations, Supported, integrations, setRootFile } from "../lib/integ
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { PM } from "detect-package-manager";
-import { loadPrimitives } from "../../../utils/src/primitives/primitives";
-import { primitives } from "../../../utils/src/primitives/primitives";
+import { primitives, loadPrimitives } from "@solid-cli/utils/primitives";
 import { t } from "@solid-cli/utils";
 import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";
 import { writeFile, readFile } from "@solid-cli/utils/fs";
@@ -76,6 +75,7 @@ const transformPrimitives = async (ps: string[]) => {
 	const mappedInput = ps.map((p) => p.replace("@solid-primitives/", ""));
 	return primitives().filter((p) => mappedInput.includes(p.value.replace("@solid-primitives/", "")));
 };
+// @ts-ignore
 const installCommand = async (pM: PM): Promise<string> => {
 	switch (pM) {
 		case "npm":

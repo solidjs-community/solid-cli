@@ -1,5 +1,5 @@
 import { Computation, Getter, Signal, batch, runWithListener } from "../core";
-export { batch, getListener } from "../core";
+export { batch, getListener, type Getter, type Setter, type Signal } from "../core";
 type OnOptions = { defer: boolean };
 export function on<T, G>(deps: Getter<G>, fn: (val: G) => T, options?: OnOptions): () => T | undefined;
 export function on<T>(deps: Getter<unknown>[] | Getter<unknown>, fn: (val: any) => T, options?: OnOptions) {

@@ -19,6 +19,7 @@
 	"dependencies": {
 		"@clack/core": "0.3.2",
 		"@clack/prompts": "0.6.3",
+		"@solid-cli/commands": "workspace:*",
 		"@solid-cli/reactivity": "workspace:*",
 		"@solid-cli/swc-plugin-solid-cli": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
@@ -33,13 +34,14 @@
 	},
 	"scripts": {
 		"start": "jiti ./src/index.ts",
-		"build": "tsup"
+		"build": "tsc && tsup"
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-meta-url": "^0.17.7",
 		"@types/node": "^20.4.9",
 		"jiti": "^1.19.1",
-		"tsup": "^7.2.0"
+		"tsup": "^7.2.0",
+		"typescript": "^5.1.6"
 	},
 	"publishConfig": {
 		"access": "public"

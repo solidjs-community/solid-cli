@@ -1,14 +1,20 @@
 {
 	"compilerOptions": {
-		"baseUrl": ".",
-		"noEmit": true,
-		"module": "ESNext",
 		"target": "ESNext",
-		"moduleResolution": "Bundler",
-		"strict": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
+		"useDefineForClassFields": true,
+		"module": "ESNext",
 		"skipLibCheck": true,
-		"resolveJsonModule": true
-	}
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"moduleResolution": "Bundler",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"allowSyntheticDefaultImports": true,
+		"strict": true,
+		// "noUnusedLocals": true,
+		// "noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"outDir": "types"
+	},
+	"include": ["src/*"]
 }

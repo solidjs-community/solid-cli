@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { handleAdd } from "../src/command_handlers/add";
+import { handleAdd } from "@solid-cli/commands";
 import { readFile as readFile1 } from "fs";
 import { UPDATESQUEUE } from "@solid-cli/utils/updates";
 const readFile = async (path: string): Promise<string> => {

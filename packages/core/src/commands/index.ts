@@ -3,12 +3,10 @@ import { startCommands } from "./start";
 import * as p from "@clack/prompts";
 import { boolean, command, flag, optional, positional, restPositionals, string } from "cmd-ts";
 import { oneOf } from "@solid-cli/utils";
-import { handleAdd } from "../command_handlers/add";
-import { handleNew } from "../command_handlers/new";
 import { cancelable } from "@solid-cli/ui";
 import { PossibleFields, setField, t } from "@solid-cli/utils";
 import { spinnerify } from "@solid-cli/ui";
-
+import { handleNew, handleAdd } from "@solid-cli/commands";
 const add = command({
 	name: "add",
 	description: t.ADD_DESC,

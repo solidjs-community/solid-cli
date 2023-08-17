@@ -1,6 +1,6 @@
 import * as p from "@clack/prompts";
 import { openInBrowser } from "@solid-cli/utils";
-import { PM, detect } from "detect-package-manager";
+import { detect } from "detect-package-manager";
 import { execa } from "execa";
 import { cancelable, spinnerify } from "@solid-cli/ui";
 import { t } from "@solid-cli/utils";
