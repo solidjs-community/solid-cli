@@ -8,43 +8,43 @@
 		"type": "git",
 		"url": "https://github.com/solidjs-community/solid-cli"
 	},
-	"main": "./dist/index.js",
+	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
 	"types": "./types/index.d.ts",
 	"exports": {
 		".": {
 			"import": "./dist/index.mjs",
-			"require": "./dist/index.js",
+			"require": "./dist/index.mjs",
 			"types": "./types/index.d.ts"
 		},
 		"./paths": {
 			"import": "./dist/paths/index.mjs",
-			"require": "./dist/paths/index.js",
+			"require": "./dist/paths/index.mjs",
 			"types": "./types/paths/index.d.ts"
 		},
 		"./transform": {
 			"import": "./dist/transform/index.mjs",
-			"require": "./dist/transform/index.js",
+			"require": "./dist/transform/index.mjs",
 			"types": "./types/transform/index.d.ts"
 		},
 		"./updates": {
 			"import": "./dist/updates/index.mjs",
-			"require": "./dist/updates/index.js",
+			"require": "./dist/updates/index.mjs",
 			"types": "./types/updates/index.d.ts"
 		},
 		"./fs": {
 			"import": "./dist/fs/index.mjs",
-			"require": "./dist/fs/index.js",
+			"require": "./dist/fs/index.mjs",
 			"types": "./types/fs/index.d.ts"
 		},
 		"./util-types": {
 			"import": "./dist/util-types/index.mjs",
-			"require": "./dist/util-types/index.js",
+			"require": "./dist/util-types/index.mjs",
 			"types": "./types/util-types/index.d.ts"
 		},
 		"./primitives": {
 			"import": "./dist/primitives/index.mjs",
-			"require": "./dist/primitives/index.js",
+			"require": "./dist/primitives/index.mjs",
 			"types": "./types/primitives/index.d.ts"
 		}
 	},

@@ -8,13 +8,13 @@
 		"url": "https://github.com/solidjs-community/solid-cli"
 	},
 	"description": "A collection of UI utilities for the Solid CLI",
-	"main": "./dist/index.js",
+	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
 	"types": "./types/index.d.ts",
 	"exports": {
 		".": {
 			"import": "./dist/index.mjs",
-			"require": "./dist/index.js",
+			"require": "./dist/index.mjs",
 			"types": "./types/index.d.ts"
 		}
 	},
