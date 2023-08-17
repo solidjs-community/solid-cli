@@ -25,6 +25,7 @@
 	"devDependencies": {
 		"@chialab/esbuild-plugin-meta-url": "^0.17.7",
 		"@types/node": "^20.5.0",
+		"prettier": "^3.0.2",
 		"tsup": "^7.2.0",
 		"typescript": "^5.1.6"
 	},
@@ -35,9 +36,9 @@
 		"@chialab/esbuild-plugin-meta-url": "^0.17.7",
 		"@clack/prompts": "0.6.3",
 		"@solid-cli/reactivity": "workspace:*",
+		"@solid-cli/transpiler": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
 		"@solid-cli/utils": "workspace:*",
-		"@solid-cli/transpiler": "workspace:*",
 		"detect-package-manager": "^2.0.1",
 		"execa": "^7.2.0",
 		"picocolors": "^1.0.0"

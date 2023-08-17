@@ -1,17 +1,17 @@
 import * as p from "@clack/prompts";
 import { openInBrowser } from "@solid-cli/utils";
 import { detect } from "detect-package-manager";
-import { execa, $ } from "execa";
+import { execa } from "execa";
 import { cancelable, spinnerify } from "@solid-cli/ui";
 import { t } from "@solid-cli/utils";
-import { insertAtEnd, readFileToString, writeFile } from "@solid-cli/utils/fs";
+import { insertAtEnd, readFileToString } from "@solid-cli/utils/fs";
 import { flushQueue } from "@solid-cli/utils/updates";
 import { getRunner } from "@solid-cli/utils/paths";
 import { rm } from "fs/promises";
-import { resolve } from "path";
-import { findFiles } from "../lib/utils/helpers";
-import { writeFileSync } from "fs";
+import { basename, join, resolve } from "path";
+import { Dirent, copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import { transpile } from "@solid-cli/transpiler";
+import prettier from "prettier";
 
 const startSupported = [
 	"bare",
@@ -39,6 +39,38 @@ const modifyReadme = async (name: string) => {
 	);
 	await flushQueue();
 };
+
+const recurseFiles = (startPath: string, cb: (file: Dirent, startPath: string) => void) => {
+	startPath = resolve(startPath);
+
+	const files = readdirSync(startPath, { withFileTypes: true });
+
+	for (const file of files) {
+		cb(file, startPath);
+	}
+};
+
+const convertToJS = async (file: Dirent, startPath: string) => {
+	const src = join(startPath, file.name);
+	const dest = resolve(startPath.replace(".solid-start", ""), file.name);
+	if (file.isDirectory()) {
+		mkdirSync(dest, { recursive: true });
+		recurseFiles(resolve(startPath, file.name), convertToJS);
+	} else if (file.isFile()) {
+		if (src.endsWith(".ts") || src.endsWith(".tsx")) {
+			let compiled = transpile(await readFileToString(src), file.name);
+
+			compiled = await prettier.format(compiled, {
+				parser: "babel",
+			});
+
+			writeFileSync(dest.replace(".ts", ".js"), compiled, { flag: "wx" });
+		} else {
+			copyFileSync(src, dest);
+		}
+	}
+};
+
 const handleNewStartProject = async (projectName: string) => {
 	const template = await cancelable(
 		p.select({
@@ -50,6 +82,9 @@ const handleNewStartProject = async (projectName: string) => {
 
 	const withTs = await cancelable(p.confirm({ message: "Use Typescript?" }));
 
+	// If the user does not want ts, we create the project in a temp directory inside the project directory
+	const tempDir = withTs ? projectName : join(projectName, ".solid-start");
+
 	const pM = await detect();
 	await spinnerify({
 		startText: t.CREATING_PROJECT,
@@ -57,11 +92,12 @@ const handleNewStartProject = async (projectName: string) => {
 		fn: () =>
 			execa(
 				getRunner(pM),
-				["degit", `solidjs/solid-start/examples/${template}#main`, projectName].filter((e) => e !== null) as string[],
+				["degit", `solidjs/solid-start/examples/${template}#main`, tempDir].filter((e) => e !== null) as string[],
 			),
 	});
 
 	if (!withTs) {
+		await rm(resolve(tempDir, "tsconfig.json"));
 		writeFileSync(
 			resolve(projectName, "jsconfig.json"),
 			JSON.stringify(
@@ -80,16 +116,36 @@ const handleNewStartProject = async (projectName: string) => {
 			{ flag: "wx" },
 		);
 
-		const tsFiles = await findFiles(projectName, [".ts", ".tsx"], { startsWith: false });
+		// Convert all ts files in temp directory into js
+		recurseFiles(tempDir, convertToJS);
 
-		for (const file of tsFiles) {
-			const compiled = transpile(await readFileToString(resolve(projectName, file)), file);
-			console.log(compiled);
-		}
-		await rm(resolve(projectName, "tsconfig.json"));
+		// Update package.json to remove type deps
+		const name = basename(resolve(projectName));
+		const pkg_file = join(projectName, "package.json");
+		const pkg_json = JSON.parse(
+			readFileSync(pkg_file, "utf-8")
+				.replace(/"name": ".+"/, (_m) => `"name": "${name}"`)
+				.replace(/"(.+)": "workspace:.+"/g, (_m, name) => `"${name}": "next"`),
+		);
+
+		delete pkg_json.dependencies["@types/cookie"];
+		delete pkg_json.dependencies["@types/debug"];
+		delete pkg_json.devDependencies["@types/babel__core"];
+		delete pkg_json.devDependencies["@types/node"];
+		delete pkg_json.devDependencies["typescript"];
+		delete pkg_json.devDependencies["@types/wait-on"];
+
+		writeFileSync(pkg_file, JSON.stringify(pkg_json, null, 2));
+
+		// Remove temp directory
+		await rm(join(process.cwd(), tempDir), {
+			recursive: true,
+			force: true,
+		});
 	}
 
 	await modifyReadme(projectName);
+
 	p.log.info(`${t.GET_STARTED}
   - cd ${projectName}
   - npm install
