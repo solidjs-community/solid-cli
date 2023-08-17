@@ -1,0 +1,18 @@
+{
+  "name": "@solid-cli/transpiler-darwin-x64",
+  "version": "0.0.0",
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "transpiler.darwin-x64.node",
+  "files": [
+    "transpiler.darwin-x64.node"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  }
+}

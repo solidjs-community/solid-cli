@@ -1,0 +1,29 @@
+[package]
+edition = "2021"
+name = "solid-cli_transpiler"
+version = "0.0.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+# Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
+napi = { version = "2.12.2", default-features = false, features = ["napi4"] }
+napi-derive = "2.12.2"
+swc = "0.264.55"
+swc_core = { version = "0.79", features = [
+    "ecma_plugin_transform",
+    "ecma_utils",
+    "ecma_minifier",
+    "ecma_visit",
+    "ecma_ast",
+    "ecma_parser",
+    "common",
+] }
+swc_ecma_transforms_typescript = "0.180.36"
+
+[build-dependencies]
+napi-build = "2.0.1"
+
+[profile.release]
+lto = true
