@@ -101,6 +101,54 @@ const convertToJS = async (file: Dirent, startPath: string) => {
 	}
 };
 
+const handleTSConversion = async (tempDir: string, projectName: string) => {
+	await rm(resolve(tempDir, "tsconfig.json"));
+	writeFileSync(
+		resolve(projectName, "jsconfig.json"),
+		JSON.stringify(
+			{
+				compilerOptions: {
+					jsx: "preserve",
+					jsxImportSource: "solid-js",
+					paths: {
+						"~/*": ["./src/*"],
+					},
+				},
+			},
+			null,
+			2,
+		),
+		{ flag: "wx" },
+	);
+
+	// Convert all ts files in temp directory into js
+	recurseFiles(tempDir, convertToJS);
+
+	// Update package.json to remove type deps
+	const name = basename(resolve(projectName));
+	const pkg_file = join(projectName, "package.json");
+	const pkg_json = JSON.parse(
+		readFileSync(pkg_file, "utf-8")
+			.replace(/"name": ".+"/, (_m) => `"name": "${name}"`)
+			.replace(/"(.+)": "workspace:.+"/g, (_m, name) => `"${name}": "next"`),
+	);
+
+	delete pkg_json.dependencies["@types/cookie"];
+	delete pkg_json.dependencies["@types/debug"];
+	delete pkg_json.devDependencies["@types/babel__core"];
+	delete pkg_json.devDependencies["@types/node"];
+	delete pkg_json.devDependencies["typescript"];
+	delete pkg_json.devDependencies["@types/wait-on"];
+
+	writeFileSync(pkg_file, JSON.stringify(pkg_json, null, 2));
+
+	// Remove temp directory
+	await rm(join(process.cwd(), tempDir), {
+		recursive: true,
+		force: true,
+	});
+};
+
 const handleNewStartProject = async (projectName: string) => {
 	const template = await cancelable(
 		p.select({
@@ -126,55 +174,11 @@ const handleNewStartProject = async (projectName: string) => {
 			),
 	});
 
-	if (!withTs) {
-		await rm(resolve(tempDir, "tsconfig.json"));
-		writeFileSync(
-			resolve(projectName, "jsconfig.json"),
-			JSON.stringify(
-				{
-					compilerOptions: {
-						jsx: "preserve",
-						jsxImportSource: "solid-js",
-						paths: {
-							"~/*": ["./src/*"],
-						},
-					},
-				},
-				null,
-				2,
-			),
-			{ flag: "wx" },
-		);
+	if (!withTs) handleTSConversion(tempDir, projectName);
 
-		// Convert all ts files in temp directory into js
-		recurseFiles(tempDir, convertToJS);
-
-		// Update package.json to remove type deps
-		const name = basename(resolve(projectName));
-		const pkg_file = join(projectName, "package.json");
-		const pkg_json = JSON.parse(
-			readFileSync(pkg_file, "utf-8")
-				.replace(/"name": ".+"/, (_m) => `"name": "${name}"`)
-				.replace(/"(.+)": "workspace:.+"/g, (_m, name) => `"${name}": "next"`),
-		);
-
-		delete pkg_json.dependencies["@types/cookie"];
-		delete pkg_json.dependencies["@types/debug"];
-		delete pkg_json.devDependencies["@types/babel__core"];
-		delete pkg_json.devDependencies["@types/node"];
-		delete pkg_json.devDependencies["typescript"];
-		delete pkg_json.devDependencies["@types/wait-on"];
-
-		writeFileSync(pkg_file, JSON.stringify(pkg_json, null, 2));
-
-		// Remove temp directory
-		await rm(join(process.cwd(), tempDir), {
-			recursive: true,
-			force: true,
-		});
-	}
 	// Add .gitignore
 	writeFileSync(join(projectName, ".gitignore"), gitIgnore);
+
 	await modifyReadme(projectName);
 
 	p.log.info(`${t.GET_STARTED}
@@ -205,7 +209,11 @@ const handleAutocompleteNew = async () => {
 
 	await handleNew(template, name);
 };
-export const handleNew = async (variation?: AllSupported, name?: string, stackblitz: boolean = false) => {
+export const handleNew = async (
+	variation?: AllSupported,
+	name: string = "solid-project",
+	stackblitz: boolean = false,
+) => {
 	if (!variation) {
 		await handleAutocompleteNew();
 		return;
@@ -220,6 +228,11 @@ export const handleNew = async (variation?: AllSupported, name?: string, stackbl
 		return;
 	}
 
+	const withTs = await cancelable(p.confirm({ message: "Use Typescript?" }));
+
+	// If the user does not want ts, we create the project in a temp directory inside the project directory
+	const tempDir = withTs ? name : join(name, ".solid-start");
+
 	const pM = await detect();
 
 	await spinnerify({
@@ -231,6 +244,12 @@ export const handleNew = async (variation?: AllSupported, name?: string, stackbl
 				["degit", `solidjs/templates/${variation}`, name ?? null].filter((e) => e !== null) as string[],
 			),
 	});
+
+	if (!withTs) handleTSConversion(tempDir, name);
+
+	// Add .gitignore
+	writeFileSync(join(name, ".gitignore"), gitIgnore);
+
 	await modifyReadme(name ?? variation);
 	p.log.info(`${t.GET_STARTED}
   - cd ${name}
