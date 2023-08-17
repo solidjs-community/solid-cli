@@ -12,7 +12,7 @@ describe("transpiler", () => {
 		expect(res).toBe("");
 	});
 	test("TSX should work", () => {
-		let res = transpile("export default function Counter(){}", "index.ts");
-		expect(res).toBe("export default function Counter(){}");
+		let res = transpile("export default function Counter(){}", "index.tsx");
+		expect(res).toBe("export default function Counter() {}\n");
 	});
 });

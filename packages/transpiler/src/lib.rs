@@ -33,7 +33,7 @@ pub fn transpile(code: String, id: String) -> String {
       Syntax::Typescript(TsConfig {
         tsx: true,
         decorators: false,
-        dts: true,
+        dts: false,
         no_early_errors: false,
         disallow_ambiguous_jsx_like: true,
       }),
