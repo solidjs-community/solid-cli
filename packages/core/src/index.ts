@@ -84,7 +84,7 @@ const provideSuggestions = async () => {
 };
 
 const main = async () => {
-	p.intro(`${color.bgCyan(color.black(" Solid-CLI "))}`);
+	p.intro(`\n${color.bgCyan(color.black(" Solid-CLI "))}`);
 	await readConfig();
 	const needsUpdate = createAsync(async () => await updater({ name, version, ttl: 86_400_000 }));
 	setLocale(getField("lang"));

@@ -226,17 +226,6 @@ class AutocompleteText<T extends Option> extends Prompt {
 	}
 }
 
-const getTerminalSize = () => {
-	const stdout = process.stdout.getWindowSize();
-
-	return {
-		width: stdout[0],
-		height: stdout[1],
-	};
-};
-
-const space = (n: number) => ` `.repeat(n);
-
 const BULLET = "•";
 
 const instructions = color.gray(
@@ -259,7 +248,7 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
 			const selected =
 				this.selected.length === 0
 					? color.gray(t.NOTHING_SELECTED)
-					: this.selected.map((option, i) => `${color.red(option.label)}`).join(" ");
+					: this.selected.map((option, i) => `${color.yellow(option.label)}`).join(" ");
 			const placeholder = opts.placeholder
 				? color.inverse(opts.placeholder[0]) + color.dim(opts.placeholder.slice(1))
 				: color.inverse(color.hidden("_"));

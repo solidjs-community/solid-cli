@@ -36,10 +36,10 @@ const TRANSLATIONS = {
 		ja: "結果がありません",
 	},
 	SELECT_START_ACTION: {
-		en: "Select a start action",
-		es: "Seleccione una acción de inicio",
-		fr: "Sélectionnez une action de démarrage",
-		ja: "開始アクションを選択してください",
+		en: "Select a SolidStart specific action",
+		es: "Seleccione una acción específica de SolidStart",
+		fr: "Sélectionnez une action spécifique à SolidStart",
+		ja: "SolidStart 固有のアクションを選択します",
 	},
 	SELECT_ACTION: {
 		en: "Select an action",
