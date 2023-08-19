@@ -174,7 +174,7 @@ const handleNewStartProject = async (projectName: string) => {
 			),
 	});
 
-	if (!withTs) handleTSConversion(tempDir, projectName);
+	if (!withTs) await handleTSConversion(tempDir, projectName);
 
 	// Add .gitignore
 	writeFileSync(join(projectName, ".gitignore"), gitIgnore);
@@ -245,7 +245,7 @@ export const handleNew = async (
 			),
 	});
 
-	if (!withTs) handleTSConversion(tempDir, name);
+	if (!withTs) await handleTSConversion(tempDir, name);
 
 	// Add .gitignore
 	writeFileSync(join(name, ".gitignore"), gitIgnore);
