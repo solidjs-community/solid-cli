@@ -10,9 +10,8 @@ import { getRunner } from "@solid-cli/utils/paths";
 import { rm } from "fs/promises";
 import { basename, join, resolve } from "path";
 import { Dirent, copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
-import { transpile } from "@solid-cli/transpiler";
 import prettier from "prettier";
-
+import { transform } from "sucrase";
 const gitIgnore = `
 dist
 .solid
@@ -88,13 +87,15 @@ const convertToJS = async (file: Dirent, startPath: string) => {
 		recurseFiles(resolve(startPath, file.name), convertToJS);
 	} else if (file.isFile()) {
 		if (src.endsWith(".ts") || src.endsWith(".tsx")) {
-			let compiled = transpile(await readFileToString(src), file.name);
-
-			compiled = await prettier.format(compiled, {
+			let { code } = transform(await readFileToString(src), {
+				transforms: ["typescript", "jsx"],
+				jsxRuntime: "preserve",
+			});
+			code = await prettier.format(code, {
 				parser: "babel",
 			});
 
-			writeFileSync(dest.replace(".ts", ".js"), compiled, { flag: "wx" });
+			writeFileSync(dest.replace(".ts", ".js"), code, { flag: "wx" });
 		} else {
 			copyFileSync(src, dest);
 		}
