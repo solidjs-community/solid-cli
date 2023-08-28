@@ -2,7 +2,7 @@
 
 ## Adapters
 
-- [Aws](https://github.com/solidjs/solid-start/tree/main/packages/start-aws)
+- [AWS](https://github.com/solidjs/solid-start/tree/main/packages/start-aws)
 - [Cloudflare-pages](https://github.com/solidjs/solid-start/tree/main/packages/start-cloudflare-pages)
 - [Cloudflare-workers](https://github.com/solidjs/solid-start/tree/main/packages/start-cloudflare-workers)
 - [Deno](https://github.com/solidjs/solid-start/tree/main/packages/start-deno)
