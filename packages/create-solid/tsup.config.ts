@@ -6,7 +6,7 @@ export default defineConfig({
 	format: "esm",
 	splitting: false,
 	bundle: true,
-	sourcemap: true,
+	sourcemap: false,
 	clean: true,
 	noExternal: ["@solid-cli/commands"],
 	treeshake: true,
