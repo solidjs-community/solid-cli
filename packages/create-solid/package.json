@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/create-solid",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"description": "A stripped down Solid CLI just for creating new projects",
 	"author": "Thomas Beer & Rahul Batra",
 	"license": "MIT",
@@ -25,10 +25,8 @@
 		"start": "jiti ./src/index.ts",
 		"build": "tsc && tsup"
 	},
-	"dependencies": {
-		"@solid-cli/commands": "workspace:*"
-	},
 	"devDependencies": {
+		"@solid-cli/commands": "workspace:*",
 		"jiti": "^1.19.1",
 		"tsup": "^7.2.0",
 		"typescript": "^5.1.6"

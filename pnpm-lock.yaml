@@ -134,11 +134,10 @@ importers:
         version: 5.1.6
 
   packages/create-solid:
-    dependencies:
+    devDependencies:
       '@solid-cli/commands':
         specifier: workspace:*
         version: link:../commands
-    devDependencies:
       jiti:
         specifier: ^1.19.1
         version: 1.19.1
