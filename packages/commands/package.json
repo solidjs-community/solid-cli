@@ -16,6 +16,11 @@
 			"import": "./dist/index.mjs",
 			"require": "./dist/index.mjs",
 			"types": "./types/index.d.ts"
+		},
+		"./new": {
+			"import": "./dist/handlers/new.mjs",
+			"require": "./dist/handlers/new.mjs",
+			"types": "./types/handlers/new.d.ts"
 		}
 	},
 	"scripts": {
@@ -33,14 +38,12 @@
 		"access": "public"
 	},
 	"dependencies": {
-		"@chialab/esbuild-plugin-meta-url": "^0.17.7",
 		"@clack/prompts": "0.6.3",
 		"@solid-cli/reactivity": "workspace:*",
-		"@solid-cli/transpiler": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
 		"@solid-cli/utils": "workspace:*",
 		"detect-package-manager": "^2.0.1",
-		"execa": "^7.2.0",
+		"execa": "^8.0.1",
 		"picocolors": "^1.0.0",
 		"sucrase": "^3.34.0"
 	}

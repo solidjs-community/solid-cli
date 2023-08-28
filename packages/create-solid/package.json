@@ -21,12 +21,12 @@
 	"files": [
 		"dist"
 	],
-	"dependencies": {
-		"@solid-cli/commands": "workspace:*"
-	},
 	"scripts": {
 		"start": "jiti ./src/index.ts",
 		"build": "tsc && tsup"
+	},
+	"dependencies": {
+		"@solid-cli/commands": "workspace:*"
 	},
 	"devDependencies": {
 		"jiti": "^1.19.1",

@@ -10,7 +10,7 @@ import { getRunner } from "@solid-cli/utils/paths";
 import { rm } from "fs/promises";
 import { basename, join, resolve } from "path";
 import { Dirent, copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
-import prettier from "prettier";
+// import prettier from "prettier";
 import { transform } from "sucrase";
 const gitIgnore = `
 dist
@@ -91,9 +91,9 @@ const convertToJS = async (file: Dirent, startPath: string) => {
 				transforms: ["typescript", "jsx"],
 				jsxRuntime: "preserve",
 			});
-			code = await prettier.format(code, {
-				parser: "babel",
-			});
+			// code = await prettier.format(code, {
+			// 	parser: "babel",
+			// });
 
 			writeFileSync(dest.replace(".ts", ".js"), code, { flag: "wx" });
 		} else {
