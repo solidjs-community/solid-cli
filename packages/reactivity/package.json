@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/reactivity",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"description": "The minimal, eager reactive system that powers the Solid CLI",
 	"license": "MIT",
 	"homepage": "https://solid-cli.netlify.app",
@@ -8,6 +8,10 @@
 		"type": "git",
 		"url": "https://github.com/solidjs-community/solid-cli"
 	},
+	"files": [
+		"dist",
+		"types"
+	],
 	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
 	"types": "./types/index.d.ts",
