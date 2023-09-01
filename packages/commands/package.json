@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/commands",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "The main command handlers for the Solid CLI",
 	"license": "MIT",
 	"homepage": "https://solid-cli.netlify.app",
@@ -8,6 +8,10 @@
 		"type": "git",
 		"url": "https://github.com/solidjs-community/solid-cli"
 	},
+	"files": [
+		"dist",
+		"types"
+	],
 	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
 	"types": "./types/index.d.ts",

@@ -1,12 +1,16 @@
 {
 	"name": "@solid-cli/ui",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"license": "MIT",
 	"homepage": "https://solid-cli.netlify.app",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/solidjs-community/solid-cli"
 	},
+	"files": [
+		"dist",
+		"types"
+	],
 	"description": "A collection of UI utilities for the Solid CLI",
 	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",

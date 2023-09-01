@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/utils",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"description": "A collection of utilities for the Solid CLI",
 	"license": "MIT",
 	"homepage": "https://solid-cli.netlify.app",
@@ -8,6 +8,10 @@
 		"type": "git",
 		"url": "https://github.com/solidjs-community/solid-cli"
 	},
+	"files": [
+		"dist",
+		"types"
+	],
 	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
 	"types": "./types/index.d.ts",
