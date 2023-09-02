@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 import { handleNew } from "@solid-cli/commands/new";
-// const main = async () => {
-// 	await handleNew();
-// };
-// main();
+import { bgCyan, black } from "picocolors";
+import { intro } from "@clack/prompts";
+import { version } from "../package.json";
+intro(`\n${bgCyan(black(` Create-Solid v${version}`))}`);
 handleNew();

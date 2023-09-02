@@ -140,6 +140,13 @@ importers:
         version: 5.1.6
 
   packages/create-solid:
+    dependencies:
+      '@clack/prompts':
+        specifier: 0.6.3
+        version: 0.6.3
+      picocolors:
+        specifier: ^1.0.0
+        version: 1.0.0
     devDependencies:
       '@solid-cli/commands':
         specifier: workspace:*

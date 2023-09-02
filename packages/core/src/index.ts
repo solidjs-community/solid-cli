@@ -91,7 +91,7 @@ const main = async () => {
 	const cli = subcommands({
 		name: "solid",
 		cmds: await loadCommands(),
-		version: version,
+		version,
 	});
 	const args = process.argv.slice(2);
 
