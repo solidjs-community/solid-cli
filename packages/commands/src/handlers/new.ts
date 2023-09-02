@@ -10,7 +10,7 @@ import { getRunner } from "@solid-cli/utils/paths";
 import { rm } from "fs/promises";
 import { basename, join, resolve } from "path";
 import { Dirent, copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
-// import prettier from "prettier";
+import degit from "degit";
 import { transform } from "sucrase";
 const gitIgnore = `
 dist
@@ -164,15 +164,14 @@ const handleNewStartProject = async (projectName: string) => {
 	// If the user does not want ts, we create the project in a temp directory inside the project directory
 	const tempDir = withTs ? projectName : join(projectName, ".solid-start");
 
-	const pM = await detect();
 	await spinnerify({
 		startText: t.CREATING_PROJECT,
 		finishText: t.PROJECT_CREATED,
-		fn: () =>
-			execa(
-				getRunner(pM),
-				["degit", `solidjs/solid-start/examples/${template}#main`, tempDir].filter((e) => e !== null) as string[],
-			),
+		fn: async () => {
+			const emitter = degit(`solidjs/solid-start/examples/${template}#main`);
+			emitter.on("info", ({ message }) => p.log.info(message));
+			await emitter.clone(tempDir);
+		},
 	});
 
 	if (!withTs) await handleTSConversion(tempDir, projectName);

@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/commands",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "The main command handlers for the Solid CLI",
 	"license": "MIT",
 	"homepage": "https://solid-cli.netlify.app",
@@ -33,6 +33,7 @@
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-meta-url": "^0.17.7",
+		"@types/degit": "^2.8.3",
 		"@types/node": "^20.5.0",
 		"prettier": "^3.0.2",
 		"tsup": "^7.2.0",
@@ -46,6 +47,7 @@
 		"@solid-cli/reactivity": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
 		"@solid-cli/utils": "workspace:*",
+		"degit": "^2.8.4",
 		"detect-package-manager": "^2.0.1",
 		"execa": "^8.0.1",
 		"picocolors": "^1.0.0",
