@@ -1,12 +1,9 @@
 import * as p from "@clack/prompts";
 import { openInBrowser } from "@solid-cli/utils";
-import { detect } from "detect-package-manager";
-import { execa } from "execa";
 import { cancelable, spinnerify } from "@solid-cli/ui";
 import { t } from "@solid-cli/utils";
 import { insertAtEnd, readFileToString } from "@solid-cli/utils/fs";
 import { flushQueue } from "@solid-cli/utils/updates";
-import { getRunner } from "@solid-cli/utils/paths";
 import { rm } from "fs/promises";
 import { basename, join, resolve } from "path";
 import { Dirent, copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";

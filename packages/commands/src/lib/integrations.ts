@@ -1,7 +1,7 @@
 import { insertAfter, insertAtBeginning } from "@solid-cli/utils/fs";
 import { fileExists, validateFilePath } from "./utils/helpers";
 import { $ } from "execa";
-import { detect } from "detect-package-manager";
+import { getUserPkgManager } from "@solid-cli/utils/detect-package-manager";
 import { getRunner } from "@solid-cli/utils/paths";
 import { createSignal } from "@solid-cli/reactivity";
 import * as p from "@clack/prompts";
@@ -28,7 +28,7 @@ export const integrations = {
 	"tailwind": {
 		installs: ["tailwindcss", "postcss", "autoprefixer"],
 		postInstall: async () => {
-			const pM = await detect();
+			const pM = getUserPkgManager();
 			await $`${getRunner(pM)} tailwindcss init -p`;
 			let tailwindConfig = "tailwind.config.js";
 			if (!fileExists(tailwindConfig)) {

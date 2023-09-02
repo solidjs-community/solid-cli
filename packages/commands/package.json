@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/commands",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"description": "The main command handlers for the Solid CLI",
 	"license": "MIT",
 	"homepage": "https://solid-cli.netlify.app",
@@ -37,18 +37,17 @@
 		"@types/node": "^20.5.0",
 		"prettier": "^3.0.2",
 		"tsup": "^7.2.0",
-		"typescript": "^5.1.6"
+		"typescript": "^5.2.2"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"dependencies": {
-		"@clack/prompts": "0.6.3",
+		"@clack/prompts": "0.7.0",
 		"@solid-cli/reactivity": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
 		"@solid-cli/utils": "workspace:*",
 		"degit": "^2.8.4",
-		"detect-package-manager": "^2.0.1",
 		"execa": "^8.0.1",
 		"picocolors": "^1.0.0",
 		"sucrase": "^3.34.0"

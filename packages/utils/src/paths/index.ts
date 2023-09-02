@@ -1,4 +1,4 @@
-import { PM } from "detect-package-manager";
+import { PM } from "../detect-package-manager";
 import { homedir as oshomedir, tmpdir as ostmpdir } from "os";
 
 export const homedir = () => {
@@ -16,5 +16,7 @@ export const getRunner = (pM: PM) => {
 			return "npx";
 		case "pnpm":
 			return "pnpx";
+		case "bun":
+			return "bunx";
 	}
 };

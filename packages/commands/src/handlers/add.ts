@@ -3,7 +3,7 @@ import { S_BAR, cancelable, spinnerify } from "@solid-cli/ui";
 import { Integrations, Supported, integrations, setRootFile } from "../lib/integrations";
 import * as p from "@clack/prompts";
 import color from "picocolors";
-import { PM } from "detect-package-manager";
+import { PM } from "@solid-cli/utils/detect-package-manager";
 import { primitives, loadPrimitives } from "@solid-cli/utils/primitives";
 import { t } from "@solid-cli/utils";
 import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";

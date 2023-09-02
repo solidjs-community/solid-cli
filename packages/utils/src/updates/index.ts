@@ -1,6 +1,6 @@
 import { open, writeFile } from "fs/promises";
 import { $ } from "execa";
-import { detect, type PM } from "detect-package-manager";
+import { getUserPkgManager, type PM } from "../detect-package-manager";
 // Batch all updates here, so we can confirm with the user then flush
 // @ts-ignore
 export const UPDATESQUEUE: Update[] = globalThis.UPDATESQUEUE ?? [];
@@ -25,6 +25,8 @@ const installCommand = (pM: PM): string => {
 			return "add";
 		case "pnpm":
 			return "add";
+		case "bun":
+			return "install";
 	}
 };
 export const clearQueue = () => {
@@ -54,7 +56,7 @@ export const readQueuedFile = (name: string) => {
 };
 export const flushFileUpdates = async () => {
 	const fileUpdates = UPDATESQUEUE.filter((u) => u.type === "file") as FileUpdate[];
-	
+
 	for (const update of fileUpdates) {
 		if (!update.checked) {
 			await writeFile(update.name, update.contents);
@@ -70,7 +72,7 @@ export const flushFileUpdates = async () => {
 };
 export const flushPackageUpdates = async () => {
 	const packageUpdates = UPDATESQUEUE.filter((u) => u.type === "package") as PackageUpdate[];
-	const pM = await detect();
+	const pM = getUserPkgManager();
 	const instlCmd = installCommand(pM);
 	for (const update of packageUpdates) {
 		await $`${pM} ${instlCmd} ${update.name}`;
