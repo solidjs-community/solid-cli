@@ -1,15 +1,16 @@
 import { open, writeFile } from "fs/promises";
 import { $ } from "execa";
 import { getUserPkgManager, type PM } from "../detect-package-manager";
+declare global {
+	var UPDATESQUEUE: Update[] | undefined;
+}
 // Batch all updates here, so we can confirm with the user then flush
-// @ts-ignore
 export const UPDATESQUEUE: Update[] = globalThis.UPDATESQUEUE ?? [];
-// @ts-ignore
 globalThis.UPDATESQUEUE = UPDATESQUEUE;
 type PackageUpdate = { type: "package"; name: string };
 type CommandUpdate = { type: "command"; name: string };
 type FileUpdate = { type: "file"; name: string; contents: string; checked: boolean };
-// Don't bother explicitely handling plugin updates, since they're just a file update
+// Don't bother explicitly handling plugin updates, since they're just a file update
 export type Update = PackageUpdate | CommandUpdate | FileUpdate;
 type UpdateSummary = {
 	packageUpdates: string[];
