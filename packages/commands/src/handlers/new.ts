@@ -214,6 +214,7 @@ export const handleNew = async (
 	name: string = "solid-project",
 	stackblitz: boolean = false,
 ) => {
+	console.log(variation, name, stackblitz);
 	if (!variation) {
 		await handleAutocompleteNew();
 		return;
@@ -233,16 +234,14 @@ export const handleNew = async (
 	// If the user does not want ts, we create the project in a temp directory inside the project directory
 	const tempDir = withTs ? name : join(name, ".solid-start");
 
-	const pM = await detect();
-
 	await spinnerify({
 		startText: t.CREATING_PROJECT,
 		finishText: t.PROJECT_CREATED,
-		fn: () =>
-			execa(
-				getRunner(pM),
-				["degit", `solidjs/templates/${variation}`, name ?? null].filter((e) => e !== null) as string[],
-			),
+		fn: async () => {
+			const emitter = degit(`solidjs/templates/${variation}`);
+			emitter.on("info", ({ message }) => p.log.info(message));
+			await emitter.clone(tempDir);
+		},
 	});
 
 	if (!withTs) await handleTSConversion(tempDir, name);
