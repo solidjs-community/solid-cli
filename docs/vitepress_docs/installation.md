@@ -7,6 +7,15 @@ npm install @solid-cli/core
 ```
 
 Or installed globally:
+### UNIX/MacOS/Linux
+
+In order to install global packages on Unix based systems you will need to grant npm special system permissions using the `sudo` command, suffixed by the command you would like to run.
+
+```sh
+sudo npm install -g @solid-cli/core
+```
+
+### Windows
 
 ```sh
 npm install -g @solid-cli/core
