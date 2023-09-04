@@ -32,4 +32,23 @@ describe("createEffect", () => {
 		set(2);
 		expect(updates).toBe(3);
 	});
+	test("Nested effects", () => {
+		const [A, setA] = createSignal(0);
+		let updates = 0;
+		createEffect(() => {
+			A();
+			updates++;
+			let nestedUpdates = 0;
+			const [get, set] = createSignal(0);
+			createEffect(() => {
+				get();
+				nestedUpdates++;
+			});
+			expect(nestedUpdates).toBe(1);
+			set(1);
+			expect(nestedUpdates).toBe(2);
+		});
+		setA(1);
+		expect(updates).toBe(2);
+	});
 });
