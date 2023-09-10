@@ -37,11 +37,9 @@ describe("createMemo", () => {
 	test("Memos don't overexecute in a diamond (The diamond problem)", () => {
 		const [A, setA] = createSignal(0);
 		const B = createMemo(() => {
-			console.log("B updating");
 			return A() * 2;
 		});
 		const C = createMemo(() => {
-			console.log("C updating");
 			return A() + 2;
 		});
 		let updates = 0;

@@ -22,7 +22,6 @@ export const form = async (fields: Field[]) => {
 		returns.push({ name: field.name, value: r });
 	}
 
-	// console.log(JSON.stringify(returns));
 
 	return returns;
 };

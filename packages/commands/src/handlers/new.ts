@@ -211,7 +211,6 @@ export const handleNew = async (
 	name: string = "solid-project",
 	stackblitz: boolean = false,
 ) => {
-	console.log(variation, name, stackblitz);
 	if (!variation) {
 		await handleAutocompleteNew();
 		return;
