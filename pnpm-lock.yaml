@@ -27,8 +27,8 @@ importers:
   packages/commands:
     dependencies:
       '@begit/core':
-        specifier: ^0.0.4
-        version: 0.0.4
+        specifier: ^0.0.7
+        version: 0.0.7
       '@clack/prompts':
         specifier: 0.7.0
         version: 0.7.0
@@ -262,8 +262,8 @@ packages:
       regenerator-runtime: 0.14.0
     dev: true
 
-  /@begit/core@0.0.4:
-    resolution: {integrity: sha512-DSm+0r43hMwaKx++9bB3ii5Z+8XTs4G4tzTPiChKD+uBYSjIBUONALj0+8oFMVqfM8xLcayLj6TI1ug1gmxxgg==}
+  /@begit/core@0.0.7:
+    resolution: {integrity: sha512-nuS1W1HwS8Ir7K+H+MCixuFwBfP+1ZDu94GOtCheZNUr2h96S5rg2K4N3V9bd7N7iD5EvltscyXCHXt8H6rqxw==}
     dependencies:
       tar: 6.2.0
     dev: false
