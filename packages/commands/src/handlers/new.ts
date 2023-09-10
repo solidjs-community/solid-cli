@@ -7,7 +7,7 @@ import { flushQueue } from "@solid-cli/utils/updates";
 import { rm } from "fs/promises";
 import { basename, join, resolve } from "path";
 import { Dirent, copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
-import degit from "degit";
+import { downloadAndExtract } from "@begit/core";
 import { transform } from "sucrase";
 const gitIgnore = `
 dist
@@ -165,9 +165,13 @@ const handleNewStartProject = async (projectName: string) => {
 		startText: t.CREATING_PROJECT,
 		finishText: t.PROJECT_CREATED,
 		fn: async () => {
-			const emitter = degit(`solidjs/solid-start/examples/${template}#main`);
-			emitter.on("info", ({ message }) => p.log.info(message));
-			await emitter.clone(tempDir);
+			// const emitter = degit(`solidjs/solid-start/examples/${template}#main`);
+			// emitter.on("info", ({ message }) => p.log.info(message));
+			// await emitter.clone(tempDir);
+			await downloadAndExtract({
+				repo: { owner: "solidjs", name: "solid-start", subdir: `examples/${template}` },
+				dest: tempDir,
+			});
 		},
 	});
 
@@ -234,9 +238,10 @@ export const handleNew = async (
 		startText: t.CREATING_PROJECT,
 		finishText: t.PROJECT_CREATED,
 		fn: async () => {
-			const emitter = degit(`solidjs/templates/${variation}`);
-			emitter.on("info", ({ message }) => p.log.info(message));
-			await emitter.clone(tempDir);
+			// const emitter = degit(`solidjs/templates/${variation}`);
+			// emitter.on("info", ({ message }) => p.log.info(message));
+			// await emitter.clone(tempDir);
+			await downloadAndExtract({ repo: { owner: "solidjs", name: "templates", subdir: variation }, dest: tempDir });
 		},
 	});
 
