@@ -3,7 +3,7 @@
 </p>
 
 > [!WARNING]
-> 🚧 This project is under heavy development and still in beta. More features coming soon!
+> 🚧 This project is under heavy development and is not yet complete. More features coming soon!
 
 # Solid CLI
 
