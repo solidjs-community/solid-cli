@@ -2,14 +2,17 @@
   <img width="100%" src="https://assets.solidjs.com/banner?type=CLI&background=tiles&project=%20" alt="Solid CLI">
 </p>
 
-# Solid CLI (This is currently very much still in beta)
+> [!WARNING]
+> 🚧 This project is under heavy development and still in beta. More features coming soon!
+
+# Solid CLI
 
 [![Build and Test](https://github.com/solidjs-community/solid-cli/actions/workflows/tests.yml/badge.svg)](https://github.com/solidjs-community/solid-cli/actions/workflows/tests.yml)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/5233ac74-3f53-4c90-b95d-25b528b931a1/deploy-status)](https://app.netlify.com/sites/solid-cli/deploys)
 
-A custom CLI built for the purpose of installing and managing SolidJS apps and projects. The goal of the CLI is to provide a useful and powerful utility to installing any dependencies, searching the Solid ecosystem etc.
+A custom-built CLI for creating and managing SolidJS apps and projects.
 
-# Roadmap/Features
+## Roadmap/Features
 
 - [x] Templates
   - [x] From Degit
@@ -40,7 +43,7 @@ A custom CLI built for the purpose of installing and managing SolidJS apps and p
   - [x] Enable Adapters
   - [x] Enable SSR/CSR/SSG mode
 
-# CLI Design
+## Structure
 
 The CLI will use `solid` as the initialiation keyword. The CLI commands will then cascade based on groupings determined baed on what the action does defined by higher level actions. The actions will be:
 
@@ -58,6 +61,6 @@ The CLI will use `solid` as the initialiation keyword. The CLI commands will the
   - `add`: Starts the process of submitting your current project to our ecosystem listing (Solidex) ie. `solid ecosystem publish`
   - `search`: Initializes an ecosystem search result `solid ecosystem search auth`
 
-# Contributions
+## Contributing
 
 Please feel free to contribute to this repo by expanding on this design document. Once we lock a general design a choice of technology will be decided.
