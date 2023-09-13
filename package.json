@@ -2,7 +2,7 @@
 	"name": "solid-cli",
 	"private": true,
 	"version": "0.0.1",
-	"description": "A CLI for making the solidjs development experience easier, faster, and less error prone.",
+	"description": "A CLI for making the SolidJS development experience easier, faster, and less error prone.",
 	"license": "MIT",
 	"homepage": "https://solid-cli.netlify.app",
 	"repository": {
@@ -20,10 +20,16 @@
 		"watch:ui": "nodemon --watch packages/ui/src -e ts --exec 'turbo run build --scope=ui'",
 		"watch:utils": "nodemon --watch packages/utils/src -e ts --exec 'turbo run build --scope=utils'",
 		"start": "cd packages/core && pnpm start",
-		"format": "prettier . --write"
+		"format": "prettier --write ."
 	},
-	"keywords": [],
-	"author": "Thomas Beer & Rahul Batra",
+	"contributors": [
+		{
+			"name": "Thomas Beer"
+		},
+		{
+			"name": "Rahul Batra"
+		}
+	],
 	"workspaces": [
 		"./packages/*"
 	],
@@ -33,5 +39,6 @@
 		"prettier": "^3.0.3",
 		"turbo": "^1.10.13",
 		"vitest": "^0.34.4"
-	}
+	},
+	"packageManager": "pnpm@8.7.5"
 }
