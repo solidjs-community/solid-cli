@@ -45,7 +45,7 @@ A custom-built CLI for creating and managing SolidJS apps and projects.
 
 ## Structure
 
-The CLI will use `solid` as the initialiation keyword. The CLI commands will then cascade based on groupings determined baed on what the action does defined by higher level actions. The actions will be:
+The CLI is invoked with `solid`. The commands then cascade, where actions are grouped with other similar actions. The actions will be:
 
 - `version`: Displays a changelog of recent Solid versions
   - `start`: Specific command for Start versions
@@ -63,4 +63,4 @@ The CLI will use `solid` as the initialiation keyword. The CLI commands will the
 
 ## Contributing
 
-Please feel free to contribute to this repo by expanding on this design document. Once we lock a general design a choice of technology will be decided.
+Please feel free to contribute to this repo by creating an issue or a PR.
