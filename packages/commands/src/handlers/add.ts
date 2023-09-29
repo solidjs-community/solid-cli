@@ -8,7 +8,7 @@ import { primitives, loadPrimitives } from "@solid-cli/utils/primitives";
 import { t } from "@solid-cli/utils";
 import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";
 import { writeFile, readFile } from "@solid-cli/utils/fs";
-import { transformPlugins, type PluginOptions } from "@solid-cli/utils/transform";
+import { type PluginOptions } from "@solid-cli/utils/transform";
 import { parseModule } from "magicast";
 import { addVitePlugin, type AddVitePluginOptions } from "magicast/helpers";
 import {
@@ -139,6 +139,7 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 			pluginOptions.forEach((p) => {
 				addVitePlugin(mod, toVitePluginOptions(p));
 			});
+			writeFile(viteConfig, mod.generate().code);
 			// const code = await transformPlugins(
 			// 	configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
 			// 	{ name: viteConfig, contents: (await readFile(viteConfig)).toString() },
