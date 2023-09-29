@@ -9,6 +9,8 @@ import { t } from "@solid-cli/utils";
 import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";
 import { writeFile, readFile } from "@solid-cli/utils/fs";
 import { transformPlugins, type PluginOptions } from "@solid-cli/utils/transform";
+import { parseModule } from "magicast";
+import { addVitePlugin, type AddVitePluginOptions } from "magicast/helpers";
 import {
 	UPDATESQUEUE,
 	clearQueue,
@@ -87,6 +89,9 @@ const installCommand = async (pM: PM): Promise<string> => {
 	}
 };
 type Configs = Integrations[keyof Integrations][];
+const toVitePluginOptions = (cfg: PluginOptions): AddVitePluginOptions => {
+	return { from: cfg.importSource, constructor: cfg.importName };
+};
 export const handleAdd = async (packages?: string[], forceTransform: boolean = false) => {
 	if (!packages?.length) {
 		const autocompleted = await handleAutocompleteAdd();
@@ -125,18 +130,22 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 	}
 
 	if (!configs.length) return;
-
 	await spinnerify({
 		startText: "Processing config",
 		finishText: "Config processed",
 		fn: async () => {
-			const code = await transformPlugins(
-				configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
-				{ name: viteConfig, contents: (await readFile(viteConfig)).toString() },
-				forceTransform,
-				undefined,
-			);
-			writeFile(viteConfig, code);
+			const mod = parseModule((await readFile(viteConfig)).toString());
+			const pluginOptions = configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[];
+			pluginOptions.forEach((p) => {
+				addVitePlugin(mod, toVitePluginOptions(p));
+			});
+			// const code = await transformPlugins(
+			// 	configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
+			// 	{ name: viteConfig, contents: (await readFile(viteConfig)).toString() },
+			// 	forceTransform,
+			// 	undefined,
+			// );
+			// writeFile(viteConfig, code);
 		},
 	});
 

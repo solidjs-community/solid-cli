@@ -48,6 +48,7 @@
 		"@solid-cli/ui": "workspace:*",
 		"@solid-cli/utils": "workspace:*",
 		"execa": "^8.0.1",
+		"magicast": "^0.3.0",
 		"picocolors": "^1.0.0",
 		"sucrase": "^3.34.0"
 	}
