@@ -27,9 +27,9 @@
 	},
 	"devDependencies": {
 		"@solid-cli/commands": "workspace:*",
-		"jiti": "^1.19.3",
-		"tsup": "^7.2.0",
-		"typescript": "^5.2.2",
+		"jiti": "^1.21.0",
+		"tsup": "^8.0.1",
+		"typescript": "^5.3.3",
 		"@clack/prompts": "0.7.0",
 		"picocolors": "^1.0.0"
 	},

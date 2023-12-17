@@ -33,16 +33,16 @@
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-meta-url": "^0.17.7",
-		"@types/node": "^20.6.0",
-		"prettier": "^3.0.3",
-		"tsup": "^7.2.0",
-		"typescript": "^5.2.2"
+		"@types/node": "^20.10.4",
+		"prettier": "^3.1.1",
+		"tsup": "^8.0.1",
+		"typescript": "^5.3.3"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"dependencies": {
-		"@begit/core": "^0.0.7",
+		"@begit/core": "^0.0.11",
 		"@clack/prompts": "0.7.0",
 		"@solid-cli/reactivity": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
