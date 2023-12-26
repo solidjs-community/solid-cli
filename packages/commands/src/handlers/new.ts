@@ -41,16 +41,16 @@ Thumbs.db
 
 const startSupported = [
 	"bare",
+	"basic",
 	"hackernews",
 	"todomvc",
 	"with-auth",
-	"with-authjs",
 	"with-mdx",
 	"with-prisma",
 	"with-solid-styled",
 	"with-tailwindcss",
 	"with-trpc",
-	"with-vitest",
+	// "with-vitest",
 	"with-websocket",
 ] as const;
 const localSupported = ["ts", "js"] as const;
