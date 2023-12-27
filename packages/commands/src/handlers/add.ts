@@ -75,17 +75,6 @@ const transformPrimitives = async (ps: string[]) => {
 	const mappedInput = ps.map((p) => p.replace("@solid-primitives/", ""));
 	return primitives().filter((p) => mappedInput.includes(p.value.replace("@solid-primitives/", "")));
 };
-// @ts-ignore
-const installCommand = async (pM: PM): Promise<string> => {
-	switch (pM) {
-		case "npm":
-			return "install";
-		case "yarn":
-			return "add";
-		case "pnpm":
-			return "add";
-	}
-};
 type Configs = Integrations[keyof Integrations][];
 export const handleAdd = async (packages?: string[], forceTransform: boolean = false) => {
 	if (!packages?.length) {
