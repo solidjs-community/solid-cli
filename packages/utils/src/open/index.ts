@@ -1,4 +1,4 @@
-// Taken verbatim from https://github.com/withastro/astro/blob/main/packages/astro/src/cli/open.ts#L29
+// Taken verbatim from https://github.com/withastro/astro/blob/main/packages/astro/src/cli/docs/open.ts
 import type { ExecaChildProcess } from "execa";
 import { execa } from "execa";
 
