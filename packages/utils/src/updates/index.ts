@@ -1,6 +1,6 @@
 import { open, writeFile } from "fs/promises";
 import { $ } from "execa";
-import { getUserPkgManager, type PM } from "../detect-package-manager";
+import { detectPackageManager, getInstallCommand } from "../package-manager";
 declare global {
 	var UPDATESQUEUE: Update[] | undefined;
 }
@@ -18,18 +18,6 @@ type UpdateSummary = {
 	fileUpdates: string[];
 };
 
-const installCommand = (pM: PM): string => {
-	switch (pM) {
-		case "npm":
-			return "install";
-		case "yarn":
-			return "add";
-		case "pnpm":
-			return "add";
-		case "bun":
-			return "install";
-	}
-};
 export const clearQueue = () => {
 	UPDATESQUEUE.length = 0;
 };
@@ -73,8 +61,8 @@ export const flushFileUpdates = async () => {
 };
 export const flushPackageUpdates = async () => {
 	const packageUpdates = UPDATESQUEUE.filter((u) => u.type === "package") as PackageUpdate[];
-	const pM = getUserPkgManager();
-	const instlCmd = installCommand(pM);
+	const pM = detectPackageManager();
+	const instlCmd = getInstallCommand(pM);
 	for (const update of packageUpdates) {
 		await $`${pM} ${instlCmd} ${update.name}`;
 	}

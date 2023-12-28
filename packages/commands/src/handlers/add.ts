@@ -3,7 +3,6 @@ import { S_BAR, cancelable, spinnerify } from "@solid-cli/ui";
 import { Integrations, Supported, integrations, setRootFile } from "../lib/integrations";
 import * as p from "@clack/prompts";
 import color from "picocolors";
-import { PM } from "@solid-cli/utils/detect-package-manager";
 import { primitives, loadPrimitives } from "@solid-cli/utils/primitives";
 import { t } from "@solid-cli/utils";
 import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";
@@ -74,17 +73,6 @@ const transformPrimitives = async (ps: string[]) => {
 	}
 	const mappedInput = ps.map((p) => p.replace("@solid-primitives/", ""));
 	return primitives().filter((p) => mappedInput.includes(p.value.replace("@solid-primitives/", "")));
-};
-// @ts-ignore
-const installCommand = async (pM: PM): Promise<string> => {
-	switch (pM) {
-		case "npm":
-			return "install";
-		case "yarn":
-			return "add";
-		case "pnpm":
-			return "add";
-	}
 };
 type Configs = Integrations[keyof Integrations][];
 export const handleAdd = async (packages?: string[], forceTransform: boolean = false) => {

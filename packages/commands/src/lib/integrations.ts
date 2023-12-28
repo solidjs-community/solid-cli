@@ -1,8 +1,7 @@
 import { insertAfter, insertAtBeginning } from "@solid-cli/utils/fs";
 import { fileExists, validateFilePath } from "./utils/helpers";
 import { $ } from "execa";
-import { getUserPkgManager } from "@solid-cli/utils/detect-package-manager";
-import { getRunner } from "@solid-cli/utils/paths";
+import { getRunnerCommand, detectPackageManager } from "@solid-cli/utils/package-manager";
 import { createSignal } from "@solid-cli/reactivity";
 import * as p from "@clack/prompts";
 import color from "picocolors";
@@ -28,8 +27,8 @@ export const integrations = {
 	"tailwind": {
 		installs: ["tailwindcss", "postcss", "autoprefixer"],
 		postInstall: async () => {
-			const pM = getUserPkgManager();
-			await $`${getRunner(pM)} tailwindcss init -p`;
+			const pM = detectPackageManager();
+			await $`${getRunnerCommand(pM)} tailwindcss init -p`;
 			let tailwindConfig = "tailwind.config.js";
 			if (!fileExists(tailwindConfig)) {
 				p.log.error(color.red(`Can't find tailwind config file`));
