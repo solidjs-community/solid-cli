@@ -33,7 +33,7 @@
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-meta-url": "^0.17.7",
-		"@types/node": "^20.10.4",
+		"@types/node": "^20.10.5",
 		"prettier": "^3.1.1",
 		"tsup": "^8.0.1",
 		"typescript": "^5.3.3"
@@ -49,6 +49,6 @@
 		"@solid-cli/utils": "workspace:*",
 		"execa": "^8.0.1",
 		"picocolors": "^1.0.0",
-		"sucrase": "^3.34.0"
+		"sucrase": "^3.35.0"
 	}
 }
