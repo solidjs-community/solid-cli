@@ -51,10 +51,10 @@
 			"require": "./dist/primitives/index.mjs",
 			"types": "./types/primitives/index.d.ts"
 		},
-		"./detect-package-manager": {
-			"import": "./dist/detect-package-manager/index.mjs",
-			"require": "./dist/detect-package-manager/index.mjs",
-			"types": "./types/detect-package-manager/index.d.ts"
+		"./package-manager": {
+			"import": "./dist/package-manager/index.mjs",
+			"require": "./dist/package-manager/index.mjs",
+			"types": "./types/package-manager/index.d.ts"
 		}
 	},
 	"scripts": {
