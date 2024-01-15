@@ -62,12 +62,12 @@
 		"build": "tsc && tsup && jiti ./scripts/postBuild.ts"
 	},
 	"devDependencies": {
-		"@chialab/esbuild-plugin-meta-url": "^0.17.7",
-		"@types/node": "20.10.6",
+		"@chialab/esbuild-plugin-meta-url": "^0.18.0",
+		"@types/node": "20.11.2",
 		"jiti": "^1.21.0",
 		"tsup": "^8.0.1",
 		"typescript": "^5.3.3",
-		"vitest": "^1.1.2"
+		"vitest": "^1.2.0"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -76,7 +76,7 @@
 		"@clack/core": "0.3.3",
 		"@clack/prompts": "0.7.0",
 		"@solid-cli/reactivity": "workspace:*",
-		"@swc/core": "^1.3.102",
+		"@swc/core": "^1.3.103",
 		"cmd-ts": "^0.13.0",
 		"execa": "^8.0.1",
 		"picocolors": "^1.0.0",
