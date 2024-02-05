@@ -97,6 +97,7 @@ impl TransformVisitor {
             prepend_stmt(
                 &mut module.body,
                 ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {
+                    phase: Default::default(),
                     specifiers: vec![specifier],
                     src: Box::new(Str {
                         span: DUMMY_SP,
@@ -105,7 +106,7 @@ impl TransformVisitor {
                     }),
                     span: DUMMY_SP,
                     type_only: false,
-                    asserts: None,
+                    with: None,
                 })),
             );
         }
@@ -131,17 +132,21 @@ fn is_plugin_already_added(
     for (n, elem) in elems.iter().enumerate().take(elems.iter().len()) {
         // Assuming that plugins are always call expressions, and always imported as such
         // Can be fixed in the future by just visiting with self, and collecting all the identifiers that we find
-        if let Some(elem) = elem && let Expr::Call(call_expr) = elem.expr.as_expr() && let Callee::Expr(callee_expr) = &call_expr.callee {
+        if let Some(elem) = elem
+            && let Expr::Call(call_expr) = elem.expr.as_expr()
+            && let Callee::Expr(callee_expr) = &call_expr.callee
+        {
             if let Expr::Ident(i) = &**callee_expr {
                 let local_name = i.sym.as_ref();
                 if plugin_name == local_name {
                     // Checking if the import is from the same place
-                    for import in &visitor.original_imports{
+                    for import in &visitor.original_imports {
                         let imported_from = import.src.value.as_ref();
                         let import_names = get_import_names(import);
-                        if import_names.contains(&local_name) && imported_from == plugin_import_path {
+                        if import_names.contains(&local_name) && imported_from == plugin_import_path
+                        {
                             // Plugin already exists, so we don't need to add it
-                            return n.try_into().unwrap()
+                            return n.try_into().unwrap();
                         }
                     }
                 }
@@ -227,7 +232,9 @@ fn generate_plugin_expr(
                     let mut converted = to_expr(extra_config);
                     if let Some(ExprOrSpread { expr, .. }) = &original_config {
                         if let Expr::Call(call_expr) = &**expr {
-                            if call_expr.args.len() > 0 && let Expr::Object(obj) = &*call_expr.args[0].expr {
+                            if !call_expr.args.is_empty()
+                                && let Expr::Object(obj) = &*call_expr.args[0].expr
+                            {
                                 if let Expr::Object(new_cfg) = &converted {
                                     let merged = merge_objects(new_cfg, obj);
                                     converted = Expr::Object(ObjectLit {
@@ -306,7 +313,11 @@ fn update_argument(visitor: &mut TransformVisitor, arg: &mut ExprOrSpread) {
 
         for prop_spread in new_props.iter_mut() {
             if let PropOrSpread::Prop(prop) = prop_spread {
-                if let Prop::KeyValue(key_value_prop) = &**prop && let Some(i) = key_value_prop.key.as_ident() && i.sym.to_string() == "plugins" && let Expr::Array(arr_lit) = &*key_value_prop.value {
+                if let Prop::KeyValue(key_value_prop) = &**prop
+                    && let Some(i) = key_value_prop.key.as_ident()
+                    && i.sym == "plugins"
+                    && let Expr::Array(arr_lit) = &*key_value_prop.value
+                {
                     *prop_spread = add_new_plugins(visitor, arr_lit);
                     mutated_existing = true;
                 }
@@ -336,7 +347,7 @@ impl VisitMut for TransformVisitor {
 
     fn visit_mut_call_expr(&mut self, call_expr: &mut CallExpr) {
         if let Expr::Ident(i) = &**call_expr.callee.as_expr().unwrap() {
-            if i.sym.to_string() == "defineConfig" {
+            if i.sym == "defineConfig" {
                 let config_arg = &mut call_expr.args[0];
                 update_argument(self, config_arg);
             }

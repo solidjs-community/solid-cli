@@ -13,7 +13,7 @@ codegen-units = 1
 [dependencies]
 serde = "1"
 serde_json = "1.0"
-swc_core = { version = "0.79", features = [
+swc_core = { version = "0.90", features = [
     "ecma_plugin_transform",
     "ecma_utils",
     "ecma_minifier",
@@ -22,9 +22,9 @@ swc_core = { version = "0.79", features = [
     "common",
 ] }
 [dev-dependencies]
-swc_core = { version = "0.79", features = ["testing_transform", "ecma_parser"] }
+swc_core = { version = "0.90", features = ["testing_transform", "ecma_parser"] }
 
-testing = { version = "0.33" }
+testing = { version = "0.35" }
 # .cargo/config defines few alias to build plugin.
 # cargo build-wasi generates wasm-wasi32 binary
 # cargo build-wasm32 generates wasm32-unknown-unknown binary.
