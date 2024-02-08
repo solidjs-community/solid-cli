@@ -6,7 +6,7 @@ import { insertAtEnd, readFileToString } from "@solid-cli/utils/fs";
 import { flushQueue } from "@solid-cli/utils/updates";
 import { rm } from "fs/promises";
 import { basename, join, resolve } from "path";
-import { Dirent, copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
+import { Dirent, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import { downloadAndExtract } from "@begit/core";
 import { transform } from "sucrase";
 const gitIgnore = `
@@ -159,7 +159,7 @@ const handleNewStartProject = async (projectName: string) => {
 
 	// If the user does not want ts, we create the project in a temp directory inside the project directory
 	const tempDir = withTs ? projectName : join(projectName, ".solid-start");
-
+	const readmeAlreadyExists = existsSync(join(projectName, "README.md"));
 	await spinnerify({
 		startText: t.CREATING_PROJECT,
 		finishText: t.PROJECT_CREATED,
@@ -178,8 +178,7 @@ const handleNewStartProject = async (projectName: string) => {
 
 	// Add .gitignore
 	writeFileSync(join(projectName, ".gitignore"), gitIgnore);
-
-	await modifyReadme(projectName);
+	if (!readmeAlreadyExists) await modifyReadme(projectName);
 
 	p.log.info(`${t.GET_STARTED}
   - cd ${projectName}
@@ -232,6 +231,7 @@ export const handleNew = async (
 
 	// If the user does not want ts, we create the project in a temp directory inside the project directory
 	const tempDir = withTs ? name : join(name, ".solid-start");
+	const readmeAlreadyExists = existsSync(join(name, "README.md"));
 
 	await spinnerify({
 		startText: t.CREATING_PROJECT,
@@ -248,8 +248,7 @@ export const handleNew = async (
 
 	// Add .gitignore
 	writeFileSync(join(name, ".gitignore"), gitIgnore);
-
-	await modifyReadme(name ?? variation);
+	if (!readmeAlreadyExists) await modifyReadme(name ?? variation);
 	p.log.info(`${t.GET_STARTED}
   - cd ${name}
   - npm install
