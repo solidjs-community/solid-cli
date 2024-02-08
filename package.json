@@ -37,7 +37,7 @@
 		"@changesets/cli": "2.27.1",
 		"nodemon": "^3.0.3",
 		"prettier": "^3.2.5",
-		"turbo": "^1.12.2",
+		"turbo": "^1.12.3",
 		"vitest": "^1.2.2"
 	},
 	"packageManager": "pnpm@8.7.5"
