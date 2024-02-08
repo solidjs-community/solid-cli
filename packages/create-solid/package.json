@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/create-solid",
-	"version": "0.0.16",
+	"version": "0.0.17",
 	"description": "A stripped down Solid CLI just for creating new projects",
 	"author": "Thomas Beer & Rahul Batra",
 	"license": "MIT",
