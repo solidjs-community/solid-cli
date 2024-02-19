@@ -16,6 +16,7 @@ dist
 .vercel
 .netlify
 netlify
+.vinxi
 
 # Environment
 .env
