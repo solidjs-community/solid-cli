@@ -1,8 +1,11 @@
 {
-	"name": "@solid-cli/create-solid",
-	"version": "0.0.19",
-	"description": "A stripped down Solid CLI just for creating new projects",
-	"author": "Thomas Beer & Rahul Batra",
+	"name": "create-solid",
+	"version": "0.5.0",
+	"description": "Create Solid apps with low configuration",
+	"author": "Thomas Beer",
+	"contributors": [
+		"Rahul Batra"
+	],
 	"license": "MIT",
 	"homepage": "https://solid-cli.netlify.app",
 	"repository": {
