@@ -41,10 +41,10 @@ Thumbs.db
 `;
 
 const startSupported = [
-	"bare",
 	"basic",
-	"experiments",
+	"bare",
 	"hackernews",
+	"notes",
 	"todomvc",
 	"with-auth",
 	"with-mdx",
@@ -52,6 +52,9 @@ const startSupported = [
 	"with-solid-styled",
 	"with-tailwindcss",
 	"with-trpc",
+	"with-unocss",
+	"with-vitest",
+	"experiments",
 ] as const;
 const localSupported = ["ts", "js"] as const;
 const stackblitzSupported = ["bare"] as const;
@@ -121,24 +124,6 @@ const handleTSConversion = async (tempDir: string, projectName: string) => {
 
 	// Convert all ts files in temp directory into js
 	recurseFiles(tempDir, convertToJS);
-
-	// Update package.json to remove type deps
-	const name = basename(resolve(projectName));
-	const pkg_file = join(projectName, "package.json");
-	const pkg_json = JSON.parse(
-		readFileSync(pkg_file, "utf-8")
-			.replace(/"name": ".+"/, (_m) => `"name": "${name}"`)
-			.replace(/"(.+)": "workspace:.+"/g, (_m, name) => `"${name}": "next"`),
-	);
-
-	delete pkg_json.dependencies["@types/cookie"];
-	delete pkg_json.dependencies["@types/debug"];
-	delete pkg_json.devDependencies["@types/babel__core"];
-	delete pkg_json.devDependencies["@types/node"];
-	delete pkg_json.devDependencies["typescript"];
-	delete pkg_json.devDependencies["@types/wait-on"];
-
-	writeFileSync(pkg_file, JSON.stringify(pkg_json, null, 2));
 
 	// Remove temp directory
 	await rm(join(process.cwd(), tempDir), {
