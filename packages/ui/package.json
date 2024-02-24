@@ -29,13 +29,13 @@
 	"devDependencies": {
 		"tsup": "^8.0.2",
 		"typescript": "^5.3.3",
-		"@types/node": "20.11.19"
+		"@types/node": "20.11.20"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"dependencies": {
-		"@clack/core": "0.3.3",
+		"@clack/core": "0.3.4",
 		"@clack/prompts": "0.7.0",
 		"picocolors": "^1.0.0",
 		"@solid-cli/reactivity": "workspace:*",
