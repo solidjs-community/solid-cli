@@ -138,6 +138,7 @@ const handleNewStartProject = async (projectName: string) => {
 			message: t.NEW_START,
 			initialValue: "ts",
 			options: startSupported.map((s) => ({ label: s, value: s })),
+			maxItems: process.stdout.rows - 4,
 		}),
 	);
 
