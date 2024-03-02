@@ -39,5 +39,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"commander": "^12.0.0"
+	}
 }
