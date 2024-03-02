@@ -4,17 +4,18 @@ import color from "picocolors";
 import { intro } from "@clack/prompts";
 import { version } from "../package.json";
 import { program } from "commander";
+import { t } from "@solid-cli/utils";
 
 intro(`\n${color.bgCyan(color.black(` Create-Solid v${version}`))}`);
 
 program
 	.allowExcessArguments(false)
 	.configureHelp({
-		commandUsage: () => "create-solid [options]",
+		commandUsage: () => `create-solid [${t.OPTIONS}]`,
 	})
-	.helpOption(undefined, "Shows this help message")
-	.option("-p, --project-name <VALUE>", "The name of your project")
-	.option("-s, --solid-start", "Create a SolidStart project");
+	.helpOption(undefined, t.SHOWS_THIS_HELP_MESSAGE)
+	.option(`-p, --project-name <${t.VALUE}>`, t.NAME_OF_YOUR_PROJECT)
+	.option("-s, --solid-start", t.CREATE_START_PROJECT);
 
 program.parse();
 const { projectName, solidStart } = program.opts<{

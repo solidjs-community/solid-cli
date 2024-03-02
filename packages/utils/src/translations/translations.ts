@@ -323,6 +323,36 @@ const TRANSLATIONS = {
 		fr: "Ouvert avec succès dans le navigateur",
 		ja: "ブラウザで正常に開きました",
 	},
+	OPTIONS: {
+		en: "options",
+		es: "opciones",
+		fr: "choix",
+		ja: "オプション",
+	},
+	SHOWS_THIS_HELP_MESSAGE: {
+		en: "Shows this help message",
+		es: "Muestra este mensaje de ayuda",
+		fr: "Affiche ce message d'aide",
+		ja: "このヘルプメッセージを表示します",
+	},
+	VALUE: {
+		en: "value",
+		es: "valor",
+		fr: "valeur",
+		ja: "価値",
+	},
+	NAME_OF_YOUR_PROJECT: {
+		en: "The name of your project",
+		es: "El nombre de tu proyecto",
+		fr: "Le nom de votre projet",
+		ja: "プロジェクトの名前",
+	},
+	CREATE_START_PROJECT: {
+		en: "Create a SolidStart project",
+		es: "Crear un proyecto SolidStart",
+		fr: "Créer un projet SolidStart",
+		ja: "SolidStart プロジェクトを作成する",
+	},
 } as const satisfies Translations;
 
 export const t = new Proxy(TRANSLATIONS, {

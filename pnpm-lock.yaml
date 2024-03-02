@@ -137,6 +137,9 @@ importers:
       '@solid-cli/commands':
         specifier: workspace:*
         version: link:../commands
+      '@solid-cli/utils':
+        specifier: workspace:*
+        version: link:../utils
       jiti:
         specifier: ^1.21.0
         version: 1.21.0
