@@ -132,7 +132,7 @@ const handleTSConversion = async (tempDir: string, projectName: string) => {
 	});
 };
 
-const handleNewStartProject = async (projectName: string) => {
+const handleNewStartProject = async (projectName: string, variation?: AllSupported) => {
 	const template = await cancelable(
 		p.select({
 			message: t.NEW_START,
@@ -142,7 +142,7 @@ const handleNewStartProject = async (projectName: string) => {
 		}),
 	);
 
-	const withTs = await cancelable(p.confirm({ message: "Use Typescript?" }));
+	const withTs = variation ? variation !== "ts" : await cancelable(p.confirm({ message: "Use Typescript?" }));
 
 	// If the user does not want ts, we create the project in a temp directory inside the project directory
 	const tempDir = withTs ? projectName : join(projectName, ".solid-start");
@@ -173,12 +173,8 @@ const handleNewStartProject = async (projectName: string) => {
   - npm run dev`);
 };
 
-const handleAutocompleteNew = async () => {
-	const name = await cancelable(
-		p.text({ message: t.PROJECT_NAME, placeholder: "solid-project", defaultValue: "solid-project" }),
-	);
-
-	const isStart = await cancelable(p.confirm({ message: t.IS_START_PROJECT }));
+const handleAutocompleteNew = async (name: string, isStart?: boolean) => {
+	isStart ??= await cancelable(p.confirm({ message: t.IS_START_PROJECT }));
 
 	if (isStart) {
 		handleNewStartProject(name);
@@ -197,11 +193,16 @@ const handleAutocompleteNew = async () => {
 };
 export const handleNew = async (
 	variation?: AllSupported,
-	name: string = "solid-project",
+	name?: string,
 	stackblitz: boolean = false,
+	isStart?: boolean,
 ) => {
+	name ??= await cancelable(
+		p.text({ message: t.PROJECT_NAME, placeholder: "solid-project", defaultValue: "solid-project" }),
+	);
+
 	if (!variation) {
-		await handleAutocompleteNew();
+		await handleAutocompleteNew(name, isStart);
 		return;
 	}
 
@@ -214,7 +215,7 @@ export const handleNew = async (
 		return;
 	}
 
-	const withTs = await cancelable(p.confirm({ message: "Use Typescript?" }));
+	const withTs = variation ? variation === "ts" : await cancelable(p.confirm({ message: "Use Typescript?" }));
 
 	// If the user does not want ts, we create the project in a temp directory inside the project directory
 	const tempDir = withTs ? name : join(name, ".solid-start");
