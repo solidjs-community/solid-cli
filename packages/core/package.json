@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/core",
-	"version": "0.0.21",
+	"version": "0.0.22",
 	"description": "A CLI for Solid",
 	"author": "Thomas Beer & Rahul Batra",
 	"license": "MIT",
