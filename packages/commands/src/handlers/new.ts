@@ -170,7 +170,7 @@ const handleNewStartProject = async (projectName: string, variation?: AllSupport
 	const pM = detectPackageManager();
 	p.log.info(`${t.GET_STARTED}
   - cd ${projectName}
-  - ${pM.name} ${pM.installCommand}
+  - ${pM.name} install
   - ${pM.name} ${pM.runScriptCommand("dev")}`);
 };
 
@@ -241,6 +241,6 @@ export const handleNew = async (
 	const pM = detectPackageManager();
 	p.log.info(`${t.GET_STARTED}
   - cd ${name}
-  - ${pM.name} ${pM.installCommand}
+  - ${pM.name} install
   - ${pM.name} ${pM.runScriptCommand("dev")}`);
 };
