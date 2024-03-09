@@ -238,8 +238,9 @@ export const handleNew = async (
 	// Add .gitignore
 	writeFileSync(join(name, ".gitignore"), gitIgnore);
 	if (!readmeAlreadyExists) await modifyReadme(name ?? variation);
+	const pM = detectPackageManager();
 	p.log.info(`${t.GET_STARTED}
   - cd ${name}
-  - npm install
-  - npm run dev`);
+  - ${pM.name} ${pM.installCommand}
+  - ${pM.name} ${pM.runScriptCommand("dev")}`);
 };
