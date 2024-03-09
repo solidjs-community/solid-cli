@@ -64,7 +64,7 @@ export const flushPackageUpdates = async () => {
 	const pM = detectPackageManager();
 	const instlCmd = getInstallCommand(pM);
 	for (const update of packageUpdates) {
-		await $`${pM} ${instlCmd} ${update.name}`;
+		await $`${pM.name} ${instlCmd} ${update.name}`;
 	}
 };
 export const flushCommandUpdates = async () => {

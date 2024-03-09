@@ -9,6 +9,7 @@ import { basename, join, resolve } from "path";
 import { Dirent, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import { downloadAndExtract } from "@begit/core";
 import { transform } from "sucrase";
+import { detectPackageManager } from "@solid-cli/utils/package-manager";
 const gitIgnore = `
 dist
 .solid
@@ -166,11 +167,11 @@ const handleNewStartProject = async (projectName: string, variation?: AllSupport
 	// Add .gitignore
 	writeFileSync(join(projectName, ".gitignore"), gitIgnore);
 	if (!readmeAlreadyExists) await modifyReadme(projectName);
-
+	const pM = detectPackageManager();
 	p.log.info(`${t.GET_STARTED}
   - cd ${projectName}
-  - npm install
-  - npm run dev`);
+  - ${pM.name} ${pM.installCommand}
+  - ${pM.name} ${pM.runScriptCommand("dev")}`);
 };
 
 const handleAutocompleteNew = async (name: string, isStart?: boolean) => {
