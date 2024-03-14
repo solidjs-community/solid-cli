@@ -29,7 +29,7 @@
 	"devDependencies": {
 		"tsup": "^8.0.2",
 		"typescript": "^5.4.2",
-		"@types/node": "20.11.25"
+		"@types/node": "20.11.27"
 	},
 	"publishConfig": {
 		"access": "public"
