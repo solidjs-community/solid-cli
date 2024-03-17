@@ -33,7 +33,7 @@
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-meta-url": "^0.18.2",
-		"@types/node": "^20.11.27",
+		"@types/node": "^20.11.28",
 		"prettier": "^3.2.5",
 		"tsup": "^8.0.2",
 		"typescript": "^5.4.2"
