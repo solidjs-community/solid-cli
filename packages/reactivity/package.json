@@ -29,7 +29,7 @@
 	"author": "Thomas Beer",
 	"devDependencies": {
 		"tsup": "^8.0.2",
-		"typescript": "^5.4.2"
+		"typescript": "^5.4.3"
 	},
 	"publishConfig": {
 		"access": "public"
