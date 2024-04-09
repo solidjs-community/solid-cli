@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/commands",
-	"version": "0.0.18",
+	"version": "0.0.19",
 	"description": "The main command handlers for the Solid CLI",
 	"license": "MIT",
 	"homepage": "https://solid-cli.netlify.app",
