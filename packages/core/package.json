@@ -29,12 +29,12 @@
 		"@solid-cli/swc-plugin-solid-cli": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
 		"@solid-cli/utils": "workspace:*",
-		"@swc/core": "^1.4.8",
+		"@swc/core": "^1.4.13",
 		"cmd-ts": "^0.13.0",
 		"execa": "^8.0.1",
 		"picocolors": "^1.0.0",
 		"smol-toml": "^1.1.4",
-		"tiny-updater": "^3.5.1"
+		"tiny-updater": "^3.5.2"
 	},
 	"scripts": {
 		"start": "jiti ./src/index.ts",
@@ -42,10 +42,10 @@
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-meta-url": "^0.18.2",
-		"@types/node": "^20.11.30",
+		"@types/node": "^20.12.6",
 		"jiti": "^1.21.0",
 		"tsup": "^8.0.2",
-		"typescript": "^5.4.3"
+		"typescript": "^5.4.4"
 	},
 	"publishConfig": {
 		"access": "public"

@@ -1,4 +1,3 @@
-import { isCancel } from "@clack/core";
 import { log } from "@clack/prompts";
 import color from "picocolors";
 // Taken from https://github.com/natemoo-re/clack/blob/main/packages/prompts/src/index.ts#L642
@@ -85,7 +84,7 @@ export {
 const cancelable = async <T = unknown>(prompt: Promise<T | symbol>, cancelMessage: string = "Canceled"): Promise<T> => {
 	const value = await prompt;
 
-	if (isCancel(value)) {
+	if (typeof value === "symbol") {
 		log.warn(cancelMessage);
 		process.exit(0);
 	}
