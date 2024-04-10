@@ -7,5 +7,6 @@
 	"tabWidth": 2,
 	"trailingComma": "all",
 	"useTabs": true,
-	"quoteProps": "consistent"
+	"quoteProps": "consistent",
+	"endOfLine": "auto"
 }

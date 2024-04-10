@@ -22,6 +22,5 @@ export const form = async (fields: Field[]) => {
 		returns.push({ name: field.name, value: r });
 	}
 
-
 	return returns;
 };

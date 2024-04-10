@@ -80,8 +80,8 @@ export async function findFiles(
 			const fileMatch = Array.isArray(lookingFor)
 				? lookingFor.some((s) => (startsWith ? file.name.startsWith(s) : file.name.endsWith(s)))
 				: startsWith
-				? file.name.startsWith(lookingFor)
-				: file.name.endsWith(lookingFor);
+					? file.name.startsWith(lookingFor)
+					: file.name.endsWith(lookingFor);
 
 			if (fileMatch) {
 				filePaths.push(resolve(startPath, file.name));

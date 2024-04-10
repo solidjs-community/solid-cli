@@ -11,8 +11,17 @@ const app = command({
 	name: "create-solid",
 	description: "Create a new Solid project",
 	args: {
-		projectNamePositional: positional({type: optional(string), displayName: "Project Name", description: "The name of the project to be generated"}),
-		projectNameOption: option({ type: optional(string), long: "project-name", short: "p", description: "Name of your project" }),
+		projectNamePositional: positional({
+			type: optional(string),
+			displayName: "Project Name",
+			description: "The name of the project to be generated",
+		}),
+		projectNameOption: option({
+			type: optional(string),
+			long: "project-name",
+			short: "p",
+			description: "Name of your project",
+		}),
 		solidStart: flag({
 			type: optional(boolean),
 			long: "solid-start",
