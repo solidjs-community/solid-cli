@@ -5,9 +5,9 @@ import { t } from "@solid-cli/utils";
 import { insertAtEnd, readFileToString } from "@solid-cli/utils/fs";
 import { flushQueue } from "@solid-cli/utils/updates";
 import { rm } from "fs/promises";
-import { basename, join, resolve } from "path";
+import { join, resolve } from "path";
 import { Dirent, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
-import { downloadAndExtract } from "@begit/core";
+import { downloadRepo } from "@begit/core";
 import { transform } from "sucrase";
 import { detectPackageManager } from "@solid-cli/utils/package-manager";
 const gitIgnore = `
@@ -155,7 +155,7 @@ const handleNewStartProject = async (projectName: string, variation?: AllSupport
 			// const emitter = degit(`solidjs/solid-start/examples/${template}#main`);
 			// emitter.on("info", ({ message }) => p.log.info(message));
 			// await emitter.clone(tempDir);
-			await downloadAndExtract({
+			await downloadRepo({
 				repo: { owner: "solidjs", name: "solid-start", subdir: `examples/${template}` },
 				dest: tempDir,
 			});
@@ -229,7 +229,7 @@ export const handleNew = async (
 			// const emitter = degit(`solidjs/templates/${variation}`);
 			// emitter.on("info", ({ message }) => p.log.info(message));
 			// await emitter.clone(tempDir);
-			await downloadAndExtract({ repo: { owner: "solidjs", name: "templates", subdir: variation }, dest: tempDir });
+			await downloadRepo({ repo: { owner: "solidjs", name: "templates", subdir: variation }, dest: tempDir });
 		},
 	});
 
