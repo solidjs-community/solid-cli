@@ -199,13 +199,6 @@ export const handleNew = async (
 	name ??= await cancelable(
 		p.text({ message: t.PROJECT_NAME, placeholder: "solid-project", defaultValue: "solid-project" }),
 	);
-	await spinnerify({
-		startText: "This will break",
-		finishText: "Should've broken",
-		fn: async () => {
-			throw new Error("Very broken");
-		},
-	});
 
 	if (!variation) {
 		await handleAutocompleteNew(name, isStart);
