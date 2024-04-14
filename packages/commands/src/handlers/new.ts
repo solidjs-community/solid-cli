@@ -48,6 +48,7 @@ const startSupported = [
 	"notes",
 	"todomvc",
 	"with-auth",
+	"with-authjs",
 	"with-mdx",
 	"with-prisma",
 	"with-solid-styled",
