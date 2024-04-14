@@ -60,8 +60,10 @@ const startSupported = [
 const localSupported = ["ts", "js"] as const;
 const stackblitzSupported = ["bare"] as const;
 
-type AllSupported = (typeof localSupported)[number] | (typeof stackblitzSupported)[number];
-
+export type AllSupported = (typeof localSupported)[number] | (typeof stackblitzSupported)[number];
+export const isSupported = (template: string): template is AllSupported => {
+	return localSupported.indexOf(template as any) !== -1;
+};
 const modifyReadme = async (name: string) => {
 	await insertAtEnd(
 		`${name}/README.md`,
@@ -162,10 +164,12 @@ const handleNewStartProject = async (projectName: string, variation?: AllSupport
 	writeFileSync(join(projectName, ".gitignore"), gitIgnore);
 	if (!readmeAlreadyExists) await modifyReadme(projectName);
 	const pM = detectPackageManager();
-	p.log.info(`${t.GET_STARTED}
-  - cd ${projectName}
-  - ${pM.name} install
-  - ${pM.name} ${pM.runScriptCommand("dev")}`);
+	p.note(
+		`cd ${projectName}
+${pM.name} install
+${pM.name} ${pM.runScriptCommand("dev")}`,
+		t.GET_STARTED,
+	);
 };
 
 const handleAutocompleteNew = async (name: string, isStart?: boolean) => {
@@ -195,6 +199,13 @@ export const handleNew = async (
 	name ??= await cancelable(
 		p.text({ message: t.PROJECT_NAME, placeholder: "solid-project", defaultValue: "solid-project" }),
 	);
+	await spinnerify({
+		startText: "This will break",
+		finishText: "Should've broken",
+		fn: async () => {
+			throw new Error("Very broken");
+		},
+	});
 
 	if (!variation) {
 		await handleAutocompleteNew(name, isStart);
@@ -230,8 +241,10 @@ export const handleNew = async (
 	writeFileSync(join(name, ".gitignore"), gitIgnore);
 	if (!readmeAlreadyExists) await modifyReadme(name ?? variation);
 	const pM = detectPackageManager();
-	p.log.info(`${t.GET_STARTED}
-  - cd ${name}
-  - ${pM.name} install
-  - ${pM.name} ${pM.runScriptCommand("dev")}`);
+	p.note(
+		`cd ${name}
+${pM.name} install
+${pM.name} ${pM.runScriptCommand("dev")}`,
+		t.GET_STARTED,
+	);
 };

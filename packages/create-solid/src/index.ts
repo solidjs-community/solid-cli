@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-import { handleNew } from "@solid-cli/commands/new";
+import { AllSupported, handleNew, isSupported } from "@solid-cli/commands/new";
 import color from "picocolors";
 import { intro } from "@clack/prompts";
 import { version } from "../package.json";
@@ -16,6 +16,11 @@ const app = command({
 			displayName: "Project Name",
 			description: "The name of the project to be generated",
 		}),
+		templatePositional: positional({
+			type: optional(string),
+			displayName: "Template name",
+			description: "Name of template to be initialised",
+		}),
 		projectNameOption: option({
 			type: optional(string),
 			long: "project-name",
@@ -29,8 +34,22 @@ const app = command({
 			description: "Create a SolidStart project",
 		}),
 	},
-	handler: async ({ projectNameOption, solidStart, projectNamePositional }) => {
-		await handleNew(undefined, projectNamePositional ?? projectNameOption, false, solidStart);
+	handler: async ({ projectNameOption, solidStart, projectNamePositional, templatePositional }) => {
+		if (templatePositional && !isSupported(templatePositional)) {
+			console.error(`Template "${templatePositional}" is not supported`);
+			process.exit(0);
+		}
+		try {
+			await handleNew(
+				templatePositional as AllSupported,
+				projectNamePositional ?? projectNameOption,
+				false,
+				solidStart,
+			);
+		} catch (e) {
+			console.error(e);
+			process.exit(1);
+		}
 	},
 });
 run(app, process.argv.slice(2));
