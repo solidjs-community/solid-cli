@@ -28,8 +28,8 @@
 	},
 	"devDependencies": {
 		"tsup": "^8.0.2",
-		"typescript": "^5.4.4",
-		"@types/node": "20.12.6"
+		"typescript": "^5.4.5",
+		"@types/node": "20.12.7"
 	},
 	"publishConfig": {
 		"access": "public"

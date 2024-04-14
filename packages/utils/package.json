@@ -63,11 +63,11 @@
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-meta-url": "^0.18.2",
-		"@types/node": "20.12.6",
+		"@types/node": "20.12.7",
 		"jiti": "^1.21.0",
 		"tsup": "^8.0.2",
-		"typescript": "^5.4.4",
-		"vitest": "^1.4.0"
+		"typescript": "^5.4.5",
+		"vitest": "^1.5.0"
 	},
 	"publishConfig": {
 		"access": "public"
