@@ -8,8 +8,8 @@
 	},
 	"devDependencies": {
 		"flexsearch": "^0.7.43",
-		"vitepress": "1.0.0-rc.45",
+		"vitepress": "1.1.3",
 		"vitepress-plugin-search": "1.0.4-alpha.22",
-		"vue": "^3.4.21"
+		"vue": "^3.4.23"
 	}
 }
