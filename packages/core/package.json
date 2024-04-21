@@ -29,7 +29,7 @@
 		"@solid-cli/swc-plugin-solid-cli": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
 		"@solid-cli/utils": "workspace:*",
-		"@swc/core": "^1.4.13",
+		"@swc/core": "^1.4.16",
 		"cmd-ts": "^0.13.0",
 		"execa": "^8.0.1",
 		"picocolors": "^1.0.0",
