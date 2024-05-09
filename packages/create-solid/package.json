@@ -31,7 +31,7 @@
 	"devDependencies": {
 		"@clack/prompts": "0.7.0",
 		"@solid-cli/commands": "workspace:*",
-		"@types/node": "^20.12.7",
+		"@types/node": "^20.12.11",
 		"cmd-ts": "^0.13.0",
 		"jiti": "^1.21.0",
 		"picocolors": "^1.0.0",
