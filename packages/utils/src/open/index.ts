@@ -1,5 +1,5 @@
 // Taken verbatim from https://github.com/withastro/astro/blob/main/packages/astro/src/cli/docs/open.ts
-import type { ExecaChildProcess } from "execa";
+import type { Result } from "execa";
 import { execa } from "execa";
 
 /**
@@ -27,7 +27,7 @@ const getPlatformSpecificCommand = (): [string] | [string, string[]] => {
 	}
 };
 
-export async function openInBrowser(url: string): Promise<ExecaChildProcess> {
+export async function openInBrowser(url: string): Promise<Result> {
 	const [command, args = []] = getPlatformSpecificCommand();
 	return execa(command, [...args, encodeURI(url)]);
 }
