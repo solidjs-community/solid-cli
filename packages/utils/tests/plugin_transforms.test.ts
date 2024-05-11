@@ -12,22 +12,26 @@ const examplePlugin: PluginOptions = {
 describe("transformPlugins", () => {
 	test("Config is updated properly", async () => {
 		const config: Config = {
-			name: "vite.config.ts",
-			contents: `import solid from "solid-start/vite";
-            // Simulates a vite config
+			name: "app.config.ts",
+			contents: `import { defineConfig } from "@solidjs/start/config";
+            // Simulates an app config
             export default defineConfig({
-              plugins: [solid()],
+                vite: {
+                  plugins: [solid()]
+                }
             });
             `,
 		};
 		const expected = `import examplePlugin from "example";
-        import solid from "solid-start/vite";
-        // Simulates a vite config
+        import { defineConfig } from "@solidjs/start/config";
+        // Simulates an app config
         export default defineConfig({
-            plugins: [
-                solid(),
-                examplePlugin({})
-            ]
+            vite: {
+              plugins: [
+                  solid(),
+                  examplePlugin({})
+              ]
+            }
         });`;
 		const result = await transformPlugins([examplePlugin], config);
 
