@@ -1,5 +1,5 @@
-import { parseModule, ASTNode, ProxifiedModule, generateCode } from "magicast";
-import { Config, PluginOptions } from ".";
+import { ASTNode, ProxifiedModule, generateCode } from "magicast";
+import { PluginOptions } from ".";
 
 type ASTNodeFull = ASTNode & {
 	key?: ASTNodeFull;
@@ -93,8 +93,8 @@ const findPlugins = (mod: ProxifiedModule<any>) => {
 	}
 };
 
-export const addPlugins = (config: Config, plugins: PluginOptions[]) => {
-	const mod = parseModule(config.contents, { trailingComma: false, flowObjectCommas: false });
+export const addPlugins = (mod: ProxifiedModule<any>, plugins: PluginOptions[]) => {
+	// const mod = parseModule(config.contents, { trailingComma: false, flowObjectCommas: false });
 
 	const current = findPlugins(mod);
 

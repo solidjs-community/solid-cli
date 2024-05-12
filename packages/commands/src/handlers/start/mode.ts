@@ -29,18 +29,11 @@ export const handleMode = async (mode?: SupportedModes) => {
 	p.log.info("Updating config");
 	if (mode != "ssg") {
 		const newConfig = await transformPlugins(
-			[
-				{
-					importName: "solid",
-					importSource: "solid-start/vite",
-					isDefault: true,
-					options: { ssr: mode === "ssr" },
-				},
-			],
-			{ name: "vite.config.ts", contents: (await readFile("vite.config.ts")).toString() },
+			[],
+			{ name: "app.config.ts", contents: (await readFile("app.config.ts")).toString() },
 			true,
 			true,
 		);
-		await writeFile("vite.config.ts", newConfig);
+		await writeFile("app.config.ts", newConfig);
 	}
 };

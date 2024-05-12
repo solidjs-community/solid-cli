@@ -17,6 +17,7 @@ import {
 	handleNew,
 	handleRoute,
 } from "@solid-cli/commands";
+
 const possibleActions = () =>
 	[
 		{ value: "add", label: t.ACTION_ADD, hint: "solid add ..." },
