@@ -28,7 +28,7 @@ A custom-built CLI for creating and managing SolidJS apps and projects.
   - [ ] PostCSS
   - [x] UnoCSS
   - [ ] Vanilla Extract
-  - [ ] Vitest
+  - [x] Vitest
   - [ ] Tauri
   - [ ] Playwright
 - [ ] Utilities
