@@ -1,4 +1,5 @@
 import { insertAfter, insertAtBeginning } from "@solid-cli/utils/fs";
+import { readFile, writeFile } from "fs/promises";
 import { fileExists, validateFilePath } from "./utils/helpers";
 import { $ } from "execa";
 import { getRunnerCommand, detectPackageManager } from "@solid-cli/utils/package-manager";
@@ -106,6 +107,64 @@ export const integrations = {
 			const path = rootFile();
 			if (!path) return;
 			await insertAtBeginning(path, `import "solid-devtools";\n`);
+		},
+	},
+	"vitest": {
+		installs: [
+			"vitest",
+			"jsdom",
+			"@solidjs/testing-library",
+			"@testing-library/user-event",
+			"@testing-library/jest-dom",
+		],
+		additionalConfig: async () => {
+			try {
+        p.log.info("Adding test script to package.json");
+				const packageJsonString = await readFile("package.json", "utf8");
+				const packageJson = JSON.parse(packageJsonString);
+				if (!/\bvitest\b/.test(packageJson.scripts.test || "")) {
+					packageJson.scripts.test = "vitest";
+					await writeFile("package.json", JSON.stringify(packageJson, null, 2) + "\n", "utf8");
+				}
+				const hasTs = fileExists("tsconfig.json");
+				if (hasTs) {
+          p.log.info("Adding testing types to tsconfig.json");
+					const tsConfigString = await readFile("tsconfig.json", "utf8");
+					const tsConfig = JSON.parse(tsConfigString);
+					if (!tsConfig.compilerOptions) {
+						tsConfig.compilerOptions = {};
+					}
+					tsConfig.compilerOptions.types = [
+						...new Set([...(tsConfig.compilerOptions.types || []), "vite/client", "@testing-library/jest-dom"]),
+					];
+					await writeFile("tsconfig.json", JSON.stringify(tsConfig, null, 2) + "\n", "utf8");
+				}
+				if (
+					packageJson.dependencies["@solidjs/start"] &&
+					["ts", "mjs", "cjs", "js"].every(
+						(suffix) => !fileExists(`vite.config.${suffix}`) && !fileExists(`vitest.config.${suffix}`),
+					)
+				) {
+          const suffix = hasTs ? "ts" : "mjs";
+          p.log.info(`Adding vitest.config.${suffix}`);
+					await writeFile(
+						`vitest.config.${suffix}`,
+						`import solid from "vite-plugin-solid";
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  plugins: [solid()],
+  resolve: {
+    conditions: ["development", "browser"],
+  },
+});
+`,
+						"utf-8",
+					);
+				}
+			} catch (err) {
+				console.error(err);
+			}
 		},
 	},
 };
