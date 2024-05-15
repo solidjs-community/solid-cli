@@ -125,9 +125,14 @@ export const integrations: Record<string, IntegrationsValue> = {
 				p.log.info("Adding test script to package.json");
 				const packageJsonString = await readFile("package.json", "utf8");
 				const packageJson = JSON.parse(packageJsonString);
+        if (!packageJson.scripts) { packageJson.scripts = {}; }
 				if (!/\bvitest\b/.test(packageJson.scripts.test || "")) {
 					packageJson.scripts.test = "vitest";
-					await writeFile("package.json", JSON.stringify(packageJson, null, 2) + "\n", "utf8");
+					await writeFile(
+            "package.json",
+            JSON.stringify(packageJson, null, /^(\t|\s+)/m.exec(packageJsonString)?.[0] || 2) + "\n",
+            "utf8"
+          );
 				}
 				const hasTs = fileExists("tsconfig.json");
 				if (hasTs) {
@@ -140,7 +145,11 @@ export const integrations: Record<string, IntegrationsValue> = {
 					tsConfig.compilerOptions.types = [
 						...new Set([...(tsConfig.compilerOptions.types || []), "vite/client", "@testing-library/jest-dom"]),
 					];
-					await writeFile("tsconfig.json", JSON.stringify(tsConfig, null, 2) + "\n", "utf8");
+					await writeFile(
+            "tsconfig.json",
+            JSON.stringify(tsConfig, null, /^(\t|\s+)/m.exec(tsConfigString)?.[0] || 2) + "\n",
+            "utf8"
+          );
 				}
 				if (
 					packageJson.dependencies["@solidjs/start"] &&
@@ -170,4 +179,54 @@ export default defineConfig({
 			}
 		},
 	},
+  "tauri-v1.x": {
+    installs: ["@tauri-apps/cli"],
+    postInstall: async () => {
+      try {
+        const packageJsonString = await readFile("package.json", "utf8");
+        const packageJson = JSON.parse(packageJsonString);
+        if (!packageJson.scripts) { packageJson.scripts = {}; }
+        packageJson.scripts.tauri = "tauri";
+        await writeFile(
+          "package.json",
+          JSON.stringify(packageJson, null, /^(\t|\s+)/m.exec(packageJsonString)?.[0] || 2) + "\n",
+          "utf8"
+        );
+        await flushQueue();
+        const name = packageJson.name;
+        const pM = detectPackageManager();
+        await $`${getRunnerCommand(pM)} tauri init --ci -A ${name} -W ${name} -D ../dist -P http://localhost:3000`;
+        p.outro(`Make sure you have installed all prerequisites: https://tauri.app/v1/guides/getting-started/prerequisites
+
+    Start tauri development with ${color.bold(pM.name)} ${color.bold(pM.runScriptCommand("tauri dev"))}`);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+  },
+  "tauri-v2.x": {
+    installs: ["@tauri-apps/cli@next"],
+    postInstall: async () => {
+      try {
+        const packageJsonString = await readFile("package.json", "utf8");
+        const packageJson = JSON.parse(packageJsonString);
+        if (!packageJson.scripts) { packageJson.scripts = {}; }
+        packageJson.scripts.tauri = "tauri";
+        await writeFile(
+          "package.json",
+          JSON.stringify(packageJson, null, /^(\t|\s+)/m.exec(packageJsonString)?.[0] || 2) + "\n",
+          "utf8"
+        );
+        await flushQueue();
+        const name = packageJson.name;
+        const pM = detectPackageManager();
+        await $`${getRunnerCommand(pM)} tauri init --ci -A ${name} -W ${name} -D ../dist -P http://localhost:3000`;
+        p.outro(`Make sure you have installed all prerequisites: https://v2.tauri.app/start/prerequisites/
+
+    Start tauri development with ${color.bold(pM.name)} ${color.bold(pM.runScriptCommand("tauri dev"))}`);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+  },
 };

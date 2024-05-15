@@ -29,7 +29,7 @@ A custom-built CLI for creating and managing SolidJS apps and projects.
   - [x] UnoCSS
   - [ ] Vanilla Extract
   - [x] Vitest
-  - [ ] Tauri
+  - [x] Tauri
   - [ ] Playwright
 - [ ] Utilities
   - [ ] eslint-plugin-solid
