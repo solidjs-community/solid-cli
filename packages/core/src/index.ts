@@ -94,17 +94,23 @@ const main = async () => {
 		version,
 	});
 	const args = process.argv.slice(2);
+	try {
 
-	if (args.length === 0) {
-		await provideSuggestions();
-		return;
+		if (args.length === 0) {
+			await provideSuggestions();
+			return;
+		}
+
+		if (args.length === 1 && args[0] === "start") {
+			await provideStartSuggestions();
+			return;
+		}
+
+		await run(cli, args);
 	}
-
-	if (args.length === 1 && args[0] === "start") {
-		await provideStartSuggestions();
-		return;
+	catch (e) {
+		console.error(e);
+		process.exit(1);
 	}
-
-	await run(cli, args);
 };
 main();

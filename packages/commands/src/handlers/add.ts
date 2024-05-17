@@ -39,9 +39,8 @@ const handleAutocompleteAdd = async () => {
 				{ label: t.NO, value: false },
 				{ label: t.YES_FORCE, value: [true, "force"] },
 			],
-			message: `${t.CONFIRM_INSTALL(a.length)} \n${color.red(S_BAR)} \n${color.red(S_BAR)}  ${
-				" " + color.yellow(a.map((opt) => opt.label).join(" ")) + " "
-			} \n${color.red(S_BAR)} `,
+			message: `${t.CONFIRM_INSTALL(a.length)} \n${color.red(S_BAR)} \n${color.red(S_BAR)}  ${" " + color.yellow(a.map((opt) => opt.label).join(" ")) + " "
+				} \n${color.red(S_BAR)} `,
 		}),
 	);
 
@@ -101,7 +100,6 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 		})
 		.filter((p) => p) as Configs;
 
-	const viteConfig = await getViteConfig();
 
 	for (let i = 0; i < configs.length; i++) {
 		const config = configs[i];
@@ -114,20 +112,23 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 	}
 
 	if (!configs.length) return;
-
-	await spinnerify({
-		startText: "Processing config",
-		finishText: "Config processed",
-		fn: async () => {
-			const code = await transformPlugins(
-				configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
-				{ name: viteConfig, contents: (await readFile(viteConfig)).toString() },
-				forceTransform,
-				undefined,
-			);
-			writeFile(viteConfig, code);
-		},
-	});
+	const pluginOptions = configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[];
+	if (pluginOptions.length) {
+		const viteConfig = await getViteConfig();
+		await spinnerify({
+			startText: "Processing config",
+			finishText: "Config processed",
+			fn: async () => {
+				const code = await transformPlugins(
+					pluginOptions,
+					{ name: viteConfig, contents: (await readFile(viteConfig)).toString() },
+					forceTransform,
+					undefined,
+				);
+				writeFile(viteConfig, code);
+			},
+		});
+	}
 
 	p.log.info("Preparing post install steps for integrations");
 	let projectRoot = await getRootFile();
@@ -161,7 +162,7 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 	// Inspired by Qwik's CLI
 	if (fileUpdates.length) p.log.message([`${color.cyan("Modify")}`, ...fileUpdates.map((f) => `  - ${f}`)].join("\n"));
 	if (packageUpdates.length)
-		p.log.message([`${color.cyan("Install")}`, ...packageUpdates.map((p) => `  - ${p}`)].join("\n"));
+		p.log.message([`${color.cyan("Install")}`, ...packageUpdates.map((p) => `  - ${p.name}` + (p.dev ? " (dev)" : ""))].join("\n"));
 	if (commandUpdates.length)
 		p.log.message([`${color.cyan("Run commands")}`, ...commandUpdates.map((p) => `  - ${p}`)].join("\n"));
 	const confirmed = await p.confirm({ message: "Do you wish to continue?" });
@@ -173,8 +174,7 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 	const postInstalls = configs.filter((c) => c.postInstall);
 	if (postInstalls.length === 0) return;
 	p.log.message(
-		`${postInstalls.length} ${
-			postInstalls.length === 1 ? "package has" : "packages have"
+		`${postInstalls.length} ${postInstalls.length === 1 ? "package has" : "packages have"
 		} post install steps that need to run.`,
 	);
 	const pInstallConfirmed = await p.confirm({ message: "Do you wish to continue?" });

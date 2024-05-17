@@ -13,7 +13,7 @@ type FileUpdate = { type: "file"; name: string; contents: string; checked: boole
 // Don't bother explicitly handling plugin updates, since they're just a file update
 export type Update = PackageUpdate | CommandUpdate | FileUpdate;
 type UpdateSummary = {
-	packageUpdates: string[];
+	packageUpdates: PackageUpdate[];
 	commandUpdates: string[];
 	fileUpdates: string[];
 };
@@ -23,7 +23,7 @@ export const clearQueue = () => {
 };
 export const summarizeUpdates = (): UpdateSummary => {
 	const fileUpdates = UPDATESQUEUE.filter((u) => u.type === "file").map((s) => s.name);
-	const packageUpdates = UPDATESQUEUE.filter((u) => u.type === "package").map((s) => s.name);
+	const packageUpdates = UPDATESQUEUE.filter((u) => u.type === "package") as PackageUpdate[];
 	const commandUpdates = UPDATESQUEUE.filter((u) => u.type === "command").map((s) => s.name);
 	return { packageUpdates, commandUpdates, fileUpdates };
 };
@@ -64,7 +64,12 @@ export const flushPackageUpdates = async () => {
 	const pM = detectPackageManager();
 	const instlCmd = getInstallCommand(pM);
 	for (const update of packageUpdates) {
-		await $`${pM.name} ${instlCmd}${update.dev ? " -D " : " "}${update.name}`;
+		if (update.dev) {
+			await $`${pM.name} ${instlCmd} -D ${update.name}`;
+		}
+		else {
+			await $`${pM.name} ${instlCmd} ${update.name}`;
+		}
 	}
 };
 export const flushCommandUpdates = async () => {

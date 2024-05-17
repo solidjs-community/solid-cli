@@ -80,7 +80,8 @@ export const integrations: Record<string, IntegrationsValue> = {
 			isDefault: true,
 			options: {},
 		},
-		installs: ["unocss"],
+		installs: [""],
+		installsDev: ["unocss"],
 		additionalConfig: async () => {
 			const path = rootFile();
 			if (!path) return;
@@ -111,7 +112,8 @@ export const integrations: Record<string, IntegrationsValue> = {
 		},
 	},
 	"vitest": {
-		installs: [
+		installs: [],
+		installsDev: [
 			"vitest",
 			"jsdom",
 			"@solidjs/testing-library",
@@ -120,7 +122,7 @@ export const integrations: Record<string, IntegrationsValue> = {
 		],
 		additionalConfig: async () => {
 			try {
-        p.log.info("Adding test script to package.json");
+				p.log.info("Adding test script to package.json");
 				const packageJsonString = await readFile("package.json", "utf8");
 				const packageJson = JSON.parse(packageJsonString);
 				if (!/\bvitest\b/.test(packageJson.scripts.test || "")) {
@@ -129,7 +131,7 @@ export const integrations: Record<string, IntegrationsValue> = {
 				}
 				const hasTs = fileExists("tsconfig.json");
 				if (hasTs) {
-          p.log.info("Adding testing types to tsconfig.json");
+					p.log.info("Adding testing types to tsconfig.json");
 					const tsConfigString = await readFile("tsconfig.json", "utf8");
 					const tsConfig = JSON.parse(tsConfigString);
 					if (!tsConfig.compilerOptions) {
@@ -146,8 +148,8 @@ export const integrations: Record<string, IntegrationsValue> = {
 						(suffix) => !fileExists(`vite.config.${suffix}`) && !fileExists(`vitest.config.${suffix}`),
 					)
 				) {
-          const suffix = hasTs ? "ts" : "mjs";
-          p.log.info(`Adding vitest.config.${suffix}`);
+					const suffix = hasTs ? "ts" : "mjs";
+					p.log.info(`Adding vitest.config.${suffix}`);
 					await writeFile(
 						`vitest.config.${suffix}`,
 						`import solid from "vite-plugin-solid";
