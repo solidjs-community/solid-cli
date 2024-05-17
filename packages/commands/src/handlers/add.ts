@@ -5,7 +5,7 @@ import * as p from "@clack/prompts";
 import color from "picocolors";
 import { primitives, loadPrimitives } from "@solid-cli/utils/primitives";
 import { t } from "@solid-cli/utils";
-import { fileExists, getRootFile, getViteConfig, validateFilePath } from "../lib/utils/helpers";
+import { fileExists, getRootFile, getAppConfig, validateFilePath } from "../lib/utils/helpers";
 import { writeFile, readFile } from "@solid-cli/utils/fs";
 import { transformPlugins, type PluginOptions } from "@solid-cli/utils/transform";
 import {
@@ -17,10 +17,13 @@ import {
 	queueUpdate,
 	summarizeUpdates,
 } from "@solid-cli/utils/updates";
+
 const handleAutocompleteAdd = async () => {
 	const supportedIntegrations = (Object.keys(integrations) as Supported[]).map((value) => ({ label: value, value }));
 	const opts = () => [...supportedIntegrations, ...primitives()];
+
 	loadPrimitives().catch((e) => p.log.error(e));
+
 	const a = await cancelable(
 		autocomplete({
 			message: t.ADD_PACKAGES,
@@ -32,6 +35,7 @@ const handleAutocompleteAdd = async () => {
 		p.log.warn(t.NOTHING_SELECTED);
 		return;
 	}
+
 	const shouldInstall = await cancelable<unknown>(
 		p.select({
 			options: [
@@ -64,6 +68,7 @@ const isIntegration = (str: string) => {
  */
 const transformPrimitives = async (ps: string[]) => {
 	if (!ps.length) return [];
+
 	if (!primitives().length) {
 		await spinnerify({
 			startText: t.LOADING_PRIMITIVES,
@@ -71,10 +76,14 @@ const transformPrimitives = async (ps: string[]) => {
 			fn: loadPrimitives,
 		});
 	}
+
 	const mappedInput = ps.map((p) => p.replace("@solid-primitives/", ""));
+
 	return primitives().filter((p) => mappedInput.includes(p.value.replace("@solid-primitives/", "")));
 };
+
 type Configs = Integrations[keyof Integrations][];
+
 export const handleAdd = async (packages?: string[], forceTransform: boolean = false) => {
 	if (!packages?.length) {
 		const autocompleted = await handleAutocompleteAdd();
@@ -101,7 +110,7 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 		})
 		.filter((p) => p) as Configs;
 
-	const viteConfig = await getViteConfig();
+	const appConfig = await getAppConfig();
 
 	for (let i = 0; i < configs.length; i++) {
 		const config = configs[i];
@@ -120,17 +129,19 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 		fn: async () => {
 			const code = await transformPlugins(
 				configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
-				{ name: viteConfig, contents: (await readFile(viteConfig)).toString() },
+				{ name: appConfig, contents: (await readFile(appConfig)).toString() },
 				forceTransform,
 				undefined,
 			);
-			writeFile(viteConfig, code);
+			await writeFile(appConfig, code);
 		},
 	});
 
 	p.log.info("Preparing post install steps for integrations");
+
 	let projectRoot = await getRootFile();
 	setRootFile(projectRoot);
+
 	if (!fileExists(projectRoot)) {
 		p.log.error(color.red(`Can't find root file \`${projectRoot.split("/")[1]}\`.`));
 		await cancelable(
@@ -138,7 +149,7 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 				message: `Type path to root: `,
 				validate(value) {
 					if (!value.length) return `Path can not be empty`;
-					const path = validateFilePath(value, ["root.tsx", "index.tsx"]);
+					const path = validateFilePath(value, ["app.tsx", "index.tsx"]);
 					if (!path) return `File at \`${value}\` not found. Please try again`;
 					else setRootFile(path);
 				},
@@ -156,33 +167,45 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 		},
 	});
 	if (UPDATESQUEUE.length === 0) return;
+
 	const { fileUpdates, packageUpdates, commandUpdates } = summarizeUpdates();
+
 	// Inspired by Qwik's CLI
 	if (fileUpdates.length) p.log.message([`${color.cyan("Modify")}`, ...fileUpdates.map((f) => `  - ${f}`)].join("\n"));
+
 	if (packageUpdates.length)
 		p.log.message([`${color.cyan("Install")}`, ...packageUpdates.map((p) => `  - ${p}`)].join("\n"));
+
 	if (commandUpdates.length)
 		p.log.message([`${color.cyan("Run commands")}`, ...commandUpdates.map((p) => `  - ${p}`)].join("\n"));
+
 	const confirmed = await p.confirm({ message: "Do you wish to continue?" });
 	if (!confirmed || p.isCancel(confirmed)) return;
+
 	await spinnerify({ startText: "Writing files...", finishText: "Updates written", fn: flushFileUpdates });
 	await spinnerify({ startText: "Installing packages...", finishText: "Packages installed", fn: flushPackageUpdates });
 	await spinnerify({ startText: "Running setup commands", finishText: "Setup commands ran", fn: flushCommandUpdates });
+
 	clearQueue();
+
 	const postInstalls = configs.filter((c) => c.postInstall);
 	if (postInstalls.length === 0) return;
+
 	p.log.message(
 		`${postInstalls.length} ${
 			postInstalls.length === 1 ? "package has" : "packages have"
 		} post install steps that need to run.`,
 	);
+
 	const pInstallConfirmed = await p.confirm({ message: "Do you wish to continue?" });
 	if (!pInstallConfirmed || p.isCancel(pInstallConfirmed)) return;
+
 	p.log.info("Running post installs");
 	// Run postInstalls
 	for (const cfg of configs) {
 		await cfg.postInstall?.();
 	}
+
 	p.log.success("Post install steps complete!");
 	// await spinnerify({
 	// 	startText: t.POST_INSTALL,

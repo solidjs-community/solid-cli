@@ -14,7 +14,7 @@ export const getProjectRoot = async () => {
 
 export const getRootFile = async () => {
 	if (await isSolidStart()) {
-		return "src/root.tsx";
+		return "src/app.tsx";
 	}
 	return "src/index.tsx";
 };
@@ -92,30 +92,30 @@ export async function findFiles(
 	return filePaths;
 }
 
-export const getViteConfig = async () => {
-	let configFile = "vite.config.ts";
+export const getAppConfig = async () => {
+	let configFile = "app.config.ts";
 
 	const existsHere = fileExists(configFile);
 
 	if (!existsHere) {
 		const root = await getProjectRoot();
-		const existsInRoot = validateFilePath(root, "vite.config");
+		const existsInRoot = validateFilePath(root, "app.config");
 		if (existsInRoot) {
 			const correctConfig = await cancelable(
 				p.confirm({
-					message: `Could not find vite config in current directory, but found vite config in \`${root}\`. Is this the correct vite config?`,
+					message: `Could not find app config in current directory, but found app config in \`${root}\`. Is this the correct vite config?`,
 				}),
 			);
 			if (correctConfig) return existsInRoot;
 		}
 
-		p.log.error(color.red(`Can't find vite config`));
+		p.log.error(color.red(`Can't find app.config file`));
 		await cancelable(
 			p.text({
-				message: "Type path to vite config: ",
+				message: "Type path to app config: ",
 				validate(value) {
-					const path = validateFilePath(value, "vite.config");
-					if (!path) return `Vite config not found. Please try again`;
+					const path = validateFilePath(value, "app.config");
+					if (!path) return `App config not found. Please try again`;
 					else {
 						configFile = path;
 					}

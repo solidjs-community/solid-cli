@@ -7,6 +7,7 @@ import { cancelable } from "@solid-cli/ui";
 import { PossibleFields, setField, t } from "@solid-cli/utils";
 import { spinnerify } from "@solid-cli/ui";
 import { handleNew, handleAdd } from "@solid-cli/commands";
+
 const add = command({
 	name: "add",
 	description: t.ADD_DESC,
@@ -21,6 +22,7 @@ const add = command({
 		await handleAdd(packages, forceTransform);
 	},
 });
+
 const new_ = command({
 	name: "new",
 	description: t.NEW_DESC,
@@ -51,6 +53,7 @@ const new_ = command({
 		await handleNew(variation, name, stackblitz);
 	},
 });
+
 const docs = command({
 	name: "docs",
 	args: {
@@ -80,6 +83,7 @@ const docs = command({
 		});
 	},
 });
+
 const set = command({
 	name: "set",
 	args: { field: positional({ type: oneOf(PossibleFields) }), value: positional({ type: string }) },
@@ -87,6 +91,7 @@ const set = command({
 		await setField(field, value);
 	},
 });
+
 const playground = command({
 	name: "playground",
 	args: {},
@@ -98,6 +103,7 @@ const playground = command({
 		});
 	},
 });
+
 export default {
 	add,
 	docs,

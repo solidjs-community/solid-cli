@@ -8,7 +8,7 @@ export const isSolidStart = async () => {
 	const allDeps = deps.concat(devDeps);
 	for (let i = 0; i < allDeps.length; i++) {
 		const dep = allDeps[i];
-		if (dep === "solid-start") return true;
+		if (dep === "@solidjs/start") return true;
 	}
 	return false;
 };
