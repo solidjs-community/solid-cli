@@ -27,7 +27,12 @@ export function validateFilePath(path: string, lookingFor: string): string | und
 export function validateFilePath(path: string, lookingFor: string[]): string | undefined;
 export function validateFilePath(path: string, lookingFor: string | string[]): string | undefined {
 	path = resolve(path);
-	const isDir = lstatSync(path).isDirectory();
+	let isDir: boolean;
+	try {
+		console.log(path)
+		isDir = lstatSync(path).isDirectory();
+	}
+	catch (e) { return undefined }
 	if (isDir) {
 		const files = readdirSync(path, { withFileTypes: true });
 
@@ -58,9 +63,11 @@ export async function findFiles(
 	let { depth = Infinity, ignoreDirs = ["node_modules", "."], startsWith = true } = opts;
 
 	startPath = resolve(startPath);
-
-	const isDir = lstatSync(startPath).isDirectory();
-
+	let isDir: boolean;
+	try {
+		isDir = lstatSync(startPath).isDirectory();
+	}
+	catch (e) { return [] };
 	if (!isDir) {
 		startPath = resolve(startPath.slice(0, startPath.lastIndexOf("/")));
 	}

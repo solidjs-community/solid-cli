@@ -7,8 +7,8 @@ import { createSignal } from "@solid-cli/reactivity";
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { cancelable } from "@solid-cli/ui";
-import { PluginOptions } from "@chialab/esbuild-plugin-meta-url";
 import { flushQueue } from "@solid-cli/utils/updates";
+import { PluginOptions } from "@solid-cli/utils/transform";
 
 // All the integrations/packages that we support
 export type Supported = keyof typeof integrations;
@@ -16,6 +16,7 @@ export type Supported = keyof typeof integrations;
 export type IntegrationsValue = {
 	pluginOptions?: PluginOptions;
 	installs: string[];
+	installsDev?: string[];
 	additionalConfig?: () => Promise<void>;
 	postInstall?: () => Promise<void>;
 };
@@ -24,7 +25,7 @@ export type Integrations = Record<Supported, IntegrationsValue>;
 
 export const [rootFile, setRootFile] = createSignal<string | undefined>(undefined);
 
-export const integrations = {
+export const integrations: Record<string, IntegrationsValue> = {
 	"tailwind": {
 		installs: ["tailwindcss", "postcss", "autoprefixer"],
 		postInstall: async () => {
@@ -79,7 +80,8 @@ export const integrations = {
 			isDefault: true,
 			options: {},
 		},
-		installs: ["unocss"],
+		installs: [""],
+		installsDev: ["unocss"],
 		additionalConfig: async () => {
 			const path = rootFile();
 			if (!path) return;
@@ -110,7 +112,8 @@ export const integrations = {
 		},
 	},
 	"vitest": {
-		installs: [
+		installs: [],
+		installsDev: [
 			"vitest",
 			"jsdom",
 			"@solidjs/testing-library",
@@ -119,7 +122,7 @@ export const integrations = {
 		],
 		additionalConfig: async () => {
 			try {
-        p.log.info("Adding test script to package.json");
+				p.log.info("Adding test script to package.json");
 				const packageJsonString = await readFile("package.json", "utf8");
 				const packageJson = JSON.parse(packageJsonString);
 				if (!/\bvitest\b/.test(packageJson.scripts.test || "")) {
@@ -128,7 +131,7 @@ export const integrations = {
 				}
 				const hasTs = fileExists("tsconfig.json");
 				if (hasTs) {
-          p.log.info("Adding testing types to tsconfig.json");
+					p.log.info("Adding testing types to tsconfig.json");
 					const tsConfigString = await readFile("tsconfig.json", "utf8");
 					const tsConfig = JSON.parse(tsConfigString);
 					if (!tsConfig.compilerOptions) {
@@ -145,8 +148,8 @@ export const integrations = {
 						(suffix) => !fileExists(`vite.config.${suffix}`) && !fileExists(`vitest.config.${suffix}`),
 					)
 				) {
-          const suffix = hasTs ? "ts" : "mjs";
-          p.log.info(`Adding vitest.config.${suffix}`);
+					const suffix = hasTs ? "ts" : "mjs";
+					p.log.info(`Adding vitest.config.${suffix}`);
 					await writeFile(
 						`vitest.config.${suffix}`,
 						`import solid from "vite-plugin-solid";
