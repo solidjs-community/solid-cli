@@ -24,6 +24,7 @@ const mode = command({
 		await handleMode(mode);
 	},
 });
+
 const route = command({
 	name: "route",
 	args: {
@@ -38,6 +39,7 @@ const route = command({
 		await handleRoute(path, name);
 	},
 });
+
 const data = command({
 	name: "data",
 	args: {
@@ -52,6 +54,7 @@ const data = command({
 		await handleData(path, name);
 	},
 });
+
 const adapter = command({
 	name: "adapter",
 	args: {

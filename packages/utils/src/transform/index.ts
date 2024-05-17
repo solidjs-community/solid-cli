@@ -1,39 +1,21 @@
-import { transform } from "@swc/core";
-import { fileURLToPath } from "url";
+import { parseModule } from "magicast";
+import { addPlugins } from "./parse";
+
 export type Config = {
 	name: string;
 	contents: string;
 };
+
+// TODO: Handle case when vite config is a function
+
 export const transformPlugins = async (
 	new_plugins: PluginOptions[],
 	config: Config,
-	force_transform = false,
-	merge_configs = false,
-	wasm_path = fileURLToPath(new URL("../../../swc-plugin-solid-cli/output/swc_plugin_solid_cli.wasm", import.meta.url)),
+	_force_transform = false,
+	_merge_configs = false,
 ) => {
-	const res = await transform(config.contents, {
-		filename: config.name,
-		jsc: {
-			parser: {
-				syntax: "typescript",
-				tsx: false,
-			},
-			target: "es2022",
-			experimental: {
-				plugins: [
-					[
-						wasm_path,
-						{
-							additionalPlugins: new_plugins,
-							forceTransform: force_transform,
-							mergeConfigs: merge_configs,
-						},
-					],
-				],
-			},
-		},
-	});
-	return res.code;
+	const mod = parseModule(config.contents, { trailingComma: false, flowObjectCommas: false });
+	return addPlugins(mod, new_plugins).code;
 };
 // All the integrations/packages that we support
 // export const supported = ["unocss", "vitepwa", "solid-devtools"] as const;

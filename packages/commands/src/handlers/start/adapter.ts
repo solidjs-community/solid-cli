@@ -33,18 +33,11 @@ export const handleAdapter = async (name?: string, forceTransform = false) => {
 	}
 	const sym = Symbol(name).toString();
 	let code = await transformPlugins(
-		[
-			{
-				importName: "solid",
-				importSource: "solid-start/vite",
-				isDefault: true,
-				options: { adapter: sym },
-			},
-		],
-		{ name: "vite.config.ts", contents: (await readFile("vite.config.ts")).toString() },
+		[],
+		{ name: "app.config.ts", contents: (await readFile("app.config.ts")).toString() },
 		forceTransform,
 	);
 	code = `import ${name} from "solid-start-${name}";\n` + code;
 	code = code.replace(`"${sym}"`, `${name}({})`);
-	await writeFile("vite.config.ts", code);
+	await writeFile("app.config.ts", code);
 };

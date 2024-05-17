@@ -1,5 +1,7 @@
-import solid from "solid-start/vite";
-// Simulates a vite config
+import { defineConfig } from "@solidjs/start/config";
+// Simulates an app config
 export default defineConfig({
-  plugins: [solid()],
+  vite: {
+    plugins: [solid()]
+  }
 });
