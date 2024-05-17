@@ -60,9 +60,10 @@ const findOrCreatePluginsProperty = (node: ASTNodeFull) => {
 	}
 };
 
-const findPlugins = (mod: ProxifiedModule<any>) => {
+const findPlugins = (mod: ProxifiedModule<any>): ArrayExpression | undefined => {
 	const props: ASTNodeFull[] = mod.exports.default.$args[0].$ast.properties;
 
+	let viteFound = false;
 	for (const prop of props) {
 		const key = prop.key?.name;
 		if (key === "vite") {
@@ -88,8 +89,21 @@ const findPlugins = (mod: ProxifiedModule<any>) => {
 				return findOrCreatePluginsProperty(prop.value);
 			}
 
+			viteFound = true;
+
 			break;
 		}
+	}
+
+	if (!viteFound) {
+		props.push({
+			type: "ObjectProperty",
+			computed: false,
+			shorthand: false,
+			value: { type: "ObjectExpression", properties: [] },
+			key: { name: "vite", type: "Identifier" },
+		});
+		return findPlugins(mod);
 	}
 };
 
