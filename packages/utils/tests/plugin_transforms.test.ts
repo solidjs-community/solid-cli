@@ -49,6 +49,22 @@ const examplePlugin: PluginOptions = {
 	options: {},
 };
 describe("transformPlugins", () => {
+	test("No vite property defined config is updated properly", async () => {
+		const config: Config = {
+			name: "app.config.ts",
+			contents: `
+       import { defineConfig } from "@solidjs/start/config";
+
+       // Simulates an app config
+       export default defineConfig({
+        });
+     `,
+		};
+		const expected = makeExampleConfig(["examplePlugin({})"], ['import examplePlugin from "example";']);
+		const result = await transformPlugins([examplePlugin], config);
+
+		expect(removeWhitespace(result)).toBe(removeWhitespace(expected));
+	});
 	test("Object config is updated properly", async () => {
 		const config: Config = {
 			name: "app.config.ts",
