@@ -105,11 +105,12 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 
 	for (let i = 0; i < configs.length; i++) {
 		const config = configs[i];
-		config.installs.forEach((p) => queueUpdate({ type: "package", name: p }));
+		config.installs.forEach((p) => queueUpdate({ type: "package", name: p, dev: false }));
+		config.installsDev?.forEach((p) => queueUpdate({ type: "package", name: p, dev: true }));
 	}
 	// Queue primitives
 	for (const primitive of await transformPrimitives(possiblePrimitives)) {
-		queueUpdate({ type: "package", name: primitive.value });
+		queueUpdate({ type: "package", name: primitive.value, dev: false });
 	}
 
 	if (!configs.length) return;

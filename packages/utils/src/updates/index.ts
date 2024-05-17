@@ -7,7 +7,7 @@ declare global {
 // Batch all updates here, so we can confirm with the user then flush
 export const UPDATESQUEUE: Update[] = globalThis.UPDATESQUEUE ?? [];
 globalThis.UPDATESQUEUE = UPDATESQUEUE;
-type PackageUpdate = { type: "package"; name: string };
+type PackageUpdate = { type: "package"; name: string; dev: boolean };
 type CommandUpdate = { type: "command"; name: string };
 type FileUpdate = { type: "file"; name: string; contents: string; checked: boolean };
 // Don't bother explicitly handling plugin updates, since they're just a file update
@@ -64,7 +64,7 @@ export const flushPackageUpdates = async () => {
 	const pM = detectPackageManager();
 	const instlCmd = getInstallCommand(pM);
 	for (const update of packageUpdates) {
-		await $`${pM.name} ${instlCmd} ${update.name}`;
+		await $`${pM.name} ${instlCmd}${update.dev ? " -D " : " "}${update.name}`;
 	}
 };
 export const flushCommandUpdates = async () => {
