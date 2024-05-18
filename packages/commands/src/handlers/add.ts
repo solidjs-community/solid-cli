@@ -4,8 +4,8 @@ import { Integrations, Supported, integrations, setRootFile } from "../lib/integ
 import * as p from "@clack/prompts";
 import color from "picocolors";
 import { primitives, loadPrimitives } from "@solid-cli/utils/primitives";
-import { t } from "@solid-cli/utils";
-import { fileExists, getRootFile, getAppConfig, validateFilePath } from "../lib/utils/helpers";
+import { isSolidStart, t } from "@solid-cli/utils";
+import { fileExists, getRootFile, getConfigFile, validateFilePath } from "../lib/utils/helpers";
 import { writeFile, readFile } from "@solid-cli/utils/fs";
 import { transformPlugins, type PluginOptions } from "@solid-cli/utils/transform";
 import {
@@ -43,8 +43,9 @@ const handleAutocompleteAdd = async () => {
 				{ label: t.NO, value: false },
 				{ label: t.YES_FORCE, value: [true, "force"] },
 			],
-			message: `${t.CONFIRM_INSTALL(a.length)} \n${color.red(S_BAR)} \n${color.red(S_BAR)}  ${" " + color.yellow(a.map((opt) => opt.label).join(" ")) + " "
-				} \n${color.red(S_BAR)} `,
+			message: `${t.CONFIRM_INSTALL(a.length)} \n${color.red(S_BAR)} \n${color.red(S_BAR)}  ${
+				" " + color.yellow(a.map((opt) => opt.label).join(" ")) + " "
+			} \n${color.red(S_BAR)} `,
 		}),
 	);
 
@@ -109,7 +110,9 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 		})
 		.filter((p) => p) as Configs;
 
-	const appConfig = await getAppConfig();
+	const configType = (await isSolidStart()) ? "app" : "vite";
+
+	const configFile = await getConfigFile(configType);
 
 	for (let i = 0; i < configs.length; i++) {
 		const config = configs[i];
@@ -124,20 +127,19 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 	if (!configs.length) return;
 	const pluginOptions = configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[];
 	if (pluginOptions.length) {
-		const appConfig = await getAppConfig();
 		await spinnerify({
-		startText: "Processing config",
-		finishText: "Config processed",
-		fn: async () => {
-			const code = await transformPlugins(
-				configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
-				{ name: appConfig, contents: (await readFile(appConfig)).toString() },
-				forceTransform,
-				undefined,
-			);
-			await writeFile(appConfig, code);
-		},
-	});
+			startText: "Processing config",
+			finishText: "Config processed",
+			fn: async () => {
+				const code = await transformPlugins(
+					configs.map((c) => c.pluginOptions).filter(Boolean) as PluginOptions[],
+					{ type: configType, name: configFile, contents: (await readFile(configFile)).toString() },
+					forceTransform,
+					undefined,
+				);
+				await writeFile(configFile, code);
+			},
+		});
 	}
 
 	p.log.info("Preparing post install steps for integrations");

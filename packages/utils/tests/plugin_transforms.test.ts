@@ -49,8 +49,36 @@ const examplePlugin: PluginOptions = {
 	options: {},
 };
 describe("transformPlugins", () => {
+	test("SPA config is updated properly", async () => {
+		const config: Config = {
+			type: "vite",
+			name: "vite.config.ts",
+			contents: `
+       import { defineConfig } from "vite";
+
+       // Simulates a vite config
+       export default defineConfig({
+plugins: []
+        });
+     `,
+		};
+		const expected = `
+       import examplePlugin from "example";
+       import { defineConfig } from "vite";
+
+       // Simulates a vite config
+       export default defineConfig({
+        plugins: [examplePlugin({})]
+       });
+      `;
+
+		const result = await transformPlugins([examplePlugin], config);
+
+		expect(removeWhitespace(result)).toBe(removeWhitespace(expected));
+	});
 	test("No vite property defined config is updated properly", async () => {
 		const config: Config = {
+			type: "app",
 			name: "app.config.ts",
 			contents: `
        import { defineConfig } from "@solidjs/start/config";
@@ -67,6 +95,7 @@ describe("transformPlugins", () => {
 	});
 	test("Object config is updated properly", async () => {
 		const config: Config = {
+			type: "app",
 			name: "app.config.ts",
 			contents: makeExampleConfig(["solid()"]),
 		};
@@ -77,6 +106,7 @@ describe("transformPlugins", () => {
 	});
 	test("Arrow-function config is updated properly", async () => {
 		const config: Config = {
+			type: "app",
 			name: "app.config.ts",
 			contents: makeExampleConfig(["solid()"], [], "arrow"),
 		};

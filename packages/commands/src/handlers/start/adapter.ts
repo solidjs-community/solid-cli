@@ -34,7 +34,7 @@ export const handleAdapter = async (name?: string, forceTransform = false) => {
 	const sym = Symbol(name).toString();
 	let code = await transformPlugins(
 		[],
-		{ name: "app.config.ts", contents: (await readFile("app.config.ts")).toString() },
+		{ type: "app", name: "app.config.ts", contents: (await readFile("app.config.ts")).toString() },
 		forceTransform,
 	);
 	code = `import ${name} from "solid-start-${name}";\n` + code;
