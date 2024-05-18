@@ -109,8 +109,6 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 		})
 		.filter((p) => p) as Configs;
 
-	const appConfig = await getAppConfig();
-
 	for (let i = 0; i < configs.length; i++) {
 		const config = configs[i];
 		config.installs.forEach((p) => queueUpdate({ type: "package", name: p, dev: false }));

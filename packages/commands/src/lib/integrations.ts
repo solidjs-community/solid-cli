@@ -1,6 +1,6 @@
 import { insertAfter, insertAtBeginning } from "@solid-cli/utils/fs";
-import { readFile, writeFile } from "fs/promises";
-import { fileExists, validateFilePath } from "./utils/helpers";
+import { writeFile } from "fs/promises";
+import { fileExists, manipulateJsonFile, validateFilePath } from "./utils/helpers";
 import { $ } from "execa";
 import { getRunnerCommand, detectPackageManager } from "@solid-cli/utils/package-manager";
 import { createSignal } from "@solid-cli/reactivity";
@@ -123,36 +123,30 @@ export const integrations: Record<string, IntegrationsValue> = {
 		additionalConfig: async () => {
 			try {
 				p.log.info("Adding test script to package.json");
-				const packageJsonString = await readFile("package.json", "utf8");
-				const packageJson = JSON.parse(packageJsonString);
-        if (!packageJson.scripts) { packageJson.scripts = {}; }
-				if (!/\bvitest\b/.test(packageJson.scripts.test || "")) {
-					packageJson.scripts.test = "vitest";
-					await writeFile(
-            "package.json",
-            JSON.stringify(packageJson, null, /^(\t|\s+)/m.exec(packageJsonString)?.[0] || 2) + "\n",
-            "utf8"
-          );
-				}
+        let hasStart = false;
+        manipulateJsonFile("package.json", (packageJson) => {
+          if (!packageJson.scripts) { packageJson.scripts = {}; }
+				  if (!/\bvitest\b/.test(packageJson.scripts.test || "")) {
+					  packageJson.scripts.test = "vitest";
+				  } 
+					hasStart = packageJson.dependencies["@solidjs/start"]
+          return packageJson; 
+        });
 				const hasTs = fileExists("tsconfig.json");
-				if (hasTs) {
+		    if (hasTs) {
 					p.log.info("Adding testing types to tsconfig.json");
-					const tsConfigString = await readFile("tsconfig.json", "utf8");
-					const tsConfig = JSON.parse(tsConfigString);
-					if (!tsConfig.compilerOptions) {
-						tsConfig.compilerOptions = {};
-					}
-					tsConfig.compilerOptions.types = [
-						...new Set([...(tsConfig.compilerOptions.types || []), "vite/client", "@testing-library/jest-dom"]),
-					];
-					await writeFile(
-            "tsconfig.json",
-            JSON.stringify(tsConfig, null, /^(\t|\s+)/m.exec(tsConfigString)?.[0] || 2) + "\n",
-            "utf8"
-          );
+          manipulateJsonFile("tsconfig.json", (tsConfig) => {
+				    if (!tsConfig.compilerOptions) {
+						  tsConfig.compilerOptions = {};
+					  }
+					  tsConfig.compilerOptions.types = [
+						  ...new Set([...(tsConfig.compilerOptions.types || []), "vite/client", "@testing-library/jest-dom"]),
+					  ];
+            return tsConfig;
+          });
 				}
 				if (
-					packageJson.dependencies["@solidjs/start"] &&
+          hasStart &&
 					["ts", "mjs", "cjs", "js"].every(
 						(suffix) => !fileExists(`vite.config.${suffix}`) && !fileExists(`vitest.config.${suffix}`),
 					)
@@ -183,20 +177,17 @@ export default defineConfig({
     installs: ["@tauri-apps/cli"],
     postInstall: async () => {
       try {
-        const packageJsonString = await readFile("package.json", "utf8");
-        const packageJson = JSON.parse(packageJsonString);
-        if (!packageJson.scripts) { packageJson.scripts = {}; }
-        packageJson.scripts.tauri = "tauri";
-        await writeFile(
-          "package.json",
-          JSON.stringify(packageJson, null, /^(\t|\s+)/m.exec(packageJsonString)?.[0] || 2) + "\n",
-          "utf8"
-        );
+        let name = "";
+        manipulateJsonFile("package.json", (packageJson) => {
+          if (!packageJson.scripts) { packageJson.scripts = {}; }
+          packageJson.scripts.tauri = "tauri";
+          name = packageJson.name;
+          return packageJson;
+        });
         await flushQueue();
-        const name = packageJson.name;
         const pM = detectPackageManager();
         await $`${getRunnerCommand(pM)} tauri init --ci -A ${name} -W ${name} -D ../dist -P http://localhost:3000`;
-        p.outro(`Make sure you have installed all prerequisites: https://tauri.app/v1/guides/getting-started/prerequisites
+        p.note(`Make sure you have installed all prerequisites: https://tauri.app/v1/guides/getting-started/prerequisites
 
     Start tauri development with ${color.bold(pM.name)} ${color.bold(pM.runScriptCommand("tauri dev"))}`);
       } catch (err) {
@@ -208,20 +199,17 @@ export default defineConfig({
     installs: ["@tauri-apps/cli@next"],
     postInstall: async () => {
       try {
-        const packageJsonString = await readFile("package.json", "utf8");
-        const packageJson = JSON.parse(packageJsonString);
-        if (!packageJson.scripts) { packageJson.scripts = {}; }
-        packageJson.scripts.tauri = "tauri";
-        await writeFile(
-          "package.json",
-          JSON.stringify(packageJson, null, /^(\t|\s+)/m.exec(packageJsonString)?.[0] || 2) + "\n",
-          "utf8"
-        );
+        let name = "";
+        manipulateJsonFile("package.json", (packageJson) => {
+          if (!packageJson.scripts) { packageJson.scripts = {}; }
+          packageJson.scripts.tauri = "tauri";
+          name = packageJson.name;
+          return packageJson;
+        })
         await flushQueue();
-        const name = packageJson.name;
         const pM = detectPackageManager();
         await $`${getRunnerCommand(pM)} tauri init --ci -A ${name} -W ${name} -D ../dist -P http://localhost:3000`;
-        p.outro(`Make sure you have installed all prerequisites: https://v2.tauri.app/start/prerequisites/
+        p.note(`Make sure you have installed all prerequisites: https://v2.tauri.app/start/prerequisites/
 
     Start tauri development with ${color.bold(pM.name)} ${color.bold(pM.runScriptCommand("tauri dev"))}`);
       } catch (err) {
@@ -230,3 +218,4 @@ export default defineConfig({
     },
   },
 };
+
