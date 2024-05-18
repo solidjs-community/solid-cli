@@ -46,7 +46,7 @@ vi.mock("@solid-cli/utils/updates", async () => {
 
 vi.mock("../src/lib/utils/helpers.ts", async () => {
 	return {
-		getConfigFile: async (file): Promise<string> => new Promise((r) => r(`${file}.config.ts`)),
+		getConfigFile: async (): Promise<string> => new Promise((r) => r("app.config.ts")),
 		fileExists: (path: string) => path.includes("app_config") || path.includes("app.tsx") || path.includes("index.tsx"),
 		getRootFile: async (): Promise<string> => new Promise((r) => r("./src/app.tsx")),
 	};
