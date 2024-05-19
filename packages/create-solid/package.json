@@ -31,10 +31,10 @@
 	"devDependencies": {
 		"@clack/prompts": "0.7.0",
 		"@solid-cli/commands": "workspace:*",
-		"@types/node": "^20.12.11",
+		"@types/node": "^20.12.12",
 		"cmd-ts": "^0.13.0",
 		"jiti": "^1.21.0",
-		"picocolors": "^1.0.0",
+		"picocolors": "^1.0.1",
 		"tsup": "^8.0.2",
 		"typescript": "^5.4.5"
 	},
