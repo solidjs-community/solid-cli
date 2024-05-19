@@ -102,39 +102,39 @@ export async function findFiles(
   return filePaths;
 }
 
-export const getAppConfig = async () => {
-  let configFile = "app.config.ts";
+export const getConfigFile = async (file: "app" | "vite" = "app") => {
+	let configFile = `${file}.config.ts`;
 
-  const existsHere = fileExists(configFile);
+	const existsHere = fileExists(configFile);
 
-  if (!existsHere) {
-    const root = await getProjectRoot();
-    const existsInRoot = validateFilePath(root, "app.config");
-    if (existsInRoot) {
-      const correctConfig = await cancelable(
-        p.confirm({
-          message: `Could not find app config in current directory, but found app config in \`${root}\`. Is this the correct vite config?`,
-        }),
-      );
-      if (correctConfig) return existsInRoot;
-    }
+	if (!existsHere) {
+		const root = await getProjectRoot();
+		const existsInRoot = validateFilePath(root, `${file}.config`);
+		if (existsInRoot) {
+			const correctConfig = await cancelable(
+				p.confirm({
+					message: `Could not find ${file} config in current directory, but found ${file} config in \`${root}\`. Is this the correct ${file} config?`,
+				}),
+			);
+			if (correctConfig) return existsInRoot;
+		}
 
-    p.log.error(color.red(`Can't find app.config file`));
-    await cancelable(
-      p.text({
-        message: "Type path to app config: ",
-        validate(value) {
-          const path = validateFilePath(value, "app.config");
-          if (!path) return `App config not found. Please try again`;
-          else {
-            configFile = path;
-          }
-        },
-      }),
-    );
-  }
+		p.log.error(color.red(`Can't find ${file}.config file`));
+		await cancelable(
+			p.text({
+				message: `Type path to ${file} config: `,
+				validate(value) {
+					const path = validateFilePath(value, `${file}.config`);
+					if (!path) return `${file} config not found. Please try again`;
+					else {
+						configFile = path;
+					}
+				},
+			}),
+		);
+	}
 
-  return configFile;
+	return configFile;
 };
 
 export async function manipulateJsonFile(name: string, manipulate: (obj: Record<string, any>) => Record<string, any>) {

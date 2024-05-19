@@ -1,5 +1,9 @@
 import UnoCss from "unocss/vite";
 import { defineConfig } from "vite";
+// Simulates an app config
 export default defineConfig({
-	plugins: [UnoCss({ flag: true })],
+  plugins: [
+      solid(),
+      UnoCss({})
+  ]
 });
