@@ -81,9 +81,6 @@ importers:
       '@solid-cli/reactivity':
         specifier: workspace:*
         version: link:../reactivity
-      '@solid-cli/swc-plugin-solid-cli':
-        specifier: workspace:*
-        version: link:../swc-plugin-solid-cli
       '@solid-cli/ui':
         specifier: workspace:*
         version: link:../ui
@@ -160,8 +157,6 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
-
-  packages/swc-plugin-solid-cli: {}
 
   packages/ui:
     dependencies:
