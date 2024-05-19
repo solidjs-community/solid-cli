@@ -122,6 +122,7 @@ plugins: []
 
 	test("Object method config is updated properly", async () => {
 		const config: Config = {
+			type: "app",
 			name: "app.config.ts",
 			contents: makeExampleConfig(["solid()"], [], "method"),
 		};
