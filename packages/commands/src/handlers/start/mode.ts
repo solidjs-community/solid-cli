@@ -30,7 +30,7 @@ export const handleMode = async (mode?: SupportedModes) => {
 	if (mode != "ssg") {
 		const newConfig = await transformPlugins(
 			[],
-			{ name: "app.config.ts", contents: (await readFile("app.config.ts")).toString() },
+			{ type: "app", name: "app.config.ts", contents: (await readFile("app.config.ts")).toString() },
 			true,
 			true,
 		);

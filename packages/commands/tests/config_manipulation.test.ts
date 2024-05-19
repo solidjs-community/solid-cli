@@ -9,14 +9,21 @@ const readFile = async (path: string): Promise<string> => {
 		readFile1(path, (_, data) => res(data.toString())),
 	);
 };
+
 const removeWhitespace = (str: string) => str.replace(/\s/g, "");
+
 vi.mock("fs/promises", () => {
 	return {
 		readFile: async (name: string) => {
 			if (name === "app.config.ts") {
+				const sampleConfig: string = await readFile("./packages/commands/tests/assets/sample_app_config.txt");
+				return sampleConfig;
+			}
+			if (name === "vite.config.ts") {
 				const sampleConfig: string = await readFile("./packages/commands/tests/assets/sample_vite_config.txt");
 				return sampleConfig;
 			}
+
 			return "{}";
 		},
 		writeFile: async (_, contents: string) => {
@@ -46,22 +53,41 @@ vi.mock("@solid-cli/utils/updates", async () => {
 
 vi.mock("../src/lib/utils/helpers.ts", async () => {
 	return {
-		getAppConfig: async (): Promise<string> => new Promise((r) => r("app.config.ts")),
-		fileExists: (path: string) => path.includes("app_config") || path.includes("app.tsx") || path.includes("index.tsx"),
+		getConfigFile: async (file: string): Promise<string> => new Promise((r) => r(`${file}.config.ts`)),
+		fileExists: (path: string) =>
+			path.includes("vite_config") ||
+			path.includes("app_config") ||
+			path.includes("app.tsx") ||
+			path.includes("index.tsx"),
 		getRootFile: async (): Promise<string> => new Promise((r) => r("./src/app.tsx")),
 	};
 });
-describe("Update config", () => {
-	it(
-		"Adds a plugin properly to the config",
-		async () => {
-			await handleAdd(["unocss"]);
 
-			const expected = await readFile("./packages/commands/tests/assets/sample_unocss_result.txt");
-			// @ts-ignore
-			const newConfig = UPDATESQUEUE.find((u) => u.name === "app.config.ts")?.contents;
-			expect(removeWhitespace(expected)).toBe(removeWhitespace(newConfig));
-		},
-		{ timeout: 50000 },
-	);
+let testingSolidStart = false;
+
+vi.mock("@solid-cli/utils", async () => {
+	return {
+		isSolidStart: async () => new Promise((r) => r(testingSolidStart)),
+	};
+});
+
+describe("Update config", () => {
+	it("Adds a plugin properly to the app config", { timeout: 50000 }, async () => {
+		testingSolidStart = true;
+		await handleAdd(["unocss"]);
+
+		const expected = await readFile("./packages/commands/tests/assets/sample_unocss_app_result.txt");
+		// @ts-ignore
+		const newConfig = UPDATESQUEUE.find((u) => u.name === "app.config.ts")?.contents;
+		expect(removeWhitespace(newConfig)).toBe(removeWhitespace(expected));
+	});
+	it("Adds a plugin properly to the vite config", { timeout: 50000 }, async () => {
+		testingSolidStart = false;
+		await handleAdd(["unocss"]);
+
+		const expected = await readFile("./packages/commands/tests/assets/sample_unocss_vite_result.txt");
+		// @ts-ignore
+		const newConfig = UPDATESQUEUE.find((u) => u.name === "vite.config.ts")?.contents;
+		expect(removeWhitespace(newConfig)).toBe(removeWhitespace(expected));
+	});
 });
