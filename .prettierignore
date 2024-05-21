@@ -1,3 +1,2 @@
 **/*.rs
 **/*.yaml
-packages/swc-plugin-solid-cli

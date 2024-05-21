@@ -59,7 +59,7 @@
 	},
 	"scripts": {
 		"test": "vitest run",
-		"build": "tsc && tsup && jiti ./scripts/postBuild.ts"
+		"build": "tsc && tsup"
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-meta-url": "^0.18.2",
