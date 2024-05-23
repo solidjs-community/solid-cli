@@ -7,10 +7,7 @@
 		"type": "git",
 		"url": "https://github.com/solidjs-community/solid-cli"
 	},
-	"files": [
-		"dist",
-		"types"
-	],
+	"files": ["dist", "types"],
 	"description": "A collection of UI utilities for the Solid CLI",
 	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",

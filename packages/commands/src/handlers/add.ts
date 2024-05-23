@@ -179,7 +179,9 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 	if (fileUpdates.length) p.log.message([`${color.cyan("Modify")}`, ...fileUpdates.map((f) => `  - ${f}`)].join("\n"));
 
 	if (packageUpdates.length)
-		p.log.message([`${color.cyan("Install")}`, ...packageUpdates.map((p) => `  - ${p.name}` + (p.dev ? " (dev)" : ""))].join("\n"));
+		p.log.message(
+			[`${color.cyan("Install")}`, ...packageUpdates.map((p) => `  - ${p.name}` + (p.dev ? " (dev)" : ""))].join("\n"),
+		);
 	if (commandUpdates.length)
 		p.log.message([`${color.cyan("Run commands")}`, ...commandUpdates.map((p) => `  - ${p}`)].join("\n"));
 
@@ -196,7 +198,8 @@ export const handleAdd = async (packages?: string[], forceTransform: boolean = f
 	if (postInstalls.length === 0) return;
 
 	p.log.message(
-		`${postInstalls.length} ${postInstalls.length === 1 ? "package has" : "packages have"
+		`${postInstalls.length} ${
+			postInstalls.length === 1 ? "package has" : "packages have"
 		} post install steps that need to run.`,
 	);
 

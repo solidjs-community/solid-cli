@@ -9,18 +9,12 @@
 		"type": "git",
 		"url": "https://github.com/solidjs-community/solid-cli"
 	},
-	"keywords": [
-		"solidjs",
-		"solid",
-		"cli"
-	],
+	"keywords": ["solidjs", "solid", "cli"],
 	"main": "dist/index.mjs",
 	"bin": {
 		"solid": "./dist/index.mjs"
 	},
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"dependencies": {
 		"@clack/core": "0.3.4",
 		"@clack/prompts": "0.7.0",

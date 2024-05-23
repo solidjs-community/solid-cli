@@ -288,7 +288,9 @@ export const autocomplete = <T extends Option>(opts: Omit<AutocompleteTextOption
 				.join(`\n${color.cyan(S_BAR)}  `);
 
 			// prettier-ignore
-			const options = `${color.cyan(S_BAR)}  ${this.filteredOptions.length ? filteredOptions : noResults}\n${color.cyan(S_BAR_END,)}\n`;
+			const options = `${color.cyan(S_BAR)}  ${this.filteredOptions.length ? filteredOptions : noResults}\n${color.cyan(
+				S_BAR_END,
+			)}\n`;
 
 			return (
 				`${color.cyan(S_BAR)} \n ${color.cyan(S_BAR)} ${color.yellow(S_CHECKBOX_SELECTED)} ${

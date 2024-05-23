@@ -1,0 +1,28 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.7.3/schema.json",
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineEnding": "cr",
+		"lineWidth": 120,
+		"attributePosition": "auto",
+		"ignore": ["**/*.rs", "**/*.yaml"]
+	},
+	"organizeImports": { "enabled": true },
+	"linter": { "enabled": true, "rules": { "recommended": true } },
+	"javascript": {
+		"formatter": {
+			"jsxQuoteStyle": "double",
+			"quoteProperties": "asNeeded",
+			"trailingComma": "all",
+			"semicolons": "always",
+			"arrowParentheses": "always",
+			"bracketSpacing": true,
+			"bracketSameLine": false,
+			"quoteStyle": "double",
+			"attributePosition": "auto"
+		}
+	}
+}

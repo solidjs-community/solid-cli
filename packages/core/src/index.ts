@@ -96,7 +96,6 @@ const main = async () => {
 	});
 	const args = process.argv.slice(2);
 	try {
-
 		if (args.length === 0) {
 			await provideSuggestions();
 			return;
@@ -108,8 +107,7 @@ const main = async () => {
 		}
 
 		await run(cli, args);
-	}
-	catch (e) {
+	} catch (e) {
 		console.error(e);
 		process.exit(1);
 	}

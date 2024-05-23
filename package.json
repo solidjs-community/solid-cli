@@ -20,7 +20,8 @@
 		"watch:ui": "nodemon --watch packages/ui/src -e ts --exec 'turbo run build --scope=ui'",
 		"watch:utils": "nodemon --watch packages/utils/src -e ts --exec 'turbo run build --scope=utils'",
 		"start": "cd packages/core && pnpm start",
-		"format": "prettier --write ."
+		"format": "biome format ./ --write",
+		"lint": "biome lint ."
 	},
 	"contributors": [
 		{
@@ -30,10 +31,9 @@
 			"name": "Rahul Batra"
 		}
 	],
-	"workspaces": [
-		"./packages/*"
-	],
+	"workspaces": ["./packages/*"],
 	"devDependencies": {
+		"@biomejs/biome": "^1.7.3",
 		"@changesets/cli": "2.27.3",
 		"nodemon": "^3.1.0",
 		"prettier": "^3.2.5",
