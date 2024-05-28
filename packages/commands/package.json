@@ -47,7 +47,7 @@
 		"@solid-cli/reactivity": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
 		"@solid-cli/utils": "workspace:*",
-		"execa": "^9.1.0",
+		"execa": "^8.0.1",
 		"picocolors": "^1.0.1",
 		"sucrase": "^3.35.0"
 	}

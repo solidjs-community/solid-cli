@@ -29,7 +29,7 @@
 		"@solid-cli/ui": "workspace:*",
 		"@solid-cli/utils": "workspace:*",
 		"cmd-ts": "^0.13.0",
-		"execa": "^9.1.0",
+		"execa": "^8.0.1",
 		"picocolors": "^1.0.1",
 		"smol-toml": "^1.2.0",
 		"tiny-updater": "^3.5.2"
