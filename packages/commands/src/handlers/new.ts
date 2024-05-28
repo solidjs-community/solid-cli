@@ -48,6 +48,7 @@ const startSupported = [
 	"todomvc",
 	"with-auth",
 	"with-authjs",
+	"with-drizzle",
 	"with-mdx",
 	"with-prisma",
 	"with-solid-styled",
