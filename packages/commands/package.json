@@ -8,10 +8,7 @@
 		"type": "git",
 		"url": "https://github.com/solidjs-community/solid-cli"
 	},
-	"files": [
-		"dist",
-		"types"
-	],
+	"files": ["dist", "types"],
 	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
 	"types": "./types/index.d.ts",

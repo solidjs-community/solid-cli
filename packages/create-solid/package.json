@@ -3,27 +3,19 @@
 	"version": "0.5.11",
 	"description": "Create Solid apps with low configuration",
 	"author": "Thomas Beer",
-	"contributors": [
-		"Rahul Batra"
-	],
+	"contributors": ["Rahul Batra"],
 	"license": "MIT",
 	"homepage": "https://solid-cli.netlify.app",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/solidjs-community/solid-cli"
 	},
-	"keywords": [
-		"solidjs",
-		"solid",
-		"cli"
-	],
+	"keywords": ["solidjs", "solid", "cli"],
 	"main": "dist/index.mjs",
 	"bin": {
 		"create-solid": "./dist/index.mjs"
 	},
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"scripts": {
 		"start": "jiti ./src/index.ts",
 		"build": "tsc && tsup"
