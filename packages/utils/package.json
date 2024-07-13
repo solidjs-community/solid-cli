@@ -63,12 +63,12 @@
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-meta-url": "^0.18.2",
-		"@types/node": "20.12.12",
-		"jiti": "^1.21.0",
+		"@types/node": "20.14.10",
+		"jiti": "^1.21.6",
 		"magicast": "^0.3.4",
-		"tsup": "^8.0.2",
-		"typescript": "^5.4.5",
-		"vitest": "^1.6.0"
+		"tsup": "^8.1.0",
+		"typescript": "^5.5.3",
+		"vitest": "^2.0.2"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -80,6 +80,6 @@
 		"cmd-ts": "^0.13.0",
 		"execa": "^8.0.1",
 		"picocolors": "^1.0.1",
-		"smol-toml": "^1.2.0"
+		"smol-toml": "^1.2.2"
 	}
 }
