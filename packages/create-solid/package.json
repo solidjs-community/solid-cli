@@ -1,6 +1,6 @@
 {
 	"name": "create-solid",
-	"version": "0.5.11",
+	"version": "0.5.12",
 	"description": "Create Solid apps with low configuration",
 	"author": "Thomas Beer",
 	"contributors": [
@@ -31,11 +31,11 @@
 	"devDependencies": {
 		"@clack/prompts": "0.7.0",
 		"@solid-cli/commands": "workspace:*",
-		"@types/node": "^20.14.10",
+		"@types/node": "^20.14.11",
 		"cmd-ts": "^0.13.0",
 		"jiti": "^1.21.6",
 		"picocolors": "^1.0.1",
-		"tsup": "^8.1.0",
+		"tsup": "^8.2.0",
 		"typescript": "^5.5.3"
 	},
 	"publishConfig": {

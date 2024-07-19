@@ -27,9 +27,9 @@
 		"build": "tsc && tsup"
 	},
 	"devDependencies": {
-		"tsup": "^8.1.0",
+		"tsup": "^8.2.0",
 		"typescript": "^5.5.3",
-		"@types/node": "20.14.10"
+		"@types/node": "20.14.11"
 	},
 	"publishConfig": {
 		"access": "public"

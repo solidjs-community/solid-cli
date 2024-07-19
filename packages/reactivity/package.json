@@ -28,7 +28,7 @@
 	},
 	"author": "Thomas Beer",
 	"devDependencies": {
-		"tsup": "^8.1.0",
+		"tsup": "^8.2.0",
 		"typescript": "^5.5.3"
 	},
 	"publishConfig": {
