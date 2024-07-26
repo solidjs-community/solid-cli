@@ -33,10 +33,10 @@
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-meta-url": "^0.18.2",
-		"@types/node": "^20.14.11",
+		"@types/node": "^20.14.12",
 		"prettier": "^3.3.3",
-		"tsup": "^8.2.0",
-		"typescript": "^5.5.3"
+		"tsup": "^8.2.3",
+		"typescript": "^5.5.4"
 	},
 	"publishConfig": {
 		"access": "public"
