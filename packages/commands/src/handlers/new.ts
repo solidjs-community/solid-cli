@@ -40,7 +40,7 @@ gitignore
 Thumbs.db
 `;
 
-const startSupported = [
+const templates = [
 	"basic",
 	"bare",
 	"hackernews",
@@ -58,12 +58,15 @@ const startSupported = [
 	"with-vitest",
 	"experiments",
 ] as const;
-const localSupported = ["ts", "js"] as const;
-const stackblitzSupported = ["bare"] as const;
+const extensions = ["ts", "js"] as const;
 
-export type AllSupported = (typeof localSupported)[number] | (typeof stackblitzSupported)[number];
-export const isSupported = (template: string): template is AllSupported => {
-	return localSupported.indexOf(template as any) !== -1;
+export type Extension = (typeof extensions)[number];
+export const isExtension = (extension: string): extension is Extension => {
+	return extensions.indexOf(extension as any) !== -1;
+};
+export type Template = (typeof templates)[number];
+export const isTemplate = (template: string): template is Template => {
+	return templates.indexOf(template as any) !== -1;
 };
 const modifyReadme = async (name: string) => {
 	await insertAtEnd(
@@ -133,17 +136,17 @@ const handleTSConversion = async (tempDir: string, projectName: string) => {
 	});
 };
 
-const handleNewStartProject = async (projectName: string, variation?: AllSupported) => {
-	const template = await cancelable(
+const handleNewStartProject = async (projectName: string, template?: Template, extension?: Extension) => {
+	template ??= await cancelable(
 		p.select({
 			message: t.NEW_START,
-			initialValue: "ts",
-			options: startSupported.map((s) => ({ label: s, value: s })),
+			initialValue: "basic" satisfies Template as Template,
+			options: templates.map((s) => ({ label: s, value: s })),
 			maxItems: process.stdout.rows - 4,
 		}),
 	);
 
-	const withTs = variation ? variation !== "ts" : await cancelable(p.confirm({ message: "Use Typescript?" }));
+	const withTs = extension ? extension !== "ts" : await cancelable(p.confirm({ message: "Use Typescript?" }));
 
 	// If the user does not want ts, we create the project in a temp directory inside the project directory
 	const tempDir = withTs ? projectName : join(projectName, ".solid-start");
@@ -181,62 +184,65 @@ const handleAutocompleteNew = async (name: string, isStart?: boolean) => {
 		return;
 	}
 
-	const template = (await cancelable(
+	const extension = await cancelable(
 		p.select({
-			message: t.TEMPLATE,
-			initialValue: "ts",
-			options: localSupported.map((s) => ({ label: s, value: s })),
+			message: "Use Typescript?",
+			initialValue: "ts" satisfies Extension as Extension,
+			options: extensions.map((s) => ({ label: s, value: s })),
 		}),
-	)) as unknown as AllSupported;
+	);
 
-	await handleNew(template, name);
+	await handleNew({ extension, name });
 };
 export const handleNew = async (
-	variation?: AllSupported,
-	name?: string,
-	stackblitz: boolean = false,
-	isStart?: boolean,
+	x: {
+		extension?: Extension;
+		template?: Template;
+		name?: string;
+		stackblitz?: boolean;
+		isStart?: boolean;
+	} = {},
 ) => {
-	name ??= await cancelable(
+	x.name ??= await cancelable(
 		p.text({ message: t.PROJECT_NAME, placeholder: "solid-project", defaultValue: "solid-project" }),
 	);
 
-	if (!variation) {
-		await handleAutocompleteNew(name, isStart);
+	if (!x.extension) {
+		await handleAutocompleteNew(x.name, x.isStart);
 		return;
 	}
 
-	if (stackblitz) {
+	if (x.stackblitz) {
 		await spinnerify({
-			startText: t.OPENING_IN_BROWSER(variation),
+			startText: t.OPENING_IN_BROWSER(x.extension),
 			finishText: t.OPENED_IN_BROWSER,
-			fn: () => openInBrowser(`https://solid.new/${variation}`),
+			fn: () => openInBrowser(`https://solid.new/${x.extension}`),
 		});
 		return;
 	}
 
-	const withTs = variation ? variation === "ts" : await cancelable(p.confirm({ message: "Use Typescript?" }));
+	const withTs = x.extension ? x.extension === "ts" : await cancelable(p.confirm({ message: "Use Typescript?" }));
 
 	// If the user does not want ts, we create the project in a temp directory inside the project directory
-	const tempDir = withTs ? name : join(name, ".solid-start");
-	const readmeAlreadyExists = existsSync(join(name, "README.md"));
+	const tempDir = withTs ? x.name : join(x.name, ".solid-start");
+	const readmeAlreadyExists = existsSync(join(x.name, "README.md"));
 
 	await spinnerify({
 		startText: t.CREATING_PROJECT,
 		finishText: t.PROJECT_CREATED,
 		fn: async () => {
-			await downloadRepo({ repo: { owner: "solidjs", name: "templates", subdir: variation }, dest: tempDir });
+			await downloadRepo({ repo: { owner: "solidjs", name: "templates", subdir: x.extension }, dest: tempDir });
 		},
 	});
 
-	if (!withTs) await handleTSConversion(tempDir, name);
+	if (!withTs) await handleTSConversion(tempDir, x.name);
 
 	// Add .gitignore
-	writeFileSync(join(name, ".gitignore"), gitIgnore);
-	if (!readmeAlreadyExists) await modifyReadme(name ?? variation);
+	writeFileSync(join(x.name, ".gitignore"), gitIgnore);
+	if (!readmeAlreadyExists) await modifyReadme(x.name ?? x.extension);
 	const pM = detectPackageManager();
 	p.note(
-		`cd ${name}
+		`cd ${x.name}
 ${pM.name} install
 ${pM.name} ${pM.runScriptCommand("dev")}`,
 		t.GET_STARTED,
