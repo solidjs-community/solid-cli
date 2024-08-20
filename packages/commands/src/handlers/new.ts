@@ -176,11 +176,11 @@ ${pM.name} ${pM.runScriptCommand("dev")}`,
 	);
 };
 
-const handleAutocompleteNew = async (name: string, isStart?: boolean) => {
+const handleAutocompleteNew = async (name: string, template?: Template, isStart?: boolean) => {
 	isStart ??= await cancelable(p.confirm({ message: t.IS_START_PROJECT }));
 
 	if (isStart) {
-		handleNewStartProject(name);
+		handleNewStartProject(name, template);
 		return;
 	}
 
@@ -208,7 +208,7 @@ export const handleNew = async (
 	);
 
 	if (!x.extension) {
-		await handleAutocompleteNew(x.name, x.isStart);
+		await handleAutocompleteNew(x.name, x.template, x.isStart);
 		return;
 	}
 
