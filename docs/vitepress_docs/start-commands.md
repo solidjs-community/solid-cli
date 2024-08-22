@@ -1,4 +1,4 @@
-# Solid-Start Commands
+# SolidStart Commands
 
 ### `Mode`
 
@@ -39,7 +39,7 @@ Creates a new route file in the file routes directory.
 solid start adapter
 ```
 
-Used to setup a Solid-Start specific adapter.
+Used to setup a SolidStart specific adapter.
 
 **Options**
 

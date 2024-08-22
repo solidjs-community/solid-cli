@@ -78,9 +78,9 @@ const TRANSLATIONS = {
 		ja: "作成するフォルダーの名前",
 	},
 	IS_START_PROJECT: {
-		en: "Is this a Solid-Start project?",
-		es: "¿Es este un proyecto de Solid-Start?",
-		fr: "Est-ce un projet Solid-Start ?",
+		en: "Is this a SolidStart project?",
+		es: "¿Es este un proyecto de SolidStart?",
+		fr: "Est-ce un projet SolidStart?",
 		ja: "これはソリッドスタートプロジェクトですか?",
 	},
 	START_MODE: {

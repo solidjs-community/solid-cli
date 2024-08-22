@@ -18,7 +18,7 @@ export default defineConfig({
 					{ text: "About", link: "/about" },
 					{ text: "Installation", link: "/installation" },
 					{ text: "Basic Commands", link: "/basic-commands" },
-					{ text: "Solid-Start Commands", link: "/start-commands" },
+					{ text: "SolidStart Commands", link: "/start-commands" },
 				],
 			},
 			{ text: "Supported Integrations", link: "/supported-integrations" },
