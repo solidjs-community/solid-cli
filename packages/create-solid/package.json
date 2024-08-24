@@ -31,11 +31,11 @@
 	"devDependencies": {
 		"@clack/prompts": "0.7.0",
 		"@solid-cli/commands": "workspace:*",
-		"@types/node": "^20.14.12",
+		"@types/node": "^22.5.0",
 		"cmd-ts": "^0.13.0",
 		"jiti": "^1.21.6",
 		"picocolors": "^1.0.1",
-		"tsup": "^8.2.3",
+		"tsup": "^8.2.4",
 		"typescript": "^5.5.4"
 	},
 	"publishConfig": {
