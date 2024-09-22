@@ -28,7 +28,7 @@ const new_ = command({
 	description: t.NEW_DESC,
 	args: {
 		variation: positional({
-			type: optional(oneOf(["bare", "ts", "js"] as const)),
+			type: optional(oneOf(["ts", "js"] as const)),
 			displayName: t.NEW_VARIATION_DESC,
 			description: "",
 		}),
@@ -50,7 +50,7 @@ const new_ = command({
 			);
 			name = _name;
 		}
-		await handleNew(variation, name, stackblitz);
+		await handleNew({ extension: variation, name, stackblitz });
 	},
 });
 
