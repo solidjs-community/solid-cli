@@ -27,9 +27,9 @@
 		"build": "tsc && tsup"
 	},
 	"devDependencies": {
-		"tsup": "^8.2.4",
-		"typescript": "^5.5.4",
-		"@types/node": "22.5.0"
+		"tsup": "^8.3.0",
+		"typescript": "^5.6.2",
+		"@types/node": "22.5.5"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -37,7 +37,7 @@
 	"dependencies": {
 		"@clack/core": "0.3.4",
 		"@clack/prompts": "0.7.0",
-		"picocolors": "^1.0.1",
+		"picocolors": "^1.1.0",
 		"@solid-cli/reactivity": "workspace:*",
 		"@solid-cli/utils": "workspace:*"
 	}
