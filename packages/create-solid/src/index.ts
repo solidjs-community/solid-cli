@@ -2,10 +2,10 @@
 import { AllSupported, handleNew, isSupported } from "@solid-cli/commands/new";
 import color from "picocolors";
 import { intro } from "@clack/prompts";
-import { version } from "../package.json";
+import packageJson from "../package.json" with { type: "json" };
 import { command, run, option, string, boolean, flag, optional, positional } from "cmd-ts";
 
-intro(`\n${color.bgCyan(color.black(` Create-Solid v${version}`))}`);
+intro(`\n${color.bgCyan(color.black(` Create-Solid v${packageJson.version}`))}`);
 
 const app = command({
 	name: "create-solid",
