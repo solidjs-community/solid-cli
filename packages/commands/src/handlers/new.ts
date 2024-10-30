@@ -216,10 +216,11 @@ export const handleNew = async (
 		return;
 	}
 
-	const withTs = variation ? variation === "ts" : await cancelable(p.confirm({ message: "Use Typescript?" }));
+	const withTs = variation.startsWith("ts") ? await cancelable(p.confirm({ message: "Use Typescript?" })) : false;
 
 	// If the user does not want ts, we create the project in a temp directory inside the project directory
-	const tempDir = withTs ? name : join(name, ".solid-start");
+	// If project is already JS don't bother transpiling
+	const tempDir = withTs || variation.startsWith("js") ? name : join(name, ".solid-start");
 	const readmeAlreadyExists = existsSync(join(name, "README.md"));
 
 	await spinnerify({
@@ -229,8 +230,8 @@ export const handleNew = async (
 			await downloadRepo({ repo: { owner: "solidjs", name: "templates", subdir: variation }, dest: tempDir });
 		},
 	});
-
-	if (!withTs) await handleTSConversion(tempDir, name);
+	// Don't try to convert to ts if the template used is JS
+	if (!withTs && !variation.startsWith("js")) await handleTSConversion(tempDir, name);
 
 	// Add .gitignore
 	writeFileSync(join(name, ".gitignore"), gitIgnore);
