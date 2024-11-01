@@ -31,6 +31,15 @@ export const detectPackageManager = (): PackageManager => {
 					return s;
 				},
 			};
+		case userAgent.startsWith("deno"):
+			return {
+				name: "deno",
+				runner: "deno run",
+				installCommand: "add",
+				runScriptCommand(s) {
+					return `task ${s}`;
+				},
+			};
 		default:
 			return {
 				name: "npm",
