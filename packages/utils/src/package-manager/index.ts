@@ -37,7 +37,7 @@ export const detectPackageManager = (): PackageManager => {
 				runner: "deno run",
 				installCommand: "add",
 				runScriptCommand(s) {
-					return s;
+					return `task ${s}`;
 				},
 			};
 		default:
