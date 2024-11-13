@@ -34,11 +34,11 @@
 		"./packages/*"
 	],
 	"devDependencies": {
-		"@changesets/cli": "2.27.8",
+		"@changesets/cli": "2.27.9",
 		"nodemon": "^3.1.7",
 		"prettier": "^3.3.3",
-		"turbo": "^2.1.2",
-		"vitest": "^2.1.1"
+		"turbo": "^2.2.3",
+		"vitest": "^2.1.5"
 	},
 	"packageManager": "pnpm@9.6.0"
 }
