@@ -1,11 +1,33 @@
-export const createStartTS = () => {
+import { downloadRepo } from "@begit/core";
+import { GIT_IGNORE, handleTSConversion, StartTemplate } from "./helpers"
+import { join } from "path";
+import { writeFileSync } from "fs";
 
+type CreateStartArgs = {
+    template: StartTemplate,
+    destination: string,
 }
 
-export const createStartJS = () => {
-
+export const createStartTS = ({ template, destination }: CreateStartArgs) => {
+    return downloadRepo({
+        repo: { owner: "solidjs", name: "solid-start", subdir: `examples/${template}` },
+        dest: destination,
+    });
 }
 
-export const createStart = () => {
+export const createStartJS = async ({ template, destination }: CreateStartArgs) => {
+    // Create typescript project in `<destination>/.project`
+    // then transpile this to javascript and clean up
+    const tempDir = join(destination, ".project");
+    await createStartTS({ template, destination: tempDir })
+    await handleTSConversion(tempDir, destination);
+    // Add .gitignore
+    writeFileSync(join(destination, ".gitignore"), GIT_IGNORE);
+}
 
+export const createStart = (args: CreateStartArgs, js?: boolean) => {
+    if (js) {
+        return createStartJS(args);
+    }
+    return createStartTS(args);
 }

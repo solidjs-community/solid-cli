@@ -129,8 +129,8 @@ export const cancelable = async <T = unknown>(prompt: Promise<T | symbol>, cance
 const VANILLA_TEMPLATES = ["ts"] as const;
 export type VanillaTemplate = (typeof VANILLA_TEMPLATES)[number];
 
-export const START_TEMPLATES = ["basic"] as const;
-type StartTemplate = (typeof VANILLA_TEMPLATES)[number];
+const START_TEMPLATES = ["basic"] as const;
+export type StartTemplate = (typeof VANILLA_TEMPLATES)[number];
 export const getTemplatesList = async (isStart: boolean) => {
     if (isStart) {
         return START_TEMPLATES;

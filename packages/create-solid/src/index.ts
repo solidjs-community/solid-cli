@@ -5,7 +5,8 @@ import packageJson from "../package.json" with { type: "json" };
 import { defineCommand, runMain } from "citty";
 import { createVanilla, createVanillaJS } from "./create-vanilla";
 import * as p from "@clack/prompts";
-import { cancelable, getTemplatesList, VanillaTemplate } from "./helpers";
+import { cancelable, getTemplatesList, StartTemplate, VanillaTemplate } from "./helpers";
+import { createStart } from "./create-start";
 intro(`\n${color.bgCyan(color.black(` Create-Solid v${packageJson.version}`))}`);
 
 const main = defineCommand({
@@ -57,7 +58,7 @@ const main = defineCommand({
 		isJS = !(await cancelable(p.confirm({ message: "Use Typescript?" })))
 
 		if (isStart) {
-
+			createVanilla({ template: template as StartTemplate, destination: projectName }, isJS);
 		} else {
 			createVanilla({ template: template as VanillaTemplate, destination: projectName }, isJS);
 		}
