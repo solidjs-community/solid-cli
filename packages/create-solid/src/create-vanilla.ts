@@ -1,6 +1,6 @@
 import { downloadRepo } from "@begit/core";
 import { join } from "node:path";
-import { GIT_IGNORE, handleTSConversion } from "./helpers";
+import { GIT_IGNORE, handleTSConversion, VanillaTemplate } from "./helpers";
 import { writeFileSync } from "node:fs";
 
 

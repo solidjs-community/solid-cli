@@ -3,9 +3,9 @@ import color from "picocolors";
 import { intro } from "@clack/prompts";
 import packageJson from "../package.json" with { type: "json" };
 import { defineCommand, runMain } from "citty";
-import { createVanillaJS } from "./create-vanilla";
+import { createVanilla, createVanillaJS } from "./create-vanilla";
 import * as p from "@clack/prompts";
-import { cancelable, getTemplatesList } from "./helpers";
+import { cancelable, getTemplatesList, VanillaTemplate } from "./helpers";
 intro(`\n${color.bgCyan(color.black(` Create-Solid v${packageJson.version}`))}`);
 
 const main = defineCommand({
@@ -55,7 +55,12 @@ const main = defineCommand({
 			}),
 		));
 		isJS = !(await cancelable(p.confirm({ message: "Use Typescript?" })))
-		// createVanillaJS({ template: "ts", destination: "./ts" })
+
+		if (isStart) {
+
+		} else {
+			createVanilla({ template: template as VanillaTemplate, destination: projectName }, isJS);
+		}
 	}
 })
 runMain(main);
