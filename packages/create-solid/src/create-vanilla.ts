@@ -3,12 +3,16 @@ import { join } from "node:path";
 import { GIT_IGNORE, handleTSConversion } from "./helpers";
 import { writeFileSync } from "node:fs";
 
-const VANILLA_TEMPLATES = ["ts"] as const;
-type VanillaTemplate = (typeof VANILLA_TEMPLATES)[number];
 
 type CreateVanillaArgs = {
     template: VanillaTemplate,
     destination: string,
+}
+export const createVanilla = (args: CreateVanillaArgs, js?: boolean) => {
+    if (js) {
+        return createVanillaJS(args);
+    }
+    return createVanillaTS(args);
 }
 export const createVanillaTS = async ({ template, destination }: CreateVanillaArgs) => {
     return await downloadRepo({ repo: { owner: "solidjs", name: "templates", subdir: template }, dest: destination });

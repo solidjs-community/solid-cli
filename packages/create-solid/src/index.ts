@@ -4,7 +4,8 @@ import { intro } from "@clack/prompts";
 import packageJson from "../package.json" with { type: "json" };
 import { defineCommand, runMain } from "citty";
 import { createVanillaJS } from "./create-vanilla";
-
+import * as p from "@clack/prompts";
+import { cancelable, getTemplatesList } from "./helpers";
 intro(`\n${color.bgCyan(color.black(` Create-Solid v${packageJson.version}`))}`);
 
 const main = defineCommand({
@@ -36,8 +37,25 @@ const main = defineCommand({
 			description: "Create a SolidStart project",
 		},
 	},
-	run({ args: { projectNamePositional, templatePositional, "project-name": projectNameOptional, solidstart } }) {
-		createVanillaJS({ template: "ts", destination: "./ts" })
+	async run({ args: { projectNamePositional, templatePositional, "project-name": projectNameOptional, solidstart } }) {
+		let projectName: string = projectNamePositional ?? projectNameOptional;
+		let template: string = templatePositional;
+		let isStart: boolean = solidstart;
+		let isJS = false;
+		projectName ??= await cancelable(
+			p.text({ message: "Project Name", placeholder: "solid-project", defaultValue: "solid-project" }),
+		);
+		isStart ??= await cancelable(p.confirm({ message: "Is this a SolidStart project?" }));
+		const template_opts = await getTemplatesList(isStart);
+		template ??= (await cancelable(
+			p.select({
+				message: "Which template would you like to use?",
+				initialValue: "ts",
+				options: template_opts.map((s: string) => ({ label: s, value: s })),
+			}),
+		));
+		isJS = !(await cancelable(p.confirm({ message: "Use Typescript?" })))
+		// createVanillaJS({ template: "ts", destination: "./ts" })
 	}
 })
 runMain(main);

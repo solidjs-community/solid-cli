@@ -25,7 +25,6 @@
 		"@clack/core": "0.3.4",
 		"@clack/prompts": "0.7.0",
 		"@solid-cli/commands": "workspace:*",
-		"@solid-cli/reactivity": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
 		"@solid-cli/utils": "workspace:*",
 		"cmd-ts": "^0.13.0",

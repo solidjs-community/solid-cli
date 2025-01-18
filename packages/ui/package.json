@@ -38,7 +38,6 @@
 		"@clack/core": "0.3.4",
 		"@clack/prompts": "0.7.0",
 		"picocolors": "^1.1.1",
-		"@solid-cli/reactivity": "workspace:*",
 		"@solid-cli/utils": "workspace:*"
 	}
 }

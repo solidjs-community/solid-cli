@@ -31,6 +31,7 @@
 	"devDependencies": {
 		"@clack/prompts": "0.7.0",
 		"@solid-cli/commands": "workspace:*",
+		"@solid-cli/ui": "workspace:*",
 		"@types/node": "^22.9.0",
 		"cmd-ts": "^0.13.0",
 		"jiti": "^2.4.0",
