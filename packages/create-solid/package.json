@@ -41,5 +41,9 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"@begit/core": "^0.0.19",
+		"citty": "^0.1.6",
+		"sucrase": "^3.35.0"
+	}
 }
