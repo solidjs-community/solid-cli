@@ -26,7 +26,8 @@
 	],
 	"scripts": {
 		"start": "jiti ./src/bin.ts",
-		"build": "tsc && tsup"
+		"build": "tsc && tsup",
+		"test": "vitest run"
 	},
 	"devDependencies": {
 		"@clack/prompts": "0.9.1",
