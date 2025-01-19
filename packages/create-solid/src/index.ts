@@ -10,6 +10,7 @@ import { getTemplatesList, StartTemplate, VanillaTemplate } from "./utils/consta
 export const createSolid = (version: string) => defineCommand({
 	meta: {
 		name: "create-solid",
+		description: "A CLI for scaffolding new Solid projects",
 		version: version,
 	},
 	args: {
