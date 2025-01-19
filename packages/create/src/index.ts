@@ -1,5 +1,3 @@
-#! /usr/bin/env node
-
 import { defineCommand } from "citty";
 import { createVanilla } from "./create-vanilla";
 import * as p from "@clack/prompts";
