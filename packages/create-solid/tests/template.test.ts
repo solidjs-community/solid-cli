@@ -1,8 +1,6 @@
-import { afterAll, beforeEach, expect, it, vi } from "vitest";
+import { expect, it } from "vitest";
 import { createVanilla } from "../src"
-import { cwd } from "process";
-import { existsSync, readdir, readdirSync, readFileSync } from "fs";
-import { rm } from "fs/promises";
+import { existsSync } from "fs";
 it("downloads and extracts the typescript template", async () => {
     await createVanilla({ template: "ts", destination: "./test/ts" }, false)
 
