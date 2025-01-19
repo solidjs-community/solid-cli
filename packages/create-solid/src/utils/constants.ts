@@ -1,0 +1,57 @@
+export const GIT_IGNORE = `
+dist
+.solid
+.output
+.vercel
+.netlify
+.vinxi
+app.config.timestamp_*.js
+
+# Environment
+.env
+.env*.local
+
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+*.launch
+.settings/
+
+# Temp
+gitignore
+
+# System Files
+.DS_Store
+Thumbs.db
+`;
+
+export const JS_CONFIG = {
+    compilerOptions: {
+        jsx: "preserve",
+        jsxImportSource: "solid-js",
+        paths: {
+            "~/*": ["./src/*"],
+        },
+    },
+}
+
+// Supported templates
+
+const VANILLA_TEMPLATES = ["ts"] as const;
+export type VanillaTemplate = (typeof VANILLA_TEMPLATES)[number];
+
+const START_TEMPLATES = ["basic"] as const;
+export type StartTemplate = (typeof VANILLA_TEMPLATES)[number];
+
+export const getTemplatesList = async (isStart: boolean) => {
+    if (isStart) {
+        return START_TEMPLATES;
+    }
+    return VANILLA_TEMPLATES;
+}
+
+// 

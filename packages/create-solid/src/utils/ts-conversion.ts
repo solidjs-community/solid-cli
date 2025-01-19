@@ -3,6 +3,7 @@ import { readFileToString, recurseFiles } from "./file-system"
 import { join, resolve } from "node:path";
 import { transform } from "sucrase";
 import { rm } from "node:fs/promises";
+import { JS_CONFIG } from "./constants"
 const convertToJS = async (file: Dirent, startPath: string) => {
     const src = join(startPath, file.name);
     const dest = resolve(startPath.replace(".solid-start", ""), file.name);
@@ -27,15 +28,7 @@ export const handleTSConversion = async (tempDir: string, projectName: string) =
     writeFileSync(
         resolve(projectName, "jsconfig.json"),
         JSON.stringify(
-            {
-                compilerOptions: {
-                    jsx: "preserve",
-                    jsxImportSource: "solid-js",
-                    paths: {
-                        "~/*": ["./src/*"],
-                    },
-                },
-            },
+            JS_CONFIG,
             null,
             2,
         ),

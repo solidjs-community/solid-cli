@@ -1,8 +1,8 @@
 import { downloadRepo } from "@begit/core";
 import { join } from "node:path";
-import { GIT_IGNORE, VanillaTemplate } from "./helpers";
 import { writeFileSync } from "node:fs";
 import { handleTSConversion } from "./utils/ts-conversion";
+import { GIT_IGNORE, VanillaTemplate } from "./utils/constants";
 
 
 export type CreateVanillaArgs = {
