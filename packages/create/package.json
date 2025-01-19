@@ -1,6 +1,6 @@
 {
-	"name": "create-solid",
-	"version": "0.6.0-alpha.1",
+	"name": "@solid-cli/create",
+	"version": "0.6.0-alpha.0",
 	"description": "Create Solid apps with low configuration",
 	"author": "Thomas Beer",
 	"contributors": [
@@ -19,11 +19,17 @@
 	],
 	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
-	"bin": {
-		"create-solid": "./dist/bin.mjs"
+	"types": "./types/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./types/index.d.ts",
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.mjs"
+		}
 	},
 	"files": [
-		"dist"
+		"dist",
+		"types"
 	],
 	"scripts": {
 		"start": "jiti ./src/bin.ts",
@@ -31,16 +37,19 @@
 		"test": "vitest run"
 	},
 	"devDependencies": {
-		"@clack/prompts": "0.9.1",
-		"@types/node": "^22.10.7",
-		"picocolors": "^1.1.1",
-		"tsup": "^8.3.5",
 		"typescript": "^5.7.3",
-		"citty": "^0.1.6",
-		"@solid-cli/create": "workspace:*"
+		"@types/node": "^22.10.7",
+		"tsup": "^8.3.5"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"@clack/prompts": "0.9.1",
+		"picocolors": "^1.1.1",
+		"@begit/core": "^0.1.1",
+		"citty": "^0.1.6",
+		"sucrase": "^3.35.0",
+		"@solid-cli/utils": "workspace:*"
+	}
 }

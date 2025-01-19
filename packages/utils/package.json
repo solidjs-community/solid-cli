@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/utils",
-	"version": "0.0.15",
+	"version": "0.6.0-alpha.0",
 	"description": "A collection of utilities for the Solid CLI",
 	"license": "MIT",
 	"homepage": "https://solid-cli.netlify.app",
@@ -17,44 +17,44 @@
 	"types": "./types/index.d.ts",
 	"exports": {
 		".": {
+			"types": "./types/index.d.ts",
 			"import": "./dist/index.mjs",
-			"require": "./dist/index.mjs",
-			"types": "./types/index.d.ts"
+			"require": "./dist/index.mjs"
 		},
 		"./paths": {
+			"types": "./types/paths/index.d.ts",
 			"import": "./dist/paths/index.mjs",
-			"require": "./dist/paths/index.mjs",
-			"types": "./types/paths/index.d.ts"
+			"require": "./dist/paths/index.mjs"
 		},
 		"./transform": {
+			"types": "./types/transform/index.d.ts",
 			"import": "./dist/transform/index.mjs",
-			"require": "./dist/transform/index.mjs",
-			"types": "./types/transform/index.d.ts"
+			"require": "./dist/transform/index.mjs"
 		},
 		"./updates": {
+			"types": "./types/updates/index.d.ts",
 			"import": "./dist/updates/index.mjs",
-			"require": "./dist/updates/index.mjs",
-			"types": "./types/updates/index.d.ts"
+			"require": "./dist/updates/index.mjs"
 		},
 		"./fs": {
+			"types": "./types/fs/index.d.ts",
 			"import": "./dist/fs/index.mjs",
-			"require": "./dist/fs/index.mjs",
-			"types": "./types/fs/index.d.ts"
+			"require": "./dist/fs/index.mjs"
 		},
 		"./util-types": {
+			"types": "./types/util-types/index.d.ts",
 			"import": "./dist/util-types/index.mjs",
-			"require": "./dist/util-types/index.mjs",
-			"types": "./types/util-types/index.d.ts"
+			"require": "./dist/util-types/index.mjs"
 		},
 		"./primitives": {
+			"types": "./types/primitives/index.d.ts",
 			"import": "./dist/primitives/index.mjs",
-			"require": "./dist/primitives/index.mjs",
-			"types": "./types/primitives/index.d.ts"
+			"require": "./dist/primitives/index.mjs"
 		},
 		"./package-manager": {
+			"types": "./types/package-manager/index.d.ts",
 			"import": "./dist/package-manager/index.mjs",
-			"require": "./dist/package-manager/index.mjs",
-			"types": "./types/package-manager/index.d.ts"
+			"require": "./dist/package-manager/index.mjs"
 		}
 	},
 	"scripts": {
@@ -63,23 +63,21 @@
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-meta-url": "^0.18.2",
-		"@types/node": "22.9.0",
-		"jiti": "^2.4.0",
+		"@types/node": "22.10.7",
 		"magicast": "^0.3.5",
 		"tsup": "^8.3.5",
-		"typescript": "^5.6.3",
-		"vitest": "^2.1.5"
+		"typescript": "^5.7.3",
+		"vitest": "^3.0.2"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"dependencies": {
-		"@clack/core": "0.3.4",
-		"@clack/prompts": "0.7.0",
-		"@solid-cli/reactivity": "workspace:*",
+		"@clack/core": "0.4.1",
+		"@clack/prompts": "0.9.1",
 		"cmd-ts": "^0.13.0",
-		"execa": "^8.0.1",
+		"execa": "^9.5.2",
 		"picocolors": "^1.1.1",
-		"smol-toml": "^1.3.0"
+		"smol-toml": "^1.3.1"
 	}
 }

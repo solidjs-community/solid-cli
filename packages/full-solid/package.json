@@ -1,6 +1,6 @@
 {
-	"name": "create-solid",
-	"version": "0.6.0-alpha.1",
+	"name": "@solid-cli/full",
+	"version": "0.6.0-alpha.0",
 	"description": "Create Solid apps with low configuration",
 	"author": "Thomas Beer",
 	"contributors": [
@@ -17,10 +17,9 @@
 		"solid",
 		"cli"
 	],
-	"main": "./dist/index.mjs",
-	"module": "./dist/index.mjs",
+	"main": "dist/index.mjs",
 	"bin": {
-		"create-solid": "./dist/bin.mjs"
+		"sd": "./dist/bin.mjs"
 	},
 	"files": [
 		"dist"
@@ -32,15 +31,14 @@
 	},
 	"devDependencies": {
 		"@clack/prompts": "0.9.1",
-		"@types/node": "^22.10.7",
 		"picocolors": "^1.1.1",
-		"tsup": "^8.3.5",
-		"typescript": "^5.7.3",
+		"@types/node": "^22.10.7",
 		"citty": "^0.1.6",
-		"@solid-cli/create": "workspace:*"
+		"@solid-cli/create": "workspace:*",
+		"tsup": "^8.3.5",
+		"typescript": "^5.7.3"
 	},
 	"publishConfig": {
 		"access": "public"
-	},
-	"dependencies": {}
+	}
 }

@@ -10,17 +10,13 @@
 		"url": "https://github.com/solidjs-community/solid-cli"
 	},
 	"scripts": {
-		"test": "vitest",
+		"test": "vitest run",
 		"test:all": "turbo run test",
 		"build": "turbo run build",
 		"release": "pnpm build && changeset publish",
-		"watch:all": "nodemon --no-stdin -q --watch packages/core/src -e ts --exec 'turbo run build --scope=core' --watch packages/reactivity/src -e ts --exec 'turbo run build --scope=reactivity' --watch packages/ui/src -e ts --exec 'turbo run build --scope=ui' --watch packages/utils/src -e ts --exec 'turbo run build --scope=utils'",
-		"watch:core": "nodemon --watch packages/core/src -e ts --exec 'turbo run build --scope=core'",
-		"watch:reactivity": "nodemon --watch packages/reactivity/src -e ts --exec 'turbo run build --scope=reactivity'",
-		"watch:ui": "nodemon --watch packages/ui/src -e ts --exec 'turbo run build --scope=ui'",
-		"watch:utils": "nodemon --watch packages/utils/src -e ts --exec 'turbo run build --scope=utils'",
 		"start": "cd packages/core && pnpm start",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"watch:build": "turbo watch build"
 	},
 	"contributors": [
 		{
@@ -34,11 +30,13 @@
 		"./packages/*"
 	],
 	"devDependencies": {
-		"@changesets/cli": "2.27.9",
-		"nodemon": "^3.1.7",
-		"prettier": "^3.3.3",
-		"turbo": "^2.2.3",
-		"vitest": "^2.1.5"
+		"@changesets/cli": "2.27.11",
+		"prettier": "^3.4.2",
+		"turbo": "^2.3.3",
+		"vitest": "^3.0.2"
 	},
-	"packageManager": "pnpm@9.6.0"
+	"packageManager": "pnpm@9.6.0",
+	"dependencies": {
+		"jiti": "^2.4.2"
+	}
 }

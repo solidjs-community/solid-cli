@@ -1,22 +1,23 @@
-import { readFile as readFile1 } from "fs/promises";
-import { queueUpdate, readQueuedFile, unqueueUpdate } from "../updates";
-export const writeFile = (path: string, data: string, checked: boolean = false) => {
-	// First, unqueue all previous updates to this file
-	unqueueUpdate(path, "file");
-	queueUpdate({ type: "file", name: path, contents: data, checked });
-};
-export const readFile = async (path: string) => {
-	const queued = readQueuedFile(path);
-	if (queued) return queued.contents;
-	return await readFile1(path);
-};
+import { readFile, writeFile } from "fs/promises";
+// import { queueUpdate, readQueuedFile, unqueueUpdate } from "../updates";
+// export const writeFile = (path: string, data: string, checked: boolean = false) => {
+// 	// First, unqueue all previous updates to this file
+// 	unqueueUpdate(path, "file");
+// 	queueUpdate({ type: "file", name: path, contents: data, checked });
+// };
+// export const readFile = async (path: string) => {
+// 	const queued = readQueuedFile(path);
+// 	if (queued) return queued.contents;
+// 	return await readFile1(path);
+// };
 export const readFileToString = async (path: string) => {
 	return (await readFile(path)).toString();
 };
-export const writeChecked = async (path: string, contents: string) => {
-	unqueueUpdate(path, "file");
-	queueUpdate({ type: "file", name: path, contents, checked: true });
-};
+// export const writeChecked = async (path: string, contents: string) => {
+// 	unqueueUpdate(path, "file");
+// 	queueUpdate({ type: "file", name: path, contents, checked: true });
+// };
+export const writeChecked = async (_path: string, _contents: string) => { throw new Error("Unimplemented") }
 export const insertAtBeginning = async (path: string, text: string) => {
 	const contents = await readFileToString(path);
 	writeFile(path, text + contents);

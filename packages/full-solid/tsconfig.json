@@ -1,5 +1,7 @@
 {
 	"compilerOptions": {
+		"baseUrl": ".",
+		"noEmit": true,
 		"module": "ESNext",
 		"target": "ESNext",
 		"moduleResolution": "Bundler",
@@ -7,8 +9,7 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"skipLibCheck": true,
-		"resolveJsonModule": true,
-		"noEmit": true
+		"resolveJsonModule": true
 	},
 	"include": ["src/*"]
 }
