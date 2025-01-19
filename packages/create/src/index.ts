@@ -5,6 +5,8 @@ import { cancelable, spinnerify } from "./utils/ui";
 import { createStart } from "./create-start";
 import { getTemplatesList, StartTemplate, VanillaTemplate } from "./utils/constants";
 import { detectPackageManager } from "@solid-cli/utils/package-manager";
+import { insertAtEnd } from "@solid-cli/utils/fs";
+import { existsSync } from "node:fs";
 export { createVanilla, createStart };
 export const createSolid = (version: string) =>
 	defineCommand({
@@ -73,7 +75,12 @@ export const createSolid = (version: string) =>
 					fn: () => createVanilla({ template: template as VanillaTemplate, destination: projectName }, isJS),
 				});
 			}
-
+			// Add "Created with Solid CLI" text to bottom of README
+			if (existsSync(`${projectName}/README.md`))
+				await insertAtEnd(
+					`${projectName}/README.md`,
+					"\n## This project was created with the [Solid CLI](https://solid-cli.netlify.app)\n",
+				);
 			// Next steps..
 			const pM = detectPackageManager();
 			p.note(
