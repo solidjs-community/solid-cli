@@ -50,7 +50,7 @@
 		"@begit/core": "^0.1.1",
 		"citty": "^0.1.6",
 		"sucrase": "^3.35.0",
-		"@solid-cli/utils": "workspace:*"
+		"@solid-cli/create": "workspace:*"
 	},
 	"publishConfig": {
 		"access": "public"

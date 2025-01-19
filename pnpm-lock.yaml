@@ -24,8 +24,8 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2(@types/node@22.10.7)
 
-  packages/create-solid:
-    devDependencies:
+  packages/create:
+    dependencies:
       '@begit/core':
         specifier: ^0.1.1
         version: 0.1.1
@@ -35,6 +35,43 @@ importers:
       '@solid-cli/utils':
         specifier: workspace:*
         version: link:../utils
+      citty:
+        specifier: ^0.1.6
+        version: 0.1.6
+      cmd-ts:
+        specifier: ^0.13.0
+        version: 0.13.0
+      picocolors:
+        specifier: ^1.1.1
+        version: 1.1.1
+      sucrase:
+        specifier: ^3.35.0
+        version: 3.35.0
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.7
+        version: 22.10.7
+      jiti:
+        specifier: ^2.4.2
+        version: 2.4.2
+      tsup:
+        specifier: ^8.3.5
+        version: 8.3.5(@swc/core@1.5.5)(jiti@2.4.2)(postcss@8.4.38)(typescript@5.7.3)
+      typescript:
+        specifier: ^5.7.3
+        version: 5.7.3
+
+  packages/create-solid:
+    devDependencies:
+      '@begit/core':
+        specifier: ^0.1.1
+        version: 0.1.1
+      '@clack/prompts':
+        specifier: 0.9.1
+        version: 0.9.1
+      '@solid-cli/create':
+        specifier: workspace:*
+        version: link:../create
       '@types/node':
         specifier: ^22.10.7
         version: 22.10.7
@@ -65,15 +102,15 @@ importers:
       '@clack/prompts':
         specifier: 0.9.1
         version: 0.9.1
+      '@solid-cli/create':
+        specifier: workspace:*
+        version: link:../create
       '@types/node':
         specifier: ^22.10.7
         version: 22.10.7
       citty:
         specifier: ^0.1.6
         version: 0.1.6
-      create-solid:
-        specifier: workspace:*
-        version: link:../create-solid
       jiti:
         specifier: ^2.4.2
         version: 2.4.2
