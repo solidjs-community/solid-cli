@@ -39,15 +39,13 @@
 	"devDependencies": {
 		"typescript": "^5.7.3",
 		"@types/node": "^22.10.7",
-		"tsup": "^8.3.5",
-		"jiti": "^2.4.2"
+		"tsup": "^8.3.5"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"dependencies": {
 		"@clack/prompts": "0.9.1",
-		"cmd-ts": "^0.13.0",
 		"picocolors": "^1.1.1",
 		"@begit/core": "^0.1.1",
 		"citty": "^0.1.6",
