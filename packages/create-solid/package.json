@@ -29,7 +29,7 @@
 		"build": "tsc && tsup"
 	},
 	"devDependencies": {
-		"@clack/prompts": "0.7.0",
+		"@clack/prompts": "0.9.1",
 		"@solid-cli/commands": "workspace:*",
 		"@solid-cli/ui": "workspace:*",
 		"@types/node": "^22.9.0",
@@ -37,14 +37,14 @@
 		"jiti": "^2.4.0",
 		"picocolors": "^1.1.1",
 		"tsup": "^8.3.5",
-		"typescript": "^5.6.3"
+		"typescript": "^5.6.3",
+		"@begit/core": "^0.1.1",
+		"citty": "^0.1.6",
+		"sucrase": "^3.35.0"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"dependencies": {
-		"@begit/core": "^0.0.19",
-		"citty": "^0.1.6",
-		"sucrase": "^3.35.0"
 	}
 }

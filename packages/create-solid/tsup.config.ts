@@ -4,11 +4,10 @@ export default defineConfig({
 	entry: ["src/index.ts"],
 	target: "esnext",
 	format: "esm",
-	splitting: false,
+	splitting: true,
 	bundle: true,
 	sourcemap: false,
 	clean: true,
-	noExternal: ["@solid-cli/commands"],
 	treeshake: true,
 	minify: true,
 	banner: {

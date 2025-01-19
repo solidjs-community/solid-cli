@@ -1,9 +1,9 @@
 import { downloadRepo } from "@begit/core";
-import { GIT_IGNORE, handleTSConversion, StartTemplate } from "./helpers"
+import { GIT_IGNORE, StartTemplate } from "./helpers"
 import { join } from "path";
 import { writeFileSync } from "fs";
-
-type CreateStartArgs = {
+import { handleTSConversion } from "./utils/ts-conversion"
+export type CreateStartArgs = {
     template: StartTemplate,
     destination: string,
 }
