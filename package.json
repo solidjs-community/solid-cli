@@ -15,7 +15,8 @@
 		"build": "turbo run build",
 		"release": "pnpm build && changeset publish",
 		"start": "cd packages/core && pnpm start",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"watch:build": "turbo watch build"
 	},
 	"contributors": [
 		{

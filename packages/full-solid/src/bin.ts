@@ -9,6 +9,6 @@ intro(`\n${color.bgCyan(color.black(` Solid CLI v${packageJson.version}`))}`);
 
 const main = defineCommand({
     subCommands: { create: createSolid(packageJson.version) },
-})
+});
 
 runMain(main);

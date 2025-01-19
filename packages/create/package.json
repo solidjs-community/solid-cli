@@ -22,9 +22,9 @@
 	"types": "./types/index.d.ts",
 	"exports": {
 		".": {
+			"types": "./types/index.d.ts",
 			"import": "./dist/index.mjs",
-			"require": "./dist/index.mjs",
-			"types": "./types/index.d.ts"
+			"require": "./dist/index.mjs"
 		}
 	},
 	"files": [

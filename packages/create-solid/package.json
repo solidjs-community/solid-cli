@@ -19,7 +19,6 @@
 	],
 	"main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
-	"types": "./types/src/index.d.ts",
 	"bin": {
 		"create-solid": "./dist/bin.mjs"
 	},
