@@ -37,14 +37,46 @@ export const JS_CONFIG = {
             "~/*": ["./src/*"],
         },
     },
-}
+};
 
 // Supported templates
 
-const VANILLA_TEMPLATES = ["ts"] as const;
+const VANILLA_TEMPLATES = [
+    "ts",
+    "ts-vitest",
+    "ts-uvu",
+    "ts-unocss",
+    "ts-tailwindcss",
+    "ts-sass",
+    "ts-router",
+    "ts-router-file-based",
+    "ts-minimal",
+    "ts-jest",
+    "ts-bootstrap",
+    "js",
+    "js-vitest",
+    "js-tailwindcss",
+] as const;
 export type VanillaTemplate = (typeof VANILLA_TEMPLATES)[number];
 
-const START_TEMPLATES = ["basic"] as const;
+const START_TEMPLATES = [
+    "basic",
+    "bare",
+    "hackernews",
+    "notes",
+    "todomvc",
+    "with-auth",
+    "with-authjs",
+    "with-drizzle",
+    "with-mdx",
+    "with-prisma",
+    "with-solid-styled",
+    "with-tailwindcss",
+    "with-trpc",
+    "with-unocss",
+    "with-vitest",
+    "experiments",
+] as const;
 export type StartTemplate = (typeof VANILLA_TEMPLATES)[number];
 
 export const getTemplatesList = async (isStart: boolean) => {
@@ -52,6 +84,6 @@ export const getTemplatesList = async (isStart: boolean) => {
         return START_TEMPLATES;
     }
     return VANILLA_TEMPLATES;
-}
+};
 
-// 
+//

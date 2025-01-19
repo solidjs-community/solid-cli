@@ -66,8 +66,7 @@ export const flushPackageUpdates = async () => {
 	for (const update of packageUpdates) {
 		if (update.dev) {
 			await $`${pM.name} ${instlCmd} -D ${update.name}`;
-		}
-		else {
+		} else {
 			await $`${pM.name} ${instlCmd} ${update.name}`;
 		}
 	}
