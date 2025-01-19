@@ -1,20 +1,16 @@
 #! /usr/bin/env node
-import color from "picocolors";
-import { intro } from "@clack/prompts";
-import packageJson from "../package.json" with { type: "json" };
-import { defineCommand, runMain } from "citty";
-import { createVanilla, createVanillaJS } from "./create-vanilla";
+
+import { defineCommand } from "citty";
+import { createVanilla } from "./create-vanilla";
 import * as p from "@clack/prompts";
 import { cancelable, spinnerify } from "./utils/ui";
 import { createStart } from "./create-start";
-import { create } from "./create";
 import { getTemplatesList, StartTemplate, VanillaTemplate } from "./utils/constants";
-intro(`\n${color.bgCyan(color.black(` Create-Solid v${packageJson.version}`))}`);
 
-const main = defineCommand({
+export const main = (version: string) => defineCommand({
 	meta: {
 		name: "create-solid",
-		version: packageJson.version,
+		version: version,
 	},
 	args: {
 		projectNamePositional: {
@@ -74,4 +70,3 @@ const main = defineCommand({
 		}
 	}
 })
-runMain(main);

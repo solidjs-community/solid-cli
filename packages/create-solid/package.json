@@ -19,13 +19,13 @@
 	],
 	"main": "dist/index.mjs",
 	"bin": {
-		"create-solid": "./dist/index.mjs"
+		"create-solid": "./dist/bin.mjs"
 	},
 	"files": [
 		"dist"
 	],
 	"scripts": {
-		"start": "jiti ./src/index.ts",
+		"start": "jiti ./src/bin.ts",
 		"build": "tsc && tsup"
 	},
 	"devDependencies": {
