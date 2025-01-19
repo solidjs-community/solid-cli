@@ -56,8 +56,8 @@ export const createSolid = (version: string) =>
 					options: template_opts.map((s: string) => ({ label: s, value: s })),
 				}),
 			);
-			// Project must be javascript if the template name begins with `js-`
-			const isJS = template.startsWith("js") ? true : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
+			// Don't transpile project if it's already javascript!
+			const isJS = template.startsWith("js") ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
 
 			if (isStart) {
 				await spinnerify({
