@@ -31,8 +31,7 @@
 		"create-solid": "./dist/bin.mjs"
 	},
 	"files": [
-		"dist",
-		"types"
+		"dist"
 	],
 	"scripts": {
 		"start": "jiti ./src/bin.ts",
