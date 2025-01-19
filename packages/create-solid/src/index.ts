@@ -6,6 +6,7 @@ import * as p from "@clack/prompts";
 import { cancelable, spinnerify } from "./utils/ui";
 import { createStart } from "./create-start";
 import { getTemplatesList, StartTemplate, VanillaTemplate } from "./utils/constants";
+import { detectPackageManager } from "@solid-cli/utils/package-manager";
 export { createVanilla, createStart };
 export const createSolid = (version: string) =>
 	defineCommand({
@@ -41,6 +42,7 @@ export const createSolid = (version: string) =>
 		async run({
 			args: { projectNamePositional, templatePositional, "project-name": projectNameOptional, solidstart },
 		}) {
+			// Show prompts for any unknown arguments
 			let projectName: string = projectNamePositional ?? projectNameOptional;
 			let template: string = templatePositional;
 			let isStart: boolean = solidstart;
@@ -56,6 +58,7 @@ export const createSolid = (version: string) =>
 					options: template_opts.map((s: string) => ({ label: s, value: s })),
 				}),
 			);
+
 			// Don't transpile project if it's already javascript!
 			const isJS = template.startsWith("js") ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
 
@@ -72,5 +75,13 @@ export const createSolid = (version: string) =>
 					fn: () => createVanilla({ template: template as VanillaTemplate, destination: projectName }, isJS),
 				});
 			}
+
+			// Next steps..
+			const pM = detectPackageManager();
+			p.note(
+				`cd ${projectName}
+${pM.name} install
+${pM.name} ${pM.runScriptCommand("dev")}`,
+				"To get started, run:");
 		},
 	});

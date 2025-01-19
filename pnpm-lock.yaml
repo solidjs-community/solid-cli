@@ -32,6 +32,9 @@ importers:
       '@clack/prompts':
         specifier: 0.9.1
         version: 0.9.1
+      '@solid-cli/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@types/node':
         specifier: ^22.10.7
         version: 22.10.7
