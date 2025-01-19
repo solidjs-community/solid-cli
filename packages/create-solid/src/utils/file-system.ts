@@ -1,7 +1,6 @@
-import { copyFileSync, Dirent, mkdirSync, readdirSync, writeFileSync } from "node:fs";
-import { readFile, rm } from "node:fs/promises";
-import { join, resolve } from "node:path";
-import { transform } from "sucrase";
+import { Dirent, readdirSync } from "node:fs";
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
 
 export const recurseFiles = (startPath: string, cb: (file: Dirent, startPath: string) => void) => {
 	startPath = resolve(startPath);
