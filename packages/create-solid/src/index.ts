@@ -6,7 +6,7 @@ import * as p from "@clack/prompts";
 import { cancelable, spinnerify } from "./utils/ui";
 import { createStart } from "./create-start";
 import { getTemplatesList, StartTemplate, VanillaTemplate } from "./utils/constants";
-export { createVanilla, createStart }
+export { createVanilla, createStart };
 export const createSolid = (version: string) =>
 	defineCommand({
 		meta: {

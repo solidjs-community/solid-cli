@@ -135,5 +135,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Testing directory
-testing
+# Test directory
+test
