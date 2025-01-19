@@ -137,3 +137,6 @@ dist
 
 # Test directory
 test
+
+# Build output
+types
