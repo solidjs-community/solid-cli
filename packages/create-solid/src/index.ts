@@ -7,7 +7,7 @@ import { cancelable, spinnerify } from "./utils/ui";
 import { createStart } from "./create-start";
 import { getTemplatesList, StartTemplate, VanillaTemplate } from "./utils/constants";
 
-export const main = (version: string) => defineCommand({
+export const createSolid = (version: string) => defineCommand({
 	meta: {
 		name: "create-solid",
 		version: version,
