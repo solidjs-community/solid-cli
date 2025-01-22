@@ -1,11 +1,11 @@
 {
-  "mode": "pre",
-  "tag": "alpha",
-  "initialVersions": {
-    "@solid-cli/create": "0.6.0-alpha.0",
-    "create-solid": "0.6.0-alpha.1",
-    "@solid-cli/full": "0.6.0-alpha.0",
-    "@solid-cli/utils": "0.6.0-alpha.0"
-  },
-  "changesets": []
+	"mode": "pre",
+	"tag": "alpha",
+	"initialVersions": {
+		"@solid-cli/create": "0.6.0-alpha.0",
+		"create-solid": "0.6.0-alpha.1",
+		"@solid-cli/full": "0.6.0-alpha.0",
+		"@solid-cli/utils": "0.6.0-alpha.0"
+	},
+	"changesets": []
 }

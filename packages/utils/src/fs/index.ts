@@ -17,7 +17,9 @@ export const readFileToString = async (path: string) => {
 // 	unqueueUpdate(path, "file");
 // 	queueUpdate({ type: "file", name: path, contents, checked: true });
 // };
-export const writeChecked = async (_path: string, _contents: string) => { throw new Error("Unimplemented") }
+export const writeChecked = async (_path: string, _contents: string) => {
+	throw new Error("Unimplemented");
+};
 export const insertAtBeginning = async (path: string, text: string) => {
 	const contents = await readFileToString(path);
 	writeFile(path, text + contents);

@@ -30,60 +30,60 @@ Thumbs.db
 `;
 
 export const JS_CONFIG = {
-    compilerOptions: {
-        jsx: "preserve",
-        jsxImportSource: "solid-js",
-        paths: {
-            "~/*": ["./src/*"],
-        },
-    },
+	compilerOptions: {
+		jsx: "preserve",
+		jsxImportSource: "solid-js",
+		paths: {
+			"~/*": ["./src/*"],
+		},
+	},
 };
 
 // Supported templates
 
 const VANILLA_TEMPLATES = [
-    "ts",
-    "ts-vitest",
-    "ts-uvu",
-    "ts-unocss",
-    "ts-tailwindcss",
-    "ts-sass",
-    "ts-router",
-    "ts-router-file-based",
-    "ts-minimal",
-    "ts-jest",
-    "ts-bootstrap",
-    "js",
-    "js-vitest",
-    "js-tailwindcss",
+	"ts",
+	"ts-vitest",
+	"ts-uvu",
+	"ts-unocss",
+	"ts-tailwindcss",
+	"ts-sass",
+	"ts-router",
+	"ts-router-file-based",
+	"ts-minimal",
+	"ts-jest",
+	"ts-bootstrap",
+	"js",
+	"js-vitest",
+	"js-tailwindcss",
 ] as const;
 export type VanillaTemplate = (typeof VANILLA_TEMPLATES)[number];
 
 const START_TEMPLATES = [
-    "basic",
-    "bare",
-    "hackernews",
-    "notes",
-    "todomvc",
-    "with-auth",
-    "with-authjs",
-    "with-drizzle",
-    "with-mdx",
-    "with-prisma",
-    "with-solid-styled",
-    "with-tailwindcss",
-    "with-trpc",
-    "with-unocss",
-    "with-vitest",
-    "experiments",
+	"basic",
+	"bare",
+	"hackernews",
+	"notes",
+	"todomvc",
+	"with-auth",
+	"with-authjs",
+	"with-drizzle",
+	"with-mdx",
+	"with-prisma",
+	"with-solid-styled",
+	"with-tailwindcss",
+	"with-trpc",
+	"with-unocss",
+	"with-vitest",
+	"experiments",
 ] as const;
 export type StartTemplate = (typeof VANILLA_TEMPLATES)[number];
 
 export const getTemplatesList = async (isStart: boolean) => {
-    if (isStart) {
-        return START_TEMPLATES;
-    }
-    return VANILLA_TEMPLATES;
+	if (isStart) {
+		return START_TEMPLATES;
+	}
+	return VANILLA_TEMPLATES;
 };
 
 //

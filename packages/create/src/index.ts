@@ -87,6 +87,7 @@ export const createSolid = (version: string) =>
 				`cd ${projectName}
 ${pM.name} install
 ${pM.name} ${pM.runScriptCommand("dev")}`,
-				"To get started, run:");
+				"To get started, run:",
+			);
 		},
 	});
