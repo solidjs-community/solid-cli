@@ -1,7 +1,7 @@
 import { defineCommand } from "citty";
 import { createVanilla } from "./create-vanilla";
 import * as p from "@clack/prompts";
-import { cancelable, spinnerify } from "./utils/ui";
+import { cancelable, spinnerify } from "@solid-cli/utils/ui";
 import { createStart } from "./create-start";
 import { getTemplatesList, StartTemplate, VanillaTemplate } from "./utils/constants";
 import { detectPackageManager } from "@solid-cli/utils/package-manager";

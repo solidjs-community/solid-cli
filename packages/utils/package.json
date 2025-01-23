@@ -55,6 +55,11 @@
 			"types": "./types/package-manager/index.d.ts",
 			"import": "./dist/package-manager/index.mjs",
 			"require": "./dist/package-manager/index.mjs"
+		},
+		"./ui": {
+			"types": "./types/ui/index.d.ts",
+			"import": "./dist/ui/index.mjs",
+			"require": "./dist/ui/index.mjs"
 		}
 	},
 	"scripts": {

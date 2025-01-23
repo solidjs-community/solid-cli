@@ -1,4 +1,4 @@
-import { log, spinner } from "@clack/prompts";
+import { spinner } from "@clack/prompts";
 type SpinnerItem<T> = {
 	startText: string;
 	finishText: string;
@@ -17,17 +17,3 @@ export async function spinnerify<T>(spinners: SpinnerItem<any>[] | SpinnerItem<T
 	}
 	return results.length === 1 ? results[0] : results;
 }
-
-export const cancelable = async <T = unknown>(
-	prompt: Promise<T | symbol>,
-	cancelMessage: string = "Canceled",
-): Promise<T> => {
-	const value = await prompt;
-
-	if (typeof value === "symbol") {
-		log.warn(cancelMessage);
-		process.exit(0);
-	}
-
-	return value;
-};
