@@ -12,12 +12,15 @@ intro(`\n${color.bgCyan(color.black(` Solid CLI v${packageJson.version}`))}`);
 
 const main = defineCommand({
 	subCommands: {
-		create: createSolid(packageJson.version), debug: debuginfo, start: startCommands, docs: defineCommand({
+		create: createSolid(packageJson.version),
+		debug: debuginfo,
+		start: startCommands,
+		docs: defineCommand({
 			meta: { description: "Open the Solid Docs in your browser" },
 			async run() {
-				openInBrowser("https://docs.solidjs.com")
-			}
-		})
+				openInBrowser("https://docs.solidjs.com");
+			},
+		}),
 	},
 });
 

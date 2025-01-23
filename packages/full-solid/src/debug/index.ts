@@ -28,11 +28,12 @@ export const prettyPrint = (info: DebugInfo) => {
   OS: ${info.os.platform} ${info.os.release}
 Runtime:
   ${info.runtime.name}: ${info.runtime.version}
-${Object.keys(info.packages).length !== 0
-			? `Dependencies:
+${
+	Object.keys(info.packages).length !== 0
+		? `Dependencies:
 ${prettyPrintRecord(info.packages)}`
-			: ""
-		}`;
+		: ""
+}`;
 };
 export const fetchDebugInfo = async (): Promise<DebugInfo> => {
 	const parsed = await getPackageJSON();
