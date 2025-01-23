@@ -5,10 +5,11 @@ import { createSolid } from "@solid-cli/create";
 import packageJson from "../package.json" with { type: "json" };
 import { intro } from "@clack/prompts";
 import * as color from "picocolors";
+import { debuginfo } from "./debug"
 intro(`\n${color.bgCyan(color.black(` Solid CLI v${packageJson.version}`))}`);
 
 const main = defineCommand({
-	subCommands: { create: createSolid(packageJson.version) },
+	subCommands: { create: createSolid(packageJson.version), debug: debuginfo },
 });
 
 runMain(main);
