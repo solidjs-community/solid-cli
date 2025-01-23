@@ -15,7 +15,8 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
-		"outDir": "types"
+		"outDir": "types",
+		"declarationMap": true
 	},
 	"include": ["src/*", "src/**/*"]
 }
