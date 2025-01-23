@@ -17,7 +17,7 @@ A CLI for creating and managing SolidJS apps and projects.
 - `sd create`: See [create-solid](./packages/create-solid)
 - `sd docs`: Opens the Solid docs in the browser
 - `sd start`: Special keyword for SolidStart commands
-  - `route`: Creates a new route ie. `solid start route login`
+  - `route`: Creates a new route ie. `sd start route login`
 
 ## Contributing
 
