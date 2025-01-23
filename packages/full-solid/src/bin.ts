@@ -11,6 +11,9 @@ import { openInBrowser } from "@solid-cli/utils";
 intro(`\n${color.bgCyan(color.black(` Solid CLI v${packageJson.version}`))}`);
 
 const main = defineCommand({
+	meta: {
+		description: "The full Solid CLI"
+	},
 	subCommands: {
 		create: createSolid(packageJson.version),
 		debug: debuginfo,
