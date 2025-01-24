@@ -60,19 +60,19 @@ export const createSolid = (version: string) =>
 			);
 
 			// Don't transpile project if it's already javascript!
-			const isJS = template.startsWith("js") ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
+			const transpileToJS = template.startsWith("js") ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
 
 			if (isStart) {
 				await spinnerify({
 					startText: "Creating project",
 					finishText: "Project created 🎉",
-					fn: () => createStart({ template: template as StartTemplate, destination: projectName }, isJS),
+					fn: () => createStart({ template: template as StartTemplate, destination: projectName }, transpileToJS),
 				});
 			} else {
 				await spinnerify({
 					startText: "Creating project",
 					finishText: "Project created 🎉",
-					fn: () => createVanilla({ template: template as VanillaTemplate, destination: projectName }, isJS),
+					fn: () => createVanilla({ template: template as VanillaTemplate, destination: projectName }, transpileToJS),
 				});
 			}
 			// Add "Created with Solid CLI" text to bottom of README

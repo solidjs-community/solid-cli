@@ -8,8 +8,8 @@ export type CreateVanillaArgs = {
 	template: VanillaTemplate;
 	destination: string;
 };
-export const createVanilla = (args: CreateVanillaArgs, js?: boolean) => {
-	if (js) {
+export const createVanilla = (args: CreateVanillaArgs, transpile?: boolean) => {
+	if (transpile) {
 		return createVanillaJS(args);
 	}
 	return createVanillaTS(args);

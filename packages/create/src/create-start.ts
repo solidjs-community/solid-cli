@@ -25,8 +25,8 @@ export const createStartJS = async ({ template, destination }: CreateStartArgs) 
 	writeFileSync(join(destination, ".gitignore"), GIT_IGNORE);
 };
 
-export const createStart = (args: CreateStartArgs, js?: boolean) => {
-	if (js) {
+export const createStart = (args: CreateStartArgs, transpile?: boolean) => {
+	if (transpile) {
 		return createStartJS(args);
 	}
 	return createStartTS(args);
