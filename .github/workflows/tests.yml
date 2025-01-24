@@ -31,3 +31,5 @@ jobs:
         run: pnpm build
       - name: Test all packages
         run: pnpm test
+        env:
+          BEGIT_GH_API_KEY: ${{ secrets.GITHUB_TOKEN }}
