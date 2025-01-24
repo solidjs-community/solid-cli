@@ -1,6 +1,8 @@
-import { it } from "vitest";
+import { expect, it } from "vitest";
 import { fetchDebugInfo, prettyPrint } from "../src/debug";
 
 it("Runs", async () => {
-	console.log(prettyPrint(await fetchDebugInfo()));
+	const output = prettyPrint(await fetchDebugInfo());
+
+	expect(output).contains("Runtime", "System");
 });
