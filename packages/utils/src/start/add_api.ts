@@ -8,7 +8,7 @@ export const createApi = async (path: string, name?: string) => {
 
 	await mkdir(path_parts.join("/"), { recursive: true });
 
-	path_parts.push(name ? `${name}.ts` : "hello.ts");
+	path_parts.push(name ? `${name}.ts` : "index.ts");
 
 	await writeChecked(path_parts.join("/"), "");
 };
