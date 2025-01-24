@@ -5,8 +5,8 @@ export async function create(args: CreateVanillaArgs, js: boolean, isStart: fals
 export async function create(args: CreateStartArgs, js: boolean, isStart: true): Promise<void>;
 export async function create(args: CreateVanillaArgs | CreateStartArgs, js: boolean, isStart: boolean) {
 	if (isStart) {
-		return createStart(args, js);
+		return createStart(args as CreateStartArgs, js);
 	} else {
-		return createVanilla(args, js);
+		return createVanilla(args as CreateVanillaArgs, js);
 	}
 }

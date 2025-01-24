@@ -77,7 +77,7 @@ const START_TEMPLATES = [
 	"with-vitest",
 	"experiments",
 ] as const;
-export type StartTemplate = (typeof VANILLA_TEMPLATES)[number];
+export type StartTemplate = (typeof START_TEMPLATES)[number];
 
 export const getTemplatesList = async (isStart: boolean) => {
 	if (isStart) {
