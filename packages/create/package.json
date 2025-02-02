@@ -38,8 +38,8 @@
 	},
 	"devDependencies": {
 		"typescript": "^5.7.3",
-		"@types/node": "^22.10.7",
-		"tsup": "^8.3.5"
+		"@types/node": "^22.13.0",
+		"tsup": "^8.3.6"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -47,7 +47,7 @@
 	"dependencies": {
 		"@clack/prompts": "0.9.1",
 		"picocolors": "^1.1.1",
-		"@begit/core": "^0.1.1",
+		"@begit/core": "^0.1.5",
 		"citty": "^0.1.6",
 		"sucrase": "^3.35.0",
 		"@solid-cli/utils": "workspace:*"
