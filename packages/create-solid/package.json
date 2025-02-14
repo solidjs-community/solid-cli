@@ -31,10 +31,10 @@
 		"test": "vitest run"
 	},
 	"devDependencies": {
-		"@clack/prompts": "0.9.1",
-		"@types/node": "^22.10.7",
+		"@clack/prompts": "0.10.0",
+		"@types/node": "^22.13.4",
 		"picocolors": "^1.1.1",
-		"tsup": "^8.3.5",
+		"tsup": "^8.3.6",
 		"typescript": "^5.7.3",
 		"citty": "^0.1.6",
 		"@solid-cli/create": "workspace:*"
