@@ -1,5 +1,4 @@
-export const GIT_IGNORE = `
-dist
+export const GIT_IGNORE = `dist
 .solid
 .output
 .vercel

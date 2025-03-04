@@ -3,10 +3,11 @@ import { createVanilla } from "./create-vanilla";
 import * as p from "@clack/prompts";
 import { cancelable, spinnerify } from "@solid-cli/utils/ui";
 import { createStart } from "./create-start";
-import { getTemplatesList, StartTemplate, VanillaTemplate } from "./utils/constants";
+import { getTemplatesList, GIT_IGNORE, StartTemplate, VanillaTemplate } from "./utils/constants";
 import { detectPackageManager } from "@solid-cli/utils/package-manager";
 import { insertAtEnd } from "@solid-cli/utils/fs";
-import { existsSync } from "node:fs";
+import { existsSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 export { createVanilla, createStart };
 export const createSolid = (version: string) =>
 	defineCommand({
@@ -75,6 +76,8 @@ export const createSolid = (version: string) =>
 					fn: () => createVanilla({ template: template as VanillaTemplate, destination: projectName }, transpileToJS),
 				});
 			}
+			// Add .gitignore
+			writeFileSync(join(projectName, ".gitignore"), GIT_IGNORE);
 			// Add "Created with Solid CLI" text to bottom of README
 			if (existsSync(`${projectName}/README.md`))
 				await insertAtEnd(
