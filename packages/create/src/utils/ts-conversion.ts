@@ -6,7 +6,7 @@ import { rm } from "node:fs/promises";
 import { JS_CONFIG } from "./constants";
 const convertToJS = async (file: Dirent, startPath: string) => {
 	const src = join(startPath, file.name);
-	const dest = resolve(startPath.replace(".solid-start", ""), file.name);
+	const dest = resolve(startPath.replace(".project", ""), file.name);
 	if (file.isDirectory()) {
 		mkdirSync(dest, { recursive: true });
 		recurseFiles(resolve(startPath, file.name), convertToJS);
