@@ -1,5 +1,5 @@
 export const GIT_IGNORE = `dist
-.solid
+.wrangler
 .output
 .vercel
 .netlify
