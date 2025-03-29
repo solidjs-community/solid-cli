@@ -33,9 +33,9 @@
 		"@changesets/cli": "2.28.1",
 		"prettier": "^3.5.3",
 		"turbo": "^2.4.4",
-		"vitest": "^3.0.7"
+		"vitest": "^3.0.9"
 	},
-	"packageManager": "pnpm@10.5.2",
+	"packageManager": "pnpm@10.7.0",
 	"dependencies": {
 		"jiti": "^2.4.2"
 	},
