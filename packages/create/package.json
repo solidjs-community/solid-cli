@@ -37,17 +37,17 @@
 		"test": "vitest run"
 	},
 	"devDependencies": {
-		"typescript": "^5.8.2",
-		"@types/node": "^22.13.14",
+		"typescript": "^5.8.3",
+		"@types/node": "^22.14.0",
 		"tsup": "^8.4.0"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"dependencies": {
-		"@clack/prompts": "0.10.0",
+		"@clack/prompts": "0.10.1",
 		"picocolors": "^1.1.1",
-		"@begit/core": "^0.1.5",
+		"@begit/core": "^0.2.0",
 		"citty": "^0.1.6",
 		"sucrase": "^3.35.0",
 		"@solid-cli/utils": "workspace:*"
