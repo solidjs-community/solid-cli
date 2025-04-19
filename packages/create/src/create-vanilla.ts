@@ -1,4 +1,4 @@
-import { downloadRepo } from "@begit/core";
+import { downloadRepo, GithubFetcher } from "@begit/core";
 import { join } from "node:path";
 import { writeFileSync } from "node:fs";
 import { handleTSConversion } from "./utils/ts-conversion";
@@ -15,7 +15,7 @@ export const createVanilla = (args: CreateVanillaArgs, transpile?: boolean) => {
 	return createVanillaTS(args);
 };
 export const createVanillaTS = async ({ template, destination }: CreateVanillaArgs) => {
-	return await downloadRepo({ repo: { owner: "solidjs", name: "templates", subdir: template }, dest: destination });
+	return await downloadRepo(GithubFetcher, { repo: { owner: "solidjs", name: "templates", subdir: template }, dest: destination });
 };
 
 export const createVanillaJS = async ({ template, destination }: CreateVanillaArgs) => {
