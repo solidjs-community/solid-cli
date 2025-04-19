@@ -64,6 +64,7 @@ const START_TEMPLATES = [
 	"hackernews",
 	"notes",
 	"todomvc",
+	"with-solidbase",
 	"with-auth",
 	"with-authjs",
 	"with-drizzle",
