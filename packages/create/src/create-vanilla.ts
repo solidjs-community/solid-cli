@@ -15,7 +15,7 @@ export const createVanilla = (args: CreateVanillaArgs, transpile?: boolean) => {
 	return createVanillaTS(args);
 };
 export const createVanillaTS = async ({ template, destination }: CreateVanillaArgs) => {
-	return await downloadRepo(GithubFetcher, { repo: { owner: "solidjs", name: "templates", subdir: template }, dest: destination });
+	return await downloadRepo({ repo: { owner: "solidjs", name: "templates", subdir: template }, dest: destination }, GithubFetcher);
 };
 
 export const createVanillaJS = async ({ template, destination }: CreateVanillaArgs) => {

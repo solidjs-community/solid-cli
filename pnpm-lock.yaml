@@ -28,8 +28,8 @@ importers:
   packages/create:
     dependencies:
       '@begit/core':
-        specifier: ^0.3.0
-        version: 0.3.0
+        specifier: ^0.3.1
+        version: 0.3.1
       '@clack/prompts':
         specifier: 0.10.1
         version: 0.10.1
@@ -167,8 +167,8 @@ packages:
     resolution: {integrity: sha512-/l42B1qxpG6RdfYf343Uw1vmDjeNhneUXtzhojE7pDgfpEypmRhI6j1kr17XCVv4Cgl9HdAiQY2x0GwKm7rWCw==}
     engines: {node: '>=6.9.0'}
 
-  '@begit/core@0.3.0':
-    resolution: {integrity: sha512-alkgprLk2fiWy14X89vGm43q7437Jp8D/YDHMbGeyWpwOxlT+BuxxGle9D91YV0OjKQW4iWok2I/bX3PE9IWPQ==}
+  '@begit/core@0.3.1':
+    resolution: {integrity: sha512-tjpsZqeLkGgApDW0Ra1553a55lqNhFSE6ZYUzzruLbN5inst63Qoa5J2XRNixA8lFTR3o1i2HQJioPv+J8/h9A==}
 
   '@changesets/apply-release-plan@7.0.12':
     resolution: {integrity: sha512-EaET7As5CeuhTzvXTQCRZeBUcisoYPDDcXvgTE/2jmmypKp0RC7LxKj/yzqeh/1qFTZI7oDGFcL1PHRuQuketQ==}
@@ -1702,7 +1702,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
-  '@begit/core@0.3.0':
+  '@begit/core@0.3.1':
     dependencies:
       tar: 7.4.3
 
