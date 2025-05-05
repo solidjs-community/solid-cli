@@ -140,9 +140,6 @@ importers:
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
-      vitest:
-        specifier: ^3.1.2
-        version: 3.1.2(@types/node@22.15.3)
 
 packages:
 

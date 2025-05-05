@@ -16,7 +16,8 @@
 		"release": "pnpm build && changeset publish",
 		"start": "pnpm build && cd packages/create-solid && pnpm start",
 		"format": "prettier --write .",
-		"watch:build": "turbo watch build"
+		"watch:build": "turbo watch build",
+		"update-deps": "ncu -u --packageFile packages/**/package.json"
 	},
 	"contributors": [
 		{
