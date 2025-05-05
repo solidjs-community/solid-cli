@@ -14,7 +14,7 @@
 		"test:all": "turbo run test",
 		"build": "turbo run build",
 		"release": "pnpm build && changeset publish",
-		"start": "cd packages/core && pnpm start",
+		"start": "pnpm build && cd packages/create-solid && pnpm start",
 		"format": "prettier --write .",
 		"watch:build": "turbo watch build"
 	},
