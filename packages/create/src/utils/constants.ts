@@ -55,7 +55,7 @@ const VANILLA_TEMPLATES = [
 	"js",
 	"js-vitest",
 	"js-tailwindcss",
-] as const;
+] as const satisfies string[];
 export type VanillaTemplate = (typeof VANILLA_TEMPLATES)[number];
 
 const START_TEMPLATES = [
@@ -77,14 +77,26 @@ const START_TEMPLATES = [
 	"with-unocss",
 	"with-vitest",
 	"experiments",
-] as const;
+] as const satisfies string[];
 export type StartTemplate = (typeof START_TEMPLATES)[number];
 
-export const getTemplatesList = async (isStart: boolean) => {
-	if (isStart) {
-		return START_TEMPLATES;
+export const LIBRARY_TEMPLATES = ["solid-lib-starter"] as const satisfies string[];
+export type LibraryTemplate = (typeof LIBRARY_TEMPLATES)[number];
+
+export const PROJECT_TYPES = ["start", "vanilla", "library"] as const satisfies string[];
+export type ProjectType = (typeof PROJECT_TYPES)[number];
+
+export function getTemplatesList(projectType: "vanilla"): StartTemplate[];
+export function getTemplatesList(projectType: "start"): VanillaTemplate[];
+export function getTemplatesList(projectType: "library"): VanillaTemplate[];
+export function getTemplatesList(projectType: ProjectType): VanillaTemplate[] | StartTemplate[] | LibraryTemplate[];
+export function getTemplatesList(projectType: ProjectType) {
+	if (projectType === "start") {
+		return START_TEMPLATES as StartTemplate[];
+	} else if (projectType === "library") {
+		return LIBRARY_TEMPLATES as LibraryTemplate[];
 	}
-	return VANILLA_TEMPLATES;
-};
+	return VANILLA_TEMPLATES as VanillaTemplate[];
+}
 
 //

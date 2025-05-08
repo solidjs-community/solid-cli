@@ -9,10 +9,13 @@ export type CreateStartArgs = {
 };
 
 export const createStartTS = ({ template, destination }: CreateStartArgs) => {
-	return downloadRepo({
-		repo: { owner: "solidjs", name: "solid-start", subdir: `examples/${template}` },
-		dest: destination,
-	}, GithubFetcher);
+	return downloadRepo(
+		{
+			repo: { owner: "solidjs", name: "solid-start", subdir: `examples/${template}` },
+			dest: destination,
+		},
+		GithubFetcher,
+	);
 };
 
 export const createStartJS = async ({ template, destination }: CreateStartArgs) => {
