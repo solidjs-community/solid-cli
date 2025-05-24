@@ -36,11 +36,6 @@
 		"build": "tsc && tsup",
 		"test": "vitest run"
 	},
-	"devDependencies": {
-		"typescript": "^5.8.3",
-		"@types/node": "^22.15.21",
-		"tsup": "^8.5.0"
-	},
 	"publishConfig": {
 		"access": "public"
 	},

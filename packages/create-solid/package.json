@@ -32,10 +32,7 @@
 	},
 	"devDependencies": {
 		"@clack/prompts": "0.11.0",
-		"@types/node": "^22.15.21",
 		"picocolors": "^1.1.1",
-		"tsup": "^8.5.0",
-		"typescript": "^5.8.3",
 		"citty": "^0.1.6",
 		"@solid-cli/create": "workspace:*"
 	},

@@ -1,5 +1,4 @@
 import { defineConfig } from "tsup";
-import metaUrlPlugin from "@chialab/esbuild-plugin-meta-url";
 
 export default defineConfig({
 	entry: ["src"],
@@ -9,5 +8,4 @@ export default defineConfig({
 	sourcemap: true,
 	clean: true,
 	minify: true,
-	esbuildPlugins: [metaUrlPlugin()],
 });
