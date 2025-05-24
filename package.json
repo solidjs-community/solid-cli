@@ -31,10 +31,10 @@
 		"./packages/*"
 	],
 	"devDependencies": {
-		"@changesets/cli": "2.29.2",
+		"@changesets/cli": "2.29.4",
 		"prettier": "^3.5.3",
-		"turbo": "^2.5.2",
-		"vitest": "^3.1.2"
+		"turbo": "^2.5.3",
+		"vitest": "^3.1.4"
 	},
 	"packageManager": "pnpm@10.10.0",
 	"dependencies": {
