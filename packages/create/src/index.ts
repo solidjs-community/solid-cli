@@ -70,20 +70,21 @@ export const createSolid = (version: string) =>
 				}),
 			);
 			// Don't offer javascript if `projectType` is library
-			const useJS =
-				projectType === "library" ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
+			const useJS = projectType === "library" ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
 
 			const template_opts = getTemplatesList(projectType);
 			template ??= await cancelable(
 				p.select({
 					message: "Which template would you like to use?",
 					initialValue: "ts",
-					options: template_opts.filter(s => useJS ? s : !s.startsWith("js")).map((s: string) => ({ label: s, value: s })),
+					options: template_opts
+						.filter((s) => (useJS ? s : !s.startsWith("js")))
+						.map((s: string) => ({ label: s, value: s })),
 				}),
 			);
-			
+
 			// Need to transpile if the user wants Jabascript, but their selected template isn't Javascript
-			const transpileToJS = useJS && !template.startsWith("js")
+			const transpileToJS = useJS && !template.startsWith("js");
 			if (projectType === "start") {
 				await spinnerify({
 					startText: "Creating project",

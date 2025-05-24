@@ -1,6 +1,7 @@
 import { downloadRepo, GithubFetcher } from "@begit/core";
 import { join } from "node:path";
 import { writeFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 import { handleTSConversion } from "./utils/ts-conversion";
 import { GIT_IGNORE, VanillaTemplate } from "./utils/constants";
 
@@ -27,6 +28,9 @@ export const createVanillaJS = async ({ template, destination }: CreateVanillaAr
 	const tempDir = join(destination, ".project");
 	await createVanillaTS({ template, destination: tempDir });
 	await handleTSConversion(tempDir, destination);
+	// Replace `index.tsx` with `index.jsx` in `index.html`
+	const indexPath = join(destination, "index.html");
+	writeFileSync(indexPath, (await readFile(indexPath)).toString().replace("index.tsx", "index.jsx"));
 	// Add .gitignore
 	writeFileSync(join(destination, ".gitignore"), GIT_IGNORE);
 };
