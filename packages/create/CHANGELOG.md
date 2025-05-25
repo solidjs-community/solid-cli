@@ -1,5 +1,11 @@
 # @solid-cli/create
 
+## 0.6.4
+
+### Patch Changes
+
+- Update link in text added to project READMEs
+
 ## 0.6.3
 
 ### Patch Changes
