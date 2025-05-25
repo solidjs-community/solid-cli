@@ -42,7 +42,7 @@ export const createSolid = (version: string) =>
 				alias: "p",
 				description: "Project name",
 			},
-			template: {
+			"template": {
 				type: "string",
 				required: false,
 				alias: "t",
@@ -57,16 +57,24 @@ export const createSolid = (version: string) =>
 			"ts": {
 				type: "boolean",
 				required: false,
-				description: "Use typescript"
+				description: "Use typescript",
 			},
 			"js": {
 				type: "boolean",
 				required: false,
-				description: "Use javascript"
-			}
+				description: "Use javascript",
+			},
 		},
 		async run({
-			args: { projectNamePositional, templatePositional, "project-name": projectNameOptional, template: templateOptional, solidstart, ts, js },
+			args: {
+				projectNamePositional,
+				templatePositional,
+				"project-name": projectNameOptional,
+				"template": templateOptional,
+				solidstart,
+				ts,
+				js,
+			},
 		}) {
 			// Show prompts for any unknown arguments
 			let projectName: string = projectNamePositional ?? projectNameOptional;
