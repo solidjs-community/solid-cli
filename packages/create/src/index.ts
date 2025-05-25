@@ -128,7 +128,7 @@ export const createSolid = (version: string) =>
 			if (existsSync(`${projectName}/README.md`))
 				await insertAtEnd(
 					`${projectName}/README.md`,
-					"\n## This project was created with the [Solid CLI](https://solid-cli.netlify.app)\n",
+					"\n## This project was created with the [Solid CLI](https://github.com/solidjs-community/solid-cli)\n",
 				);
 			// Next steps..
 			const pM = detectPackageManager();
