@@ -37,12 +37,10 @@
 		"@changesets/cli": "2.29.4",
 		"prettier": "^3.5.3",
 		"turbo": "^2.5.3",
-		"vitest": "^3.1.4"
-	},
-	"packageManager": "pnpm@10.10.0",
-	"dependencies": {
+		"vitest": "^3.1.4",
 		"jiti": "^2.4.2"
 	},
+	"packageManager": "pnpm@10.10.0",
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"@swc/core",
