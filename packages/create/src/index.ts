@@ -42,20 +42,38 @@ export const createSolid = (version: string) =>
 				alias: "p",
 				description: "Project name",
 			},
+			template: {
+				type: "string",
+				required: false,
+				alias: "t",
+				description: "Template name",
+			},
 			"solidstart": {
 				type: "boolean",
 				required: false,
 				alias: "s",
 				description: "Create a SolidStart project",
 			},
+			"ts": {
+				type: "boolean",
+				required: false,
+				description: "Use typescript"
+			},
+			"js": {
+				type: "boolean",
+				required: false,
+				description: "Use javascript"
+			}
 		},
 		async run({
-			args: { projectNamePositional, templatePositional, "project-name": projectNameOptional, solidstart },
+			args: { projectNamePositional, templatePositional, "project-name": projectNameOptional, template: templateOptional, solidstart, ts, js },
 		}) {
 			// Show prompts for any unknown arguments
 			let projectName: string = projectNamePositional ?? projectNameOptional;
-			let template: string = templatePositional;
+			let template: string = templatePositional ?? templateOptional;
 			let projectType: ProjectType | undefined = solidstart ? "start" : undefined;
+			// False if user has selected ts, true if they have selected js, and undefined if they've done neither
+			let useJS = ts ? !ts : js ? js : undefined;
 			projectName ??= await cancelable(
 				p.text({ message: "Project Name", placeholder: "solid-project", defaultValue: "solid-project" }),
 			);
@@ -70,7 +88,7 @@ export const createSolid = (version: string) =>
 				}),
 			);
 			// Don't offer javascript if `projectType` is library
-			const useJS = projectType === "library" ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
+			useJS ??= projectType === "library" ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
 
 			const template_opts = getTemplatesList(projectType);
 			template ??= await cancelable(
