@@ -1,5 +1,11 @@
 # @solid-cli/create
 
+## 0.6.5
+
+### Patch Changes
+
+- Don't add "Created with Solid CLI" text to README if it's already there
+
 ## 0.6.4
 
 ### Patch Changes
