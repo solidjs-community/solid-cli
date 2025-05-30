@@ -12,10 +12,10 @@ import {
 	VanillaTemplate,
 } from "./utils/constants";
 import { detectPackageManager } from "@solid-cli/utils/package-manager";
-import { insertAtEnd } from "@solid-cli/utils/fs";
 import { existsSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { createLibrary } from "./create-library";
+import { readFile, writeFile } from "node:fs/promises";
 export { createVanilla, createStart };
 
 export const createSolid = (version: string) =>
@@ -133,11 +133,12 @@ export const createSolid = (version: string) =>
 			// Add .gitignore
 			writeFileSync(join(projectName, ".gitignore"), GIT_IGNORE);
 			// Add "Created with Solid CLI" text to bottom of README
-			if (existsSync(`${projectName}/README.md`))
-				await insertAtEnd(
-					`${projectName}/README.md`,
-					"\n## This project was created with the [Solid CLI](https://github.com/solidjs-community/solid-cli)\n",
-				);
+			const readmePath = `${projectName}/README.md`;
+			if (existsSync(readmePath)) {
+				const contents = (await readFile(readmePath)).toString();
+				if (!contents.includes("This project was created with the [Solid CLI]"))
+					await writeFile(readmePath, contents + "\n## This project was created with the [Solid CLI](https://github.com/solidjs-community/solid-cli)\n")
+			}
 			// Next steps..
 			const pM = detectPackageManager();
 			p.note(
