@@ -4,6 +4,7 @@ import { join, resolve } from "node:path";
 import { transform } from "sucrase";
 import { rm } from "node:fs/promises";
 import { JS_CONFIG } from "./constants";
+
 const convertToJS = async (file: Dirent, startPath: string) => {
 	const src = join(startPath, file.name);
 	const dest = resolve(startPath.replace(".project", ""), file.name);

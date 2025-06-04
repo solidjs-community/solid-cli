@@ -40,6 +40,7 @@ export const JS_CONFIG = {
 
 // Supported templates
 
+/**Supported Vanilla Templates */
 const VANILLA_TEMPLATES = [
 	"ts",
 	"ts-vitest",
@@ -58,6 +59,7 @@ const VANILLA_TEMPLATES = [
 ] as const satisfies string[];
 export type VanillaTemplate = (typeof VANILLA_TEMPLATES)[number];
 
+/**Supported Start Templates */
 const START_TEMPLATES = [
 	"basic",
 	"bare",
@@ -80,12 +82,17 @@ const START_TEMPLATES = [
 ] as const satisfies string[];
 export type StartTemplate = (typeof START_TEMPLATES)[number];
 
+/**Supported Library Templates */
 export const LIBRARY_TEMPLATES = ["solid-lib-starter"] as const satisfies string[];
 export type LibraryTemplate = (typeof LIBRARY_TEMPLATES)[number];
 
 export const PROJECT_TYPES = ["start", "vanilla", "library"] as const satisfies string[];
 export type ProjectType = (typeof PROJECT_TYPES)[number];
 
+/**
+ * Fetches the template list for the project type given
+ * @param projectType type of project
+ */
 export function getTemplatesList(projectType: "vanilla"): StartTemplate[];
 export function getTemplatesList(projectType: "start"): VanillaTemplate[];
 export function getTemplatesList(projectType: "library"): VanillaTemplate[];
