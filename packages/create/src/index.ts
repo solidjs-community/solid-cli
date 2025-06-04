@@ -6,10 +6,9 @@ import { createStart } from "./create-start";
 import {
 	getTemplatesList,
 	GIT_IGNORE,
+	isValidTemplate,
 	PROJECT_TYPES,
 	ProjectType,
-	StartTemplate,
-	VanillaTemplate,
 } from "./utils/constants";
 import { detectPackageManager } from "@solid-cli/utils/package-manager";
 import { existsSync, writeFileSync } from "node:fs";
@@ -111,24 +110,28 @@ export const createSolid = (version: string) =>
 
 			// Need to transpile if the user wants Jabascript, but their selected template isn't Javascript
 			const transpileToJS = useJS && !template.startsWith("js");
-			if (projectType === "start") {
+			if (projectType === "start" && isValidTemplate("start", template)) {
 				await spinnerify({
 					startText: "Creating project",
 					finishText: "Project created 🎉",
-					fn: () => createStart({ template: template as StartTemplate, destination: projectName }, transpileToJS),
+					fn: () => createStart({ template, destination: projectName }, transpileToJS),
 				});
-			} else if (projectType === "library") {
+			} else if (projectType === "library" && isValidTemplate("library", template)) {
 				await spinnerify({
 					startText: "Creating project",
 					finishText: "Project created 🎉",
 					fn: () => createLibrary({ destination: projectName }),
 				});
-			} else {
+			} else if (projectType === "vanilla" && isValidTemplate(projectType, template)) {
 				await spinnerify({
 					startText: "Creating project",
 					finishText: "Project created 🎉",
-					fn: () => createVanilla({ template: template as VanillaTemplate, destination: projectName }, transpileToJS),
+					fn: () => createVanilla({ template, destination: projectName }, transpileToJS),
 				});
+			}
+			else {
+				p.log.error(`Template ${template} is not valid for project type ${projectType}`);
+				process.exit(0);
 			}
 			// Add .gitignore
 			writeFileSync(join(projectName, ".gitignore"), GIT_IGNORE);
