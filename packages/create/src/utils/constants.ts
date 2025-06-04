@@ -99,4 +99,16 @@ export function getTemplatesList(projectType: ProjectType) {
 	return VANILLA_TEMPLATES as VanillaTemplate[];
 }
 
-//
+/**
+ * Tests is the template given is a valid template, and returns it as a template if it is
+ * @param type expected type of the template
+ * @param maybe_template the template string to test
+ * @returns the template string if it is valid, undefined if not
+ */
+export function isValidTemplate(type: "vanilla", maybe_template: string): VanillaTemplate;
+export function isValidTemplate(type: "start", maybe_template: string): StartTemplate;
+export function isValidTemplate(type: "library", maybe_template: string): LibraryTemplate;
+export function isValidTemplate(type: ProjectType, maybe_template: string) {
+	const templates = getTemplatesList(type);
+	return templates.find(t => t === maybe_template)
+}
