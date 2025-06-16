@@ -31,13 +31,13 @@
 		"./packages/*"
 	],
 	"devDependencies": {
-		"@types/node": "22.15.29",
+		"@types/node": "24.0.3",
 		"tsup": "^8.5.0",
 		"typescript": "^5.8.3",
 		"@changesets/cli": "2.29.4",
 		"prettier": "^3.5.3",
 		"turbo": "^2.5.4",
-		"vitest": "^3.2.1",
+		"vitest": "^3.2.3",
 		"jiti": "^2.4.2"
 	},
 	"packageManager": "pnpm@10.11.1",
