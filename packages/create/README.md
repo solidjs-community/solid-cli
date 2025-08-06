@@ -1,29 +1,26 @@
----
-description: Create Solid apps in one command with create-solid.
----
+# @solid-cli/create
 
-# Create Solid
+A library for easily initialising Solid projects
 
-The easiest way to get started with Solid is by using `create-solid`. This CLI tool enables you to quickly start building a new Solid application, with everything set up for you. You can create a new app using the default SolidStart template or use one of the [Official SolidStart Examples](https://github.com/solidjs/solid-start/tree/main/examples). To get started, use the following command:
+## Usage
 
-```bash
-#or
-npm init solid@latest
+### Initialising a Vanilla project
 
-#or
-pnpm create solid@latest
-
-# or
-yarn create solid
-
-# or
-bunx create-solid
+```ts
+import { createVanilla } from "@solid-cli/create";
+createVanilla({ template: "ts", destination: "./ts" });
 ```
 
-## Why use Create Solid?
+### Initialising a Start project
 
-`create-solid` allows you to create a new Solid app within seconds. It includes a number of benefits:
+```ts
+import { createStart } from "@solid-cli/create";
+createStart({ template: "basic", destination: "./basic" });
+```
 
-- **Interactive Experience**: Running `npm init solid@latest` (with no arguments) launches an interactive experience that guides you through setting up a project.
-- **Zero Dependencies**: Initializing a project is as quick as one second. Create Solid has zero runtime dependencies.
-- **Support for Examples**: Create Solid App can bootstrap your application using an example from the SolidStart official examples collection.
+### Initialising a Library project
+
+```ts
+import { createLibrary } from "@solid-cli/create";
+createLibrary({ destination: "./library-project" });
+```
