@@ -15,7 +15,7 @@ import { existsSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { createLibrary } from "./create-library";
 import { readFile, writeFile } from "node:fs/promises";
-export { createVanilla, createStart };
+export { createVanilla, createStart, createLibrary };
 
 export const createSolid = (version: string) =>
 	defineCommand({
