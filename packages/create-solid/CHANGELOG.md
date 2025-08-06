@@ -1,5 +1,11 @@
 # create-solid
 
+## 0.6.6
+
+### Patch Changes
+
+- Add CLI flags for creating `vanilla` and `library` projects
+
 ## 0.6.5
 
 ### Patch Changes
