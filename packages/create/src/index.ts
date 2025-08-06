@@ -53,6 +53,18 @@ export const createSolid = (version: string) =>
 				alias: "s",
 				description: "Create a SolidStart project",
 			},
+			"library": {
+				type: "boolean",
+				required: false,
+				alias: "l",
+				description: "Create a Library project",
+			},
+			"vanilla": {
+				type: "boolean",
+				required: false,
+				alias: "v",
+				description: "Create a vanilla (SolidJS + Vite) project",
+			},
 			"ts": {
 				type: "boolean",
 				required: false,
@@ -71,6 +83,8 @@ export const createSolid = (version: string) =>
 				"project-name": projectNameOptional,
 				"template": templateOptional,
 				solidstart,
+				library,
+				vanilla,
 				ts,
 				js,
 			},
@@ -78,7 +92,7 @@ export const createSolid = (version: string) =>
 			// Show prompts for any unknown arguments
 			let projectName: string = projectNamePositional ?? projectNameOptional;
 			let template: string = templatePositional ?? templateOptional;
-			let projectType: ProjectType | undefined = solidstart ? "start" : undefined;
+			let projectType: ProjectType | undefined = solidstart ? "start" : (vanilla ? "vanilla" : (library ? "library" : undefined));
 			// False if user has selected ts, true if they have selected js, and undefined if they've done neither
 			let useJS = ts ? !ts : js ? js : undefined;
 			projectName ??= await cancelable(
