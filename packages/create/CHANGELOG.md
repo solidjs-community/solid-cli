@@ -1,5 +1,11 @@
 # @solid-cli/create
 
+## 0.6.7
+
+### Patch Changes
+
+- Add `with-strict-csp` template to Start
+
 ## 0.6.6
 
 ### Patch Changes
