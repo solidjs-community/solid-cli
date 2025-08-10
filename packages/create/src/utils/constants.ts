@@ -78,6 +78,7 @@ const START_TEMPLATES = [
 	"with-trpc",
 	"with-unocss",
 	"with-vitest",
+	"with-strict-csp",
 	"experiments",
 ] as const satisfies string[];
 export type StartTemplate = (typeof START_TEMPLATES)[number];
