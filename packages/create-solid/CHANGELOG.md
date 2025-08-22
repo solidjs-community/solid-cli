@@ -1,5 +1,11 @@
 # create-solid
 
+## 0.6.8
+
+### Patch Changes
+
+- Correctly perform TS->JS conversion by disabling ES transforms and preserving dynamic imports
+
 ## 0.6.7
 
 ### Patch Changes
