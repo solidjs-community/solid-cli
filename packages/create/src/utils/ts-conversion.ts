@@ -16,6 +16,8 @@ const convertToJS = async (file: Dirent, startPath: string) => {
 			let { code } = transform(await readFileToString(src), {
 				transforms: ["typescript", "jsx"],
 				jsxRuntime: "preserve",
+				disableESTransforms: true,
+				preserveDynamicImport: true,
 			});
 
 			writeFileSync(dest.replace(".ts", ".js"), code, { flag: "wx" });
