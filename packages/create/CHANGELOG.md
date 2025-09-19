@@ -1,5 +1,11 @@
 # @solid-cli/create
 
+## 0.6.11
+
+### Patch Changes
+
+- Rename `with-pages-router-file-based` to `with-vite-plugin-pages`
+
 ## 0.6.10
 
 ### Patch Changes
