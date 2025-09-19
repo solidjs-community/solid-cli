@@ -50,7 +50,7 @@ const VANILLA_TEMPLATES = [
 	"with-tailwindcss",
 	"with-sass",
 	"with-solid-router",
-	"with-pages-router-file-based",
+	"with-vite-plugin-pages",
 	"with-tanstack-router-config-based",
 	"with-tanstack-router-file-based",
 	"with-jest",
