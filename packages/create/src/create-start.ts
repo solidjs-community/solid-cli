@@ -11,7 +11,7 @@ export type CreateStartArgs = {
 export const createStartTS = ({ template, destination }: CreateStartArgs) => {
 	return downloadRepo(
 		{
-			repo: { owner: "solidjs", name: "solid-start", subdir: `examples/${template}` },
+			repo: { owner: "solidjs", name: "templates", subdir: `solid-start/${template}` },
 			dest: destination,
 		},
 		GithubFetcher,

@@ -59,13 +59,13 @@ const VANILLA_TEMPLATES = [
 ] as const satisfies string[];
 export type VanillaTemplate = (typeof VANILLA_TEMPLATES)[number];
 
-/**Supported Start Templates */
+/**
+ * @description This list is hardcoded. But templates are fetched from another github repo.
+ * @see https://github.com/solidjs/templates/tree/main/solid-start
+ */
 const START_TEMPLATES = [
 	"basic",
 	"bare",
-	"hackernews",
-	"notes",
-	"todomvc",
 	"with-solidbase",
 	"with-auth",
 	"with-authjs",
@@ -79,8 +79,8 @@ const START_TEMPLATES = [
 	"with-unocss",
 	"with-vitest",
 	"with-strict-csp",
-	"experiments",
 ] as const satisfies string[];
+
 export type StartTemplate = (typeof START_TEMPLATES)[number];
 
 /**Supported Library Templates */
@@ -118,5 +118,5 @@ export function isValidTemplate(type: "start", maybe_template: string): maybe_te
 export function isValidTemplate(type: "library", maybe_template: string): maybe_template is LibraryTemplate;
 export function isValidTemplate(type: ProjectType, maybe_template: string) {
 	const templates = getTemplatesList(type);
-	return templates.find(t => t === maybe_template) !== undefined
+	return templates.find((t) => t === maybe_template) !== undefined;
 }
