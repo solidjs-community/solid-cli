@@ -1,5 +1,11 @@
 # @solid-cli/create
 
+## 0.6.10
+
+### Patch Changes
+
+- Fetch Vanilla templates from /vanilla subdirectory of solidjs/templates, rather than from repo root
+
 ## 0.6.9
 
 ### Patch Changes
