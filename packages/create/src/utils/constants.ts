@@ -42,20 +42,19 @@ export const JS_CONFIG = {
 
 /**Supported Vanilla Templates */
 const VANILLA_TEMPLATES = [
-	"ts",
-	"ts-vitest",
-	"ts-uvu",
-	"ts-unocss",
-	"ts-tailwindcss",
-	"ts-sass",
-	"ts-router",
-	"ts-router-file-based",
-	"ts-minimal",
-	"ts-jest",
-	"ts-bootstrap",
-	"js",
-	"js-vitest",
-	"js-tailwindcss",
+	"basic",
+	"bare",
+	"with-vitest",
+	"with-uvu",
+	"with-unocss",
+	"with-tailwindcss",
+	"with-sass",
+	"with-solid-router",
+	"with-pages-router-file-based",
+	"with-tanstack-router-config-based",
+	"with-tanstack-router-file-based",
+	"with-jest",
+	"with-bootstrap",
 ] as const satisfies string[];
 export type VanillaTemplate = (typeof VANILLA_TEMPLATES)[number];
 
