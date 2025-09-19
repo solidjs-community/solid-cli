@@ -1,5 +1,11 @@
 # @solid-cli/create
 
+## 0.6.9
+
+### Patch Changes
+
+- Fetch Start templates from solidjs/templates, rather than the Start repo
+
 ## 0.6.8
 
 ### Patch Changes
