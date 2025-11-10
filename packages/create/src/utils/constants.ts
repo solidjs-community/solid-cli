@@ -53,6 +53,7 @@ const VANILLA_TEMPLATES = [
 	"with-vite-plugin-pages",
 	"with-tanstack-router-config-based",
 	"with-tanstack-router-file-based",
+	"with-tanstack-start",
 	"with-jest",
 	"with-bootstrap",
 ] as const satisfies string[];
