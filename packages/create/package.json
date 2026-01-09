@@ -44,7 +44,7 @@
 		"picocolors": "^1.1.1",
 		"@begit/core": "^0.3.3",
 		"citty": "^0.1.6",
-		"sucrase": "^3.35.0",
+		"sucrase": "^3.35.1",
 		"@solid-cli/utils": "workspace:*"
 	}
 }

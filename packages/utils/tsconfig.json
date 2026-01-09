@@ -7,7 +7,7 @@
 		"skipLibCheck": true,
 		"declaration": true,
 		"emitDeclarationOnly": true,
-		"moduleResolution": "Node",
+		"moduleResolution": "Bundler",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"allowSyntheticDefaultImports": true,

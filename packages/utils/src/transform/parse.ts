@@ -12,7 +12,7 @@ type ArrayExpression = Extract<ASTNode, { type: "ArrayExpression" }>;
 
 const isNodeFunction = (node: ASTNodeFull) => node.type === "BlockStatement" || node.type === "ArrowFunctionExpression";
 
-const getReturnStatement = (node: ASTNodeFull | undefined) => {
+const getReturnStatement = (node: ASTNode | undefined) => {
 	if (!node) return;
 	if (node.type === "BlockStatement" && node.body) {
 		let returnStatement;
