@@ -90,8 +90,8 @@ export const createSolid = (version: string) =>
 			},
 		}) {
 			// Show prompts for any unknown arguments
-			let projectName: string = projectNamePositional ?? projectNameOptional;
-			let template: string = templatePositional ?? templateOptional;
+			let projectName = projectNamePositional ?? projectNameOptional;
+			let template = templatePositional ?? templateOptional;
 			let projectType: ProjectType | undefined = solidstart ? "start" : (vanilla ? "vanilla" : (library ? "library" : undefined));
 			// False if user has selected ts, true if they have selected js, and undefined if they've done neither
 			let useJS = ts ? !ts : js ? js : undefined;

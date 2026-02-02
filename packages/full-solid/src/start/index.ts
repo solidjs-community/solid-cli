@@ -26,7 +26,7 @@ export const startCommands = defineCommand({
 					p.text({
 						message: "Route path",
 						validate(value) {
-							if (value.length === 0) return "A route path is required";
+							if (!value || value.length === 0) return "A route path is required";
 						},
 					}),
 				);
