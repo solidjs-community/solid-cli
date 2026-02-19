@@ -159,7 +159,7 @@ export const createSolid = (version: string) =>
 			// Next steps..
 			const pM = detectPackageManager();
 			p.note(
-				projectName === "." ? "" : `cd ${projectName}\n` +
+				(projectName === "." ? "" : `cd ${projectName}\n`) +
 					`${pM.name} install
 ${pM.name} ${pM.runScriptCommand("dev")}`,
 				"To get started, run:",
