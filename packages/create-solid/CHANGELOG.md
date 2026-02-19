@@ -1,5 +1,11 @@
 # create-solid
 
+## 0.6.12
+
+### Patch Changes
+
+- Update dependencies, add new template, and remove `cd` command if project is created in working directory
+
 ## 0.6.11
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @solid-cli/create
 
+## 0.6.12
+
+### Patch Changes
+
+- Update dependencies, add new template, and remove `cd` command if project is created in working directory
+- Updated dependencies
+  - @solid-cli/utils@0.6.2
+
 ## 0.6.11
 
 ### Patch Changes
