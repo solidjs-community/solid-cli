@@ -1,5 +1,11 @@
 # @solid-cli/create
 
+## 0.6.13
+
+### Patch Changes
+
+- Keep showing `pnpm install` & `pnpm dev` commands when initialising a project in the current working directory
+
 ## 0.6.12
 
 ### Patch Changes
