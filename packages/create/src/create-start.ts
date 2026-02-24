@@ -1,4 +1,4 @@
-import { downloadRepo, GithubFetcher } from "@begit/core";
+import { downloadRepo } from "./utils/download-repo";
 import { join } from "path";
 import { writeFileSync } from "fs";
 import { handleTSConversion } from "./utils/ts-conversion";
@@ -9,13 +9,10 @@ export type CreateStartArgs = {
 };
 
 export const createStartTS = ({ template, destination }: CreateStartArgs) => {
-	return downloadRepo(
-		{
-			repo: { owner: "solidjs", name: "templates", subdir: `solid-start/${template}` },
-			dest: destination,
-		},
-		GithubFetcher,
-	);
+	return downloadRepo({
+		repo: { owner: "solidjs", name: "templates", subdir: `solid-start/${template}` },
+		dest: destination,
+	});
 };
 
 export const createStartJS = async ({ template, destination }: CreateStartArgs) => {

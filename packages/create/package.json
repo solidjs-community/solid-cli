@@ -40,6 +40,7 @@
 		"access": "public"
 	},
 	"dependencies": {
+		"simple-git": "^3.32.2",
 		"@clack/prompts": "1.0.1",
 		"picocolors": "^1.1.1",
 		"@begit/core": "^0.3.4",
