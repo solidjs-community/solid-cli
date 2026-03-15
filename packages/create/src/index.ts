@@ -3,13 +3,7 @@ import { createVanilla } from "./create-vanilla";
 import * as p from "@clack/prompts";
 import { cancelable, spinnerify } from "@solid-cli/utils/ui";
 import { createStart } from "./create-start";
-import {
-	getTemplatesList,
-	GIT_IGNORE,
-	isValidTemplate,
-	PROJECT_TYPES,
-	ProjectType,
-} from "./utils/constants";
+import { getTemplatesList, GIT_IGNORE, isValidTemplate, PROJECT_TYPES, ProjectType } from "./utils/constants";
 import { detectPackageManager } from "@solid-cli/utils/package-manager";
 import { existsSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -53,6 +47,11 @@ export const createSolid = (version: string) =>
 				alias: "s",
 				description: "Create a SolidStart project",
 			},
+			"v2": {
+				type: "boolean",
+				required: false,
+				description: "Create a SolidStart v2 project",
+			},
 			"library": {
 				type: "boolean",
 				required: false,
@@ -87,12 +86,19 @@ export const createSolid = (version: string) =>
 				vanilla,
 				ts,
 				js,
+				v2,
 			},
 		}) {
 			// Show prompts for any unknown arguments
 			let projectName = projectNamePositional ?? projectNameOptional;
 			let template = templatePositional ?? templateOptional;
-			let projectType: ProjectType | undefined = solidstart ? "start" : (vanilla ? "vanilla" : (library ? "library" : undefined));
+			let projectType: ProjectType | undefined = solidstart
+				? "start"
+				: vanilla
+					? "vanilla"
+					: library
+						? "library"
+						: undefined;
 			// False if user has selected ts, true if they have selected js, and undefined if they've done neither
 			let useJS = ts ? !ts : js ? js : undefined;
 			projectName ??= await cancelable(
@@ -108,10 +114,30 @@ export const createSolid = (version: string) =>
 					})),
 				}),
 			);
+			if (!projectType) return;
+
+			let useV2: string | undefined;
+			if (projectType === "start") {
+				useV2 = v2
+					? "v2"
+					: await cancelable(
+							p.select({
+								message: "Which version of SolidStart?",
+								initialValue: "v2",
+								options: [
+									{ value: "v2", label: "v2 (pre-release, recommended)" },
+									{ value: "v1", label: "v1 (stable)" },
+								],
+							}),
+						);
+			}
+			const isV2 = useV2 === "v2";
+
 			// Don't offer javascript if `projectType` is library
 			useJS ??= projectType === "library" ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
 
-			const template_opts = getTemplatesList(projectType);
+			if (!projectType) return;
+			const template_opts = getTemplatesList(projectType, isV2);
 			template ??= await cancelable(
 				p.select({
 					message: "Which template would you like to use?",
@@ -122,13 +148,15 @@ export const createSolid = (version: string) =>
 				}),
 			);
 
+			if (!template) return;
+
 			// Need to transpile if the user wants Jabascript, but their selected template isn't Javascript
 			const transpileToJS = useJS && !template.startsWith("js");
-			if (projectType === "start" && isValidTemplate("start", template)) {
+			if (projectType === "start" && isValidTemplate("start", template, isV2)) {
 				await spinnerify({
 					startText: "Creating project",
 					finishText: "Project created 🎉",
-					fn: () => createStart({ template, destination: projectName }, transpileToJS),
+					fn: () => createStart({ template, destination: projectName }, transpileToJS, isV2),
 				});
 			} else if (projectType === "library" && isValidTemplate("library", template)) {
 				await spinnerify({
@@ -142,8 +170,7 @@ export const createSolid = (version: string) =>
 					finishText: "Project created 🎉",
 					fn: () => createVanilla({ template, destination: projectName }, transpileToJS),
 				});
-			}
-			else {
+			} else {
 				p.log.error(`Template ${template} is not valid for project type ${projectType}`);
 				process.exit(0);
 			}
@@ -154,7 +181,11 @@ export const createSolid = (version: string) =>
 			if (existsSync(readmePath)) {
 				const contents = (await readFile(readmePath)).toString();
 				if (!contents.includes("This project was created with the [Solid CLI]"))
-					await writeFile(readmePath, contents + "\n## This project was created with the [Solid CLI](https://github.com/solidjs-community/solid-cli)\n")
+					await writeFile(
+						readmePath,
+						contents +
+							"\n## This project was created with the [Solid CLI](https://github.com/solidjs-community/solid-cli)\n",
+					);
 			}
 			// Next steps..
 			const pM = detectPackageManager();
