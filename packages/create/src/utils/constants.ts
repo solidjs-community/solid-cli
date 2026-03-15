@@ -83,6 +83,24 @@ const START_TEMPLATES = [
 
 export type StartTemplate = (typeof START_TEMPLATES)[number];
 
+const START_TEMPLATES_V2 = [
+	"basic",
+	"bare",
+	"hackernews",
+	"notes",
+	"with-auth",
+	"with-drizzle",
+	"with-mdx",
+	"with-prisma",
+	"with-solid-styled",
+	"with-tailwindcss",
+	"with-trpc",
+	"with-unocss",
+	"with-vitest",
+] as const satisfies string[];
+
+export type StartTemplateV2 = (typeof START_TEMPLATES_V2)[number];
+
 /**Supported Library Templates */
 export const LIBRARY_TEMPLATES = ["solid-lib-starter"] as const satisfies string[];
 export type LibraryTemplate = (typeof LIBRARY_TEMPLATES)[number];
@@ -94,12 +112,18 @@ export type ProjectType = (typeof PROJECT_TYPES)[number];
  * Fetches the template list for the project type given
  * @param projectType type of project
  */
-export function getTemplatesList(projectType: "vanilla"): StartTemplate[];
-export function getTemplatesList(projectType: "start"): VanillaTemplate[];
-export function getTemplatesList(projectType: "library"): VanillaTemplate[];
-export function getTemplatesList(projectType: ProjectType): VanillaTemplate[] | StartTemplate[] | LibraryTemplate[];
-export function getTemplatesList(projectType: ProjectType) {
+export function getTemplatesList(projectType: "vanilla", v2?: boolean): VanillaTemplate[];
+export function getTemplatesList(projectType: "start", v2?: boolean): StartTemplate[] | StartTemplateV2[];
+export function getTemplatesList(projectType: "library", v2?: boolean): LibraryTemplate[];
+export function getTemplatesList(
+	projectType: ProjectType,
+	v2?: boolean,
+): VanillaTemplate[] | StartTemplate[] | StartTemplateV2[] | LibraryTemplate[];
+export function getTemplatesList(projectType: ProjectType, v2?: boolean) {
 	if (projectType === "start") {
+		if (v2) {
+			return START_TEMPLATES_V2 as unknown as StartTemplateV2[];
+		}
 		return START_TEMPLATES as StartTemplate[];
 	} else if (projectType === "library") {
 		return LIBRARY_TEMPLATES as LibraryTemplate[];
@@ -114,9 +138,13 @@ export function getTemplatesList(projectType: ProjectType) {
  * @returns the template string if it is valid, undefined if not
  */
 export function isValidTemplate(type: "vanilla", maybe_template: string): maybe_template is VanillaTemplate;
-export function isValidTemplate(type: "start", maybe_template: string): maybe_template is StartTemplate;
+export function isValidTemplate(
+	type: "start",
+	maybe_template: string,
+	v2?: boolean,
+): maybe_template is StartTemplate | StartTemplateV2;
 export function isValidTemplate(type: "library", maybe_template: string): maybe_template is LibraryTemplate;
-export function isValidTemplate(type: ProjectType, maybe_template: string) {
-	const templates = getTemplatesList(type);
+export function isValidTemplate(type: ProjectType, maybe_template: string, v2?: boolean) {
+	const templates = getTemplatesList(type, v2);
 	return templates.find((t) => t === maybe_template) !== undefined;
 }
