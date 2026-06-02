@@ -15,7 +15,7 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
-		"rootDir": ".",
+		"rootDir": "./src",
 		"outDir": "types",
 		"declarationMap": true
 	},

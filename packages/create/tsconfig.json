@@ -11,7 +11,7 @@
 		"types": ["node"],
 		"declaration": true,
 		"emitDeclarationOnly": true,
-		"rootDir": ".",
+		"rootDir": "./src",
 		"outDir": "types"
 	},
 	"include": ["src/*"]
