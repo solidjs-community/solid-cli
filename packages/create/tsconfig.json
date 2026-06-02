@@ -8,9 +8,10 @@
 		"forceConsistentCasingInFileNames": true,
 		"skipLibCheck": true,
 		"resolveJsonModule": true,
-
+		"types": ["node"],
 		"declaration": true,
 		"emitDeclarationOnly": true,
+		"rootDir": ".",
 		"outDir": "types"
 	},
 	"include": ["src/*"]
