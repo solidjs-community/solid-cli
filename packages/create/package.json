@@ -40,10 +40,10 @@
 		"access": "public"
 	},
 	"dependencies": {
-		"@clack/prompts": "1.0.1",
+		"@clack/prompts": "1.5.0",
 		"picocolors": "^1.1.1",
 		"@begit/core": "^0.3.4",
-		"citty": "^0.2.1",
+		"citty": "^0.2.2",
 		"sucrase": "^3.35.1",
 		"@solid-cli/utils": "workspace:*"
 	}

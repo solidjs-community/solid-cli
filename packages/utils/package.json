@@ -67,14 +67,14 @@
 		"build": "tsc && tsup"
 	},
 	"devDependencies": {
-		"magicast": "^0.5.2"
+		"magicast": "^0.5.3"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"dependencies": {
-		"@clack/core": "1.0.1",
-		"@clack/prompts": "1.0.1",
+		"@clack/core": "1.4.0",
+		"@clack/prompts": "1.5.0",
 		"execa": "^9.6.1",
 		"picocolors": "^1.1.1"
 	}
