@@ -123,10 +123,10 @@ export const createSolid = (version: string) =>
 					: await cancelable(
 							p.select({
 								message: "Which version of SolidStart?",
-								initialValue: "v2",
+								initialValue: "v1",
 								options: [
-									{ value: "v2", label: "v2 (pre-release, recommended)" },
 									{ value: "v1", label: "v1 (stable)" },
+									{ value: "v2", label: "v2 (pre-release)" },
 								],
 							}),
 						);
