@@ -40,6 +40,15 @@ export const detectPackageManager = (): PackageManager => {
 					return `task ${s}`;
 				},
 			};
+		case userAgent.startsWith("nub"):
+			return {
+				name: "nub",
+				runner: "nubx",
+				installCommand: "add",
+				runScriptCommand(s) {
+					return `run ${s}`;
+				},
+			};
 		default:
 			return {
 				name: "npm",
