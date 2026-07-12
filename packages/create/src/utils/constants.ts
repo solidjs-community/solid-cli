@@ -86,9 +86,11 @@ export type StartTemplate = (typeof START_TEMPLATES)[number];
 const START_TEMPLATES_V2 = [
 	"basic",
 	"bare",
+	"with-solidbase",
 	"hackernews",
 	"notes",
 	"with-auth",
+	"with-authjs",
 	"with-drizzle",
 	"with-mdx",
 	"with-prisma",
@@ -97,6 +99,8 @@ const START_TEMPLATES_V2 = [
 	"with-trpc",
 	"with-unocss",
 	"with-vitest",
+	"with-strict-csp",
+	"with-tanstack-router",
 ] as const satisfies string[];
 
 export type StartTemplateV2 = (typeof START_TEMPLATES_V2)[number];
