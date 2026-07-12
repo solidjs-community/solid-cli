@@ -3,3 +3,5 @@ packages:
 allowBuilds:
   '@swc/core': true
   esbuild: true
+minimumReleaseAgeExclude:
+  - '@begit/core@0.3.5'

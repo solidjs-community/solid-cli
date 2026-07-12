@@ -31,7 +31,7 @@
 		"test": "vitest run"
 	},
 	"devDependencies": {
-		"@clack/prompts": "1.5.0",
+		"@clack/prompts": "1.7.0",
 		"picocolors": "^1.1.1",
 		"citty": "^0.2.2",
 		"@solid-cli/create": "workspace:*"
