@@ -1,5 +1,11 @@
 # create-solid
 
+## 0.6.14
+
+### Patch Changes
+
+- update dependencies and add to solid start v2 templates list
+
 ## 0.6.13
 
 ### Patch Changes
