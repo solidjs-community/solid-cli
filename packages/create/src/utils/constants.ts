@@ -74,7 +74,6 @@ const START_TEMPLATES = [
 	"with-prisma",
 	"with-solid-styled",
 	"with-tailwindcss",
-	"with-tanstack-router",
 	"with-trpc",
 	"with-unocss",
 	"with-vitest",
