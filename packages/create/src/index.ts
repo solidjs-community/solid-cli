@@ -134,7 +134,8 @@ export const createSolid = (version: string) =>
 			const isV2 = useV2 === "v2";
 
 			// Don't offer javascript if `projectType` is library
-			useJS ??= projectType === "library" ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
+			// or if v2 selected, see #73
+			useJS ??= projectType === "library" || isV2 ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
 
 			if (!projectType) return;
 			const template_opts = getTemplatesList(projectType, isV2);
