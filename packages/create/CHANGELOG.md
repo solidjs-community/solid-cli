@@ -1,5 +1,16 @@
 # @solid-cli/create
 
+## 0.8.0
+
+### Minor Changes
+
+- support fetching without the github API (so fetching should no work when hitting the github api limit)
+
+### Patch Changes
+
+- Updated dependencies
+  - @solid-cli/utils@0.7.0
+
 ## 0.6.14
 
 ### Patch Changes

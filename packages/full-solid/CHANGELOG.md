@@ -1,5 +1,11 @@
 # @solid-cli/full
 
+## 0.8.0
+
+### Minor Changes
+
+- support fetching without the github API (so fetching should no work when hitting the github api limit)
+
 ## 0.6.4
 
 ### Patch Changes
