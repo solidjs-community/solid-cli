@@ -75,7 +75,7 @@
 	"dependencies": {
 		"@clack/core": "1.4.3",
 		"@clack/prompts": "1.7.0",
-		"execa": "^9.6.1",
+		"execa": "^10.0.0",
 		"picocolors": "^1.1.1"
 	}
 }
