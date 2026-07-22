@@ -2,9 +2,6 @@
   <img width="100%" src="https://assets.solidjs.com/banner?type=CLI&background=tiles&project=%20" alt="Solid CLI">
 </p>
 
-> [!WARNING]
-> This project is under heavy development and is not yet complete. More features coming soon!
-
 # Solid CLI
 
 [![Build and Test](https://github.com/solidjs-community/solid-cli/actions/workflows/tests.yml/badge.svg)](https://github.com/solidjs-community/solid-cli/actions/workflows/tests.yml)
