@@ -94,7 +94,6 @@ const START_TEMPLATES_V2 = [
 	"with-solidbase",
 	"with-strict-csp",
 	"with-tailwindcss",
-	"with-tanstack-router",
 	"with-trpc",
 	"with-unocss",
 	"with-vitest",
