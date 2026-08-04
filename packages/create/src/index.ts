@@ -125,8 +125,8 @@ export const createSolid = (version: string) =>
 								message: "Which version of SolidStart?",
 								initialValue: "v2",
 								options: [
-									{ value: "v2", label: "v2 (pre-release, recommended)" },
-									{ value: "v1", label: "v1 (stable)" },
+									{ value: "v2", label: "2 (Stable)" },
+									{ value: "v1", label: "1 (Legacy)" },
 								],
 							}),
 						);
