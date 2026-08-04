@@ -1,5 +1,11 @@
 # create-solid
 
+## 0.8.1
+
+### Patch Changes
+
+- make start v2 stable
+
 ## 0.8.0
 
 ### Minor Changes
