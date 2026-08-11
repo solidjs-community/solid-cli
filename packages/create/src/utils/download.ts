@@ -9,7 +9,7 @@ export const TEMPLATES_REPO = { owner: "solidjs", name: "templates" } as const;
  * later reorganizations of the templates repo. `undefined` means live HEAD of the
  * default branch, which is the historical behavior.
  */
-export const TEMPLATES_REF: string | undefined = undefined;
+export const TEMPLATES_REF: string | undefined = "c3032d95cd6d6ab4782eb64902a12829a36d0731";
 
 /** `SOLID_CLI_TEMPLATES_REF` overrides the baked ref, for testing against branches/forks */
 export const templatesRef = () => process.env.SOLID_CLI_TEMPLATES_REF || TEMPLATES_REF;
