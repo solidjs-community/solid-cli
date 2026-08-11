@@ -12,7 +12,9 @@ const convertToJS = async (file: Dirent, startPath: string) => {
 		mkdirSync(dest, { recursive: true });
 		recurseFiles(resolve(startPath, file.name), convertToJS);
 	} else if (file.isFile()) {
-		if (src.endsWith(".ts") || src.endsWith(".tsx")) {
+		if (src.endsWith(".d.ts")) {
+			// Type declarations have no JS counterpart
+		} else if (src.endsWith(".ts") || src.endsWith(".tsx")) {
 			let { code } = transform(await readFileToString(src), {
 				transforms: ["typescript", "jsx"],
 				jsxRuntime: "preserve",
@@ -26,9 +28,9 @@ const convertToJS = async (file: Dirent, startPath: string) => {
 		}
 	}
 };
-export const handleTSConversion = async (tempDir: string, projectName: string) => {
+export const handleTSConversion = async (tempDir: string, projectName: string, jsConfig: object = JS_CONFIG) => {
 	await rm(resolve(tempDir, "tsconfig.json"));
-	writeFileSync(resolve(projectName, "jsconfig.json"), JSON.stringify(JS_CONFIG, null, 2), { flag: "wx" });
+	writeFileSync(resolve(projectName, "jsconfig.json"), JSON.stringify(jsConfig, null, 2), { flag: "wx" });
 
 	// Convert all ts files in temp directory into js
 	recurseFiles(tempDir, convertToJS);
