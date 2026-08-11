@@ -1,13 +1,15 @@
-import { downloadRepo, GithubFetcher } from "@begit/core";
 import { join } from "node:path";
 import { writeFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { handleTSConversion } from "./utils/ts-conversion";
 import { GIT_IGNORE, VanillaTemplate } from "./utils/constants";
+import { downloadTemplate } from "./utils/download";
 
 export type CreateVanillaArgs = {
-	template: VanillaTemplate;
+	template: VanillaTemplate | (string & {});
 	destination: string;
+	/** Subdir prefix inside the templates repo (from templates.json), defaults to "vanilla" */
+	path?: string;
 };
 export const createVanilla = (args: CreateVanillaArgs, transpile?: boolean) => {
 	if (transpile) {
@@ -16,18 +18,15 @@ export const createVanilla = (args: CreateVanillaArgs, transpile?: boolean) => {
 	return createVanillaTS(args);
 };
 
-export const createVanillaTS = async ({ template, destination }: CreateVanillaArgs) => {
-	return await downloadRepo(
-		{ repo: { owner: "solidjs", name: "templates", subdir: `vanilla/${template}` }, dest: destination },
-		GithubFetcher,
-	);
+export const createVanillaTS = async ({ template, destination, path = "vanilla" }: CreateVanillaArgs) => {
+	return await downloadTemplate(`${path}/${template}`, destination);
 };
 
-export const createVanillaJS = async ({ template, destination }: CreateVanillaArgs) => {
+export const createVanillaJS = async ({ template, destination, path }: CreateVanillaArgs) => {
 	// Create typescript project in `<destination>/.project`
 	// then transpile this to javascript and clean up
 	const tempDir = join(destination, ".project");
-	await createVanillaTS({ template, destination: tempDir });
+	await createVanillaTS({ template, destination: tempDir, path });
 	await handleTSConversion(tempDir, destination);
 	// Replace `index.tsx` with `index.jsx` in `index.html`
 	const indexPath = join(destination, "index.html");
