@@ -25,6 +25,22 @@ export const createSolidV2TS = async ({ template, destination, path = "solid-v2"
 	if (ssr) await applySsrFlip(destination);
 };
 
+/**
+ * Retarget `.ts`/`.tsx` filename mentions in converted text (vite config,
+ * README) to the transpiled `.js`/`.jsx` output. `.d.ts` files are deleted
+ * (not transpiled) by the conversion, so their mentions are left alone.
+ */
+export const retargetTSFilenames = (text: string) =>
+	text
+		.replace(/\.tsx\b/g, ".jsx")
+		.replace(/(?<!\.d)\.ts(?=[`'"])/g, ".js")
+		// The blanket `.tsx` rewrite leaves duplicates behind when an array lists
+		// both (`extensions: ['.jsx', '.tsx']` → `['.jsx', '.jsx']`) — dedupe.
+		.replace(/extensions:\s*\[([^\]]*)\]/g, (_match, entries: string) => {
+			const deduped = [...new Set(entries.split(",").map((entry) => entry.trim()).filter(Boolean))];
+			return `extensions: [${deduped.join(", ")}]`;
+		});
+
 export const createSolidV2JS = async (args: CreateSolidV2Args, ssr?: boolean) => {
 	// Create typescript project in `<destination>/.project`
 	// then transpile this to javascript and clean up.
@@ -34,15 +50,13 @@ export const createSolidV2JS = async (args: CreateSolidV2Args, ssr?: boolean) =>
 	await createSolidV2TS({ ...args, destination: tempDir }, ssr);
 	await handleTSConversion(tempDir, args.destination, JS_CONFIG_SOLID_V2);
 	// Solid 2.0 templates have no `index.html` (turnkey entries), but their vite
-	// config references `.ts`/`.tsx` files by path (setup files, middleware, test
-	// globs) — retarget those to the transpiled `.js`/`.jsx` output
-	const viteConfigPath = join(args.destination, "vite.config.js");
-	if (existsSync(viteConfigPath)) {
-		const viteConfig = (await readFile(viteConfigPath))
-			.toString()
-			.replace(/\.tsx(?=['"])/g, ".jsx")
-			.replace(/\.ts(?=['"])/g, ".js");
-		await writeFile(viteConfigPath, viteConfig);
+	// config and README reference `.ts`/`.tsx` files (setup files, comments,
+	// route examples) — retarget those to the transpiled `.js`/`.jsx` output
+	for (const file of ["vite.config.js", "README.md"]) {
+		const filePath = join(args.destination, file);
+		if (existsSync(filePath)) {
+			await writeFile(filePath, retargetTSFilenames((await readFile(filePath)).toString()));
+		}
 	}
 	// Add .gitignore
 	writeFileSync(join(args.destination, ".gitignore"), GIT_IGNORE);
