@@ -38,11 +38,12 @@ export const JS_CONFIG = {
 	},
 };
 
-// The solid-v2 templates don't use the `~/*` path alias
+// The solid-v2 templates don't use the `~/*` path alias, and Solid 2.0's JSX
+// runtime lives in `@solidjs/web` (matches the templates' tsconfig.json)
 export const JS_CONFIG_SOLID_V2 = {
 	compilerOptions: {
 		jsx: "preserve",
-		jsxImportSource: "solid-js",
+		jsxImportSource: "@solidjs/web",
 	},
 };
 
