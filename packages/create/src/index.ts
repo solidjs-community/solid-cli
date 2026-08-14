@@ -14,7 +14,7 @@ import { readFile, writeFile } from "node:fs/promises";
 export { createVanilla, createStart, createLibrary, createSolidV2 };
 
 const PROJECT_TYPE_LABELS: Record<ProjectType, string> = {
-	solid: "Solid 2.0 (Beta)",
+	solid: "Solid 2.0 (RC)",
 	start: "SolidStart (Solid 1.x)",
 	vanilla: "SolidJS + Vite (Solid 1.x)",
 	library: "Library",
@@ -132,7 +132,7 @@ export const createSolid = (version: string) =>
 			projectType ??= await cancelable(
 				p.select({
 					message: "What type of project would you like to create?",
-					// Solid 2.0 is listed first but not preselected while core is in beta
+					// Solid 2.0 is listed first but not preselected while core is a release candidate
 					initialValue: "start",
 					options: PROJECT_TYPES.map((t) => ({
 						value: t,

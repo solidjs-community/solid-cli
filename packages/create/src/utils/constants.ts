@@ -134,7 +134,7 @@ export const LIBRARY_TEMPLATES = ["solid-lib-starter"] as const satisfies string
 export type LibraryTemplate = (typeof LIBRARY_TEMPLATES)[number];
 
 // "solid" (Solid 2.0) is listed first, but "start" remains the preselected
-// default while Solid 2.0 core is in beta
+// default while Solid 2.0 core is a release candidate
 export const PROJECT_TYPES = ["solid", "start", "vanilla", "library"] as const satisfies string[];
 export type ProjectType = (typeof PROJECT_TYPES)[number];
 
