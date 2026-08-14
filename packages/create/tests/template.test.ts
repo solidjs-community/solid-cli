@@ -46,20 +46,32 @@ const expectScaffold = (destination: string) => {
 	expect(readdirSync(join(destination, "src")).length).toBeGreaterThan(0);
 };
 
-it("downloads and extracts the vanilla template", async () => {
-	const destination = scratch("vanilla");
-	const { path, template } = await liveTarget("vanilla");
+// A cold begit cache means pulling the whole templates tarball (~3MB), which does not
+// reliably fit in vitest's 5s default on a slow or contended connection
+const DOWNLOAD_TIMEOUT_MS = 60_000;
 
-	await createVanilla({ template, destination, path }, false);
+it(
+	"downloads and extracts the vanilla template",
+	async () => {
+		const destination = scratch("vanilla");
+		const { path, template } = await liveTarget("vanilla");
 
-	expectScaffold(destination);
-});
+		await createVanilla({ template, destination, path }, false);
 
-it("downloads and extracts the solid-v2 template", async () => {
-	const destination = scratch("solid-v2");
-	const { path, template } = await liveTarget("solid");
+		expectScaffold(destination);
+	},
+	DOWNLOAD_TIMEOUT_MS,
+);
 
-	await createSolidV2({ template, destination, path }, false);
+it(
+	"downloads and extracts the solid-v2 template",
+	async () => {
+		const destination = scratch("solid-v2");
+		const { path, template } = await liveTarget("solid");
 
-	expectScaffold(destination);
-});
+		await createSolidV2({ template, destination, path }, false);
+
+		expectScaffold(destination);
+	},
+	DOWNLOAD_TIMEOUT_MS,
+);

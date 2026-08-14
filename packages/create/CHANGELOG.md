@@ -8,7 +8,7 @@
 
   - Template downloads are no longer pinned to a baked-in solidjs/templates commit. Scaffolds come from live HEAD of the default branch, matching the `templates.json` manifest, so upstream template changes and dependency repins reach users without a CLI release.
   - Removed the `SOLID_CLI_TEMPLATES_REF` environment override that shipped in 0.9.0, along with the pin it existed to escape.
-  - Scaffolding still avoids api.github.com, which is rate limited to 60 requests/hour for unauthenticated users: templates are fetched straight from the archive endpoint rather than resolving HEAD to a commit sha first.
+  - HEAD is resolved to a commit sha before downloading so the tarball can be cached under it and reused by later scaffolds. That lookup goes through api.github.com, which is rate limited to 60 requests/hour for unauthenticated users, so any failure — rate limited, offline, slow — falls back to fetching HEAD from the archive endpoint directly, uncached.
   - Solid 2.0 is labelled "Solid 2.0 (RC)" in the project picker now that Solid 2.0 core is a release candidate. It stays listed first but not preselected.
 
 ## 0.9.0
