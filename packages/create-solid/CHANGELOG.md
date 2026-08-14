@@ -1,16 +1,26 @@
 # create-solid
 
+## 0.10.0
+
+### Minor Changes
+
+- Always scaffold from the latest templates
+
+  - Template downloads are no longer pinned to a baked-in solidjs/templates commit. Scaffolds come from live HEAD of the default branch, matching the `templates.json` manifest, so upstream template changes and dependency repins reach users without a CLI release.
+  - Removed the `SOLID_CLI_TEMPLATES_REF` environment override that shipped in 0.9.0, along with the pin it existed to escape.
+  - Scaffolding still avoids api.github.com, which is rate limited to 60 requests/hour for unauthenticated users: templates are fetched straight from the archive endpoint rather than resolving HEAD to a commit sha first.
+  - Solid 2.0 is labelled "Solid 2.0 (RC)" in the project picker now that Solid 2.0 core is a release candidate. It stays listed first but not preselected.
+
 ## 0.9.0
 
 ### Minor Changes
 
 - 68caa9f: Solid 2.0 template support
 
-  - New "Solid 2.0" top-level project type scaffolding the `solid-v2/*` templates from solidjs/templates (basic, bare, fullstack, fullstack-tanstack, with-\*). Listed first but not preselected while Solid 2.0 core is a release candidate; existing flags (`-s`, `-v`, `-l`, `--v2`) keep their meaning, plus new `--solid` and `--ssr` flags.
+  - New "Solid 2.0" top-level project type scaffolding the `solid-v2/*` templates from solidjs/templates (basic, bare, fullstack, fullstack-tanstack, with-\*). Listed first but not preselected while Solid 2.0 core is in beta; existing flags (`-s`, `-v`, `-l`, `--v2`) keep their meaning, plus new `--solid` and `--ssr` flags.
   - Optional streaming SSR on templates that support it (currently `basic`): a scaffold-time flip that sets `ssr: true` in `vite.config.ts`, adds the generic production `server.js`, and points the `start` script at it. Defaults to No.
   - JavaScript variants of the Solid 2.0 templates via the existing sucrase TS→JS conversion (no `index.html` rewrite; `.ts`/`.tsx` references inside `vite.config` are retargeted, `.d.ts` files dropped, minimal `jsconfig.json`).
   - Template lists, subdir paths and per-template flags are now read from a `templates.json` manifest at the templates repo HEAD (2s timeout), with silent fallback to the baked-in lists — so new templates and future repo reorganizations no longer require a CLI release.
-  - Template tarball downloads track live HEAD of the templates repo, matching the `templates.json` manifest, so template contents and their dependency updates reach users without a CLI release.
 
 ## 0.8.1
 

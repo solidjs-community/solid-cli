@@ -1,6 +1,6 @@
 {
 	"name": "@solid-cli/create",
-	"version": "0.9.0",
+	"version": "0.10.0",
 	"description": "Create Solid apps with low configuration",
 	"author": "Thomas Beer",
 	"contributors": [
