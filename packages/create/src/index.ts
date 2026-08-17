@@ -6,6 +6,7 @@ import { createStart } from "./create-start";
 import { createSolidV2 } from "./create-solid-v2";
 import { GIT_IGNORE, isValidTemplate, LIBRARY_TEMPLATES, PROJECT_TYPES, ProjectType } from "./utils/constants";
 import { fetchTemplatesManifest, groupKeyFor, ManifestTemplate, resolveGroup } from "./utils/manifest";
+import { fuzzyScore, rankedOptionsFn } from "./utils/fuzzy";
 import { detectPackageManager } from "@solid-cli/utils/package-manager";
 import { existsSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -167,13 +168,24 @@ export const createSolid = (version: string) =>
 			const template_opts: ManifestTemplate[] = group
 				? group.templates
 				: LIBRARY_TEMPLATES.map((name) => ({ name }));
+			const availableTemplates = template_opts.filter((t) => (useJS ? t : !t.name.startsWith("js")));
+			// clack's autocomplete always focuses options[0] when the search box is empty (it only
+			// honors `initialValue` for multi-select), so the manifest's `default`-flagged template
+			// has to be sorted to the front to keep it preselected, same as the old `p.select` did.
+			const defaultTemplate = availableTemplates.find((t) => t.default);
+			const orderedTemplates = defaultTemplate
+				? [defaultTemplate, ...availableTemplates.filter((t) => t !== defaultTemplate)]
+				: availableTemplates;
 			template ??= await cancelable(
-				p.select({
+				p.autocomplete({
 					message: "Which template would you like to use?",
-					initialValue: (template_opts.find((t) => t.default) ?? template_opts[0])?.name,
-					options: template_opts
-						.filter((t) => (useJS ? t : !t.name.startsWith("js")))
-						.map((t) => ({ label: t.name, value: t.name })),
+					placeholder: "Type to search...",
+					// clack's default substring filter would re-filter our fuzzy-ranked options and break
+					// non-contiguous matches (e.g. "wath" -> "with-auth") and the placeholder Tab-fill guard,
+					// so supply an equivalent fuzzy filter (asserted in tests/cli.test.ts).
+					filter: (search, option) => fuzzyScore(search, option.label ?? String(option.value)) > 0,
+					validate: (value) => (value === undefined ? "No matching template." : undefined),
+					options: rankedOptionsFn(orderedTemplates.map((t) => ({ label: t.name, value: t.name }))),
 				}),
 			);
 
