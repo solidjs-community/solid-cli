@@ -4,9 +4,18 @@ import * as p from "@clack/prompts";
 import { cancelable, spinnerify } from "@solid-cli/utils/ui";
 import { createStart } from "./create-start";
 import { createSolidV2 } from "./create-solid-v2";
-import { GIT_IGNORE, isValidTemplate, LIBRARY_TEMPLATES, PROJECT_TYPES, ProjectType } from "./utils/constants";
+import {
+	GIT_IGNORE,
+	isValidTemplate,
+	LIBRARY_TEMPLATES,
+	PROJECT_TYPES,
+	ProjectType,
+	START_DEVTOOLS_PACKAGE,
+	START_DEVTOOLS_VERSION,
+} from "./utils/constants";
 import { fetchTemplatesManifest, groupKeyFor, ManifestTemplate, resolveGroup } from "./utils/manifest";
 import { fuzzyScore, rankedOptionsFn } from "./utils/fuzzy";
+import { addDevDependency } from "./utils/dev-deps";
 import { detectPackageManager } from "@solid-cli/utils/package-manager";
 import { existsSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -84,6 +93,11 @@ export const createSolid = (version: string) =>
 				required: false,
 				description: "Enable server-side rendering (Solid 2.0 templates that support it)",
 			},
+			"devtools": {
+				type: "boolean",
+				required: false,
+				description: `Add ${START_DEVTOOLS_PACKAGE} (Solid 2.0 projects only)`,
+			},
 			"ts": {
 				type: "boolean",
 				required: false,
@@ -106,6 +120,7 @@ export const createSolid = (version: string) =>
 				library,
 				vanilla,
 				ssr,
+				devtools,
 				ts,
 				js,
 				v2,
@@ -204,6 +219,18 @@ export const createSolid = (version: string) =>
 				p.log.warn(`--ssr is not supported for this template and will be ignored`);
 			}
 
+			// Dev toolbar: only offered on Solid 2.0 projects (it peer-deps on solid-js 2.0)
+			let addDevtools = false;
+			if (projectType === "solid") {
+				addDevtools =
+					devtools ??
+					(await cancelable(
+						p.confirm({ message: `Add ${START_DEVTOOLS_PACKAGE} (development toolbar)?`, initialValue: false }),
+					));
+			} else if (devtools) {
+				p.log.warn(`--devtools is only supported for Solid 2.0 projects and will be ignored`);
+			}
+
 			// Need to transpile if the user wants Jabascript, but their selected template isn't Javascript
 			const transpileToJS = useJS && !template.startsWith("js");
 			if (projectType === "solid" && chosenTemplate) {
@@ -233,6 +260,11 @@ export const createSolid = (version: string) =>
 			} else {
 				p.log.error(`Template ${template} is not valid for project type ${projectType}`);
 				process.exit(0);
+			}
+			// The Solid vite plugin mounts the toolbar automatically in development,
+			// so adding the dependency is the whole setup
+			if (addDevtools) {
+				await addDevDependency(projectName, START_DEVTOOLS_PACKAGE, START_DEVTOOLS_VERSION);
 			}
 			// Add .gitignore
 			writeFileSync(join(projectName, ".gitignore"), GIT_IGNORE);
