@@ -40,6 +40,14 @@ it("drops malformed groups and template entries but keeps the rest", () => {
 	expect(manifest!.groups["solid"].templates).toEqual([{ name: "basic" }]);
 });
 
+it("preserves per-template flags like tsOnly", () => {
+	const manifest = parseManifest({
+		version: 1,
+		groups: { solid: { path: "solid-v2", templates: [{ name: "with-tsrx", tsOnly: true }] } },
+	});
+	expect(manifest!.groups["solid"].templates).toEqual([{ name: "with-tsrx", tsOnly: true }]);
+});
+
 it("resolves groups from the manifest, falling back to baked-in lists", () => {
 	const manifest = parseManifest(validManifest);
 	expect(resolveGroup(manifest, "solid").templates.map((t) => t.name)).toEqual(["basic", "bare"]);
@@ -59,12 +67,15 @@ it("resolves groups from the manifest, falling back to baked-in lists", () => {
 		"with-sass",
 		"with-tailwindcss",
 		"with-tanstack-router",
+		"with-tsrx",
 		"with-unocss",
 		"with-vitest-browser-mode",
 	]);
 	const basic = baked.templates.find((t) => t.name === "basic")!;
 	expect(basic.default).toBe(true);
 	expect(basic.ssrToggle).toBe(true);
+	// with-tsrx must never be offered as JavaScript (mirrors the manifest's tsOnly flag)
+	expect(baked.templates.find((t) => t.name === "with-tsrx")!.tsOnly).toBe(true);
 	expect(resolveGroup(undefined, "start-v2").path).toBe("solid-start-v2");
 	expect(resolveGroup(undefined, "start-v1").path).toBe("solid-start-v1");
 });

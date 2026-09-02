@@ -124,6 +124,7 @@ export const SOLID_V2_TEMPLATES = [
 	"with-sass",
 	"with-tailwindcss",
 	"with-tanstack-router",
+	"with-tsrx",
 	"with-unocss",
 	"with-vitest-browser-mode",
 ] as const satisfies string[];

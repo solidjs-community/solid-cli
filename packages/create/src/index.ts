@@ -160,14 +160,23 @@ export const createSolid = (version: string) =>
 			}
 			const isV2 = useV2 === "v2";
 
-			// Don't offer javascript if `projectType` is library
-			useJS ??= projectType === "library" ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
-
-			if (!projectType) return;
 			const group = projectType === "library" ? undefined : resolveGroup(manifest, groupKeyFor(projectType, isV2));
 			const template_opts: ManifestTemplate[] = group
 				? group.templates
 				: LIBRARY_TEMPLATES.map((name) => ({ name }));
+
+			// TypeScript-only templates (manifest `tsOnly`, e.g. with-tsrx): the JS conversion
+			// would delete files the template depends on (tsconfig.json carries its editor and
+			// compiler wiring), so never offer or perform it
+			const tsOnlyNotice = (name: string) =>
+				p.log.info(`The ${name} template is TypeScript-only — continuing with TypeScript`);
+			if (template && template_opts.find((t) => t.name === template)?.tsOnly) {
+				if (useJS) tsOnlyNotice(template);
+				useJS = false;
+			}
+
+			// Don't offer javascript if `projectType` is library
+			useJS ??= projectType === "library" ? false : !(await cancelable(p.confirm({ message: "Use Typescript?" })));
 			const availableTemplates = template_opts.filter((t) => (useJS ? t : !t.name.startsWith("js")));
 			// clack's autocomplete always focuses options[0] when the search box is empty (it only
 			// honors `initialValue` for multi-select), so the manifest's `default`-flagged template
@@ -191,6 +200,13 @@ export const createSolid = (version: string) =>
 
 			if (!template) return;
 			const chosenTemplate = template_opts.find((t) => t.name === template);
+
+			// A tsOnly template picked from the interactive list after the user chose
+			// JavaScript: tell them and continue as TypeScript
+			if (chosenTemplate?.tsOnly && useJS) {
+				tsOnlyNotice(template);
+				useJS = false;
+			}
 
 			// SSR flip: only offered on Solid 2.0 templates that support it (e.g. "basic")
 			let enableSSR = false;
