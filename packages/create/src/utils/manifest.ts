@@ -18,6 +18,11 @@ export type ManifestTemplate = {
 	default?: boolean;
 	/** Offer the "Enable server-side rendering?" prompt for this template */
 	ssrToggle?: boolean;
+	/**
+	 * Template only works as TypeScript (e.g. with-tsrx, whose tsconfig.json carries
+	 * its editor/compiler wiring) — never offer or perform the JS conversion
+	 */
+	tsOnly?: boolean;
 };
 
 export type ManifestGroup = {
@@ -39,11 +44,12 @@ export type ManifestGroupKey = "solid" | "start-v2" | "start-v1" | "vanilla";
 export const MANIFEST_URL = "https://raw.githubusercontent.com/solidjs/templates/HEAD/templates.json";
 const MANIFEST_TIMEOUT_MS = 2000;
 
-const asTemplates = (names: readonly string[], defaultName?: string, ssrToggle?: string): ManifestTemplate[] =>
+const asTemplates = (names: readonly string[], defaultName?: string, ssrToggle?: string, tsOnly?: string): ManifestTemplate[] =>
 	names.map((name) => ({
 		name,
 		...(name === defaultName ? { default: true } : {}),
 		...(name === ssrToggle ? { ssrToggle: true } : {}),
+		...(name === tsOnly ? { tsOnly: true } : {}),
 	}));
 
 /** Baked-in fallback, used whenever the manifest can't be fetched or parsed */
@@ -51,7 +57,7 @@ export const BAKED_GROUPS: Record<ManifestGroupKey, ManifestGroup> = {
 	"solid": {
 		label: "Solid 2.0",
 		path: "solid-v2",
-		templates: asTemplates(SOLID_V2_TEMPLATES, "basic", "basic"),
+		templates: asTemplates(SOLID_V2_TEMPLATES, "basic", "basic", "with-tsrx"),
 	},
 	"start-v2": {
 		label: "SolidStart 2",
