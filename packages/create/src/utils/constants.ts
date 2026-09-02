@@ -130,6 +130,15 @@ export const SOLID_V2_TEMPLATES = [
 ] as const satisfies string[];
 export type SolidV2Template = (typeof SOLID_V2_TEMPLATES)[number];
 
+/**
+ * Dev toolbar offered by the wizard on Solid 2.0 scaffolds. It peer-deps on
+ * solid-js ^2.0.0-rc.0 (so 1.x project types don't qualify) and is mounted
+ * automatically by @solidjs/vite-plugin in development, so adding the
+ * dependency is the whole setup.
+ */
+export const START_DEVTOOLS_PACKAGE = "@solidjs/start-devtools";
+export const START_DEVTOOLS_VERSION = "^1.0.0-next.4";
+
 /**Supported Library Templates */
 export const LIBRARY_TEMPLATES = ["solid-lib-starter"] as const satisfies string[];
 export type LibraryTemplate = (typeof LIBRARY_TEMPLATES)[number];
