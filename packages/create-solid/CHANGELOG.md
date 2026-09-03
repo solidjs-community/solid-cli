@@ -1,5 +1,11 @@
 # create-solid
 
+## 0.12.0
+
+### Minor Changes
+
+- respect the manifest tsOnly flag for TypeScript-only templates; offer @solidjs/start-devtools during scaffolding
+
 ## 0.11.0
 
 ### Minor Changes

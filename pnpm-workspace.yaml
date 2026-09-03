@@ -12,3 +12,6 @@ minimumReleaseAgeExclude:
   - '@turbo/windows-64@2.10.6 || 2.10.10'
   - '@turbo/windows-arm64@2.10.6 || 2.10.10'
   - turbo@2.10.6 || 2.10.10
+  - '@vitest/mocker@5.0.0'
+  - '@vitest/spy@5.0.0'
+  - vitest@5.0.0
