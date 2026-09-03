@@ -56,13 +56,16 @@ afterEach(() => {
 
 const transpileArg = () => createSolidV2.mock.calls[0][1];
 const noticeCalls = () => logInfo.mock.calls.filter(([message]) => /TypeScript-only/.test(String(message)));
+// Solid 2.0 scaffolds also confirm the dev toolbar (covered in devtools.test.ts), so assert
+// on the TypeScript prompt specifically rather than on confirm never being called at all.
+const tsPromptCalls = () => confirm.mock.calls.filter(([options]) => options?.message === "Use Typescript?");
 
 it("skips the TypeScript prompt when a tsOnly template is passed as an argument", async () => {
 	const destination = scratch("tsonly-arg");
 
 	await runCommand(createSolid("test"), { rawArgs: [destination, "--solid", "-t", "with-tsrx"] });
 
-	expect(confirm).not.toHaveBeenCalled();
+	expect(tsPromptCalls()).toHaveLength(0);
 	expect(createSolidV2).toHaveBeenCalledOnce();
 	expect(transpileArg()).toBeFalsy();
 });
@@ -72,7 +75,7 @@ it("prints a notice and scaffolds TypeScript when --js is passed for a tsOnly te
 
 	await runCommand(createSolid("test"), { rawArgs: [destination, "--solid", "-t", "with-tsrx", "--js"] });
 
-	expect(confirm).not.toHaveBeenCalled();
+	expect(tsPromptCalls()).toHaveLength(0);
 	expect(noticeCalls()).toHaveLength(1);
 	expect(noticeCalls()[0][0]).toContain("with-tsrx");
 	expect(transpileArg()).toBeFalsy();
