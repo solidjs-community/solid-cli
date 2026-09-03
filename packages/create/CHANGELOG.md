@@ -1,5 +1,11 @@
 # @solid-cli/create
 
+## 0.11.0
+
+### Minor Changes
+
+- feat(create): add fuzzy search to template selection prompt (#87)
+
 ## 0.10.0
 
 ### Minor Changes
