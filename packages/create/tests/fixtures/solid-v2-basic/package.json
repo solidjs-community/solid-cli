@@ -8,23 +8,27 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "lint": "oxlint src"
   },
   "license": "MIT",
   "devDependencies": {
-    "@solidjs/testing-library": "1.0.0-beta.2",
-    "@solidjs/vite-plugin": "^3.0.0-next.29",
-    "@testing-library/jest-dom": "^6.6.3",
-    "filesystem-routing": "0.2.1",
+    "@solidjs/diagnostics": "^2.0.0-rc.9",
+    "@solidjs/testing-library": "^1.0.0-beta.3",
+    "@solidjs/vite-plugin": "^3.0.0-next.44",
+    "@testing-library/jest-dom": "^7.0.0",
+    "eslint-plugin-solid": "~0.18.0",
+    "filesystem-routing": "0.3.0",
     "jsdom": "^25.0.1",
+    "oxlint": "~1.79.0",
     "typescript": "^5.9.2",
     "vite": "^8.1.5",
-    "vitest": "^4.0.0"
+    "vitest": "^5.0.0"
   },
   "dependencies": {
     "@solidjs/meta": "^1.0.0-next.2",
-    "@solidjs/router": "^2.0.0-next.16",
-    "@solidjs/web": "^2.0.0-rc.0",
-    "solid-js": "^2.0.0-rc.0"
+    "@solidjs/router": "^2.0.0-next.26",
+    "@solidjs/web": "^2.0.0-rc.9",
+    "solid-js": "^2.0.0-rc.9"
   }
 }
