@@ -45,7 +45,8 @@ export const createSolidV2JS = async (args: CreateSolidV2Args, ssr?: boolean) =>
 	// Create typescript project in `<destination>/.project`
 	// then transpile this to javascript and clean up.
 	// The SSR flip runs inside the temp dir, before conversion, so the config
-	// edit happens on the `.ts` source (server.js is already plain JS).
+	// edit happens on the `.ts` source (the production entry it points the
+	// `start` script at, dist/server/node.js, is a build artifact — nothing to convert).
 	const tempDir = join(args.destination, ".project");
 	await createSolidV2TS({ ...args, destination: tempDir }, ssr);
 	await handleTSConversion(tempDir, args.destination, JS_CONFIG_SOLID_V2);
