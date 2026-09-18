@@ -16,7 +16,7 @@ import { log } from "@clack/prompts";
 export const SSR_ANCHOR = "solid({ start: true";
 export const SSR_ANCHOR_REPLACEMENT = "solid({ start: { node: true }, ssr: true";
 /** The template documents the flip with this hint; drop it once the flip is applied */
-export const SSR_HINT_COMMENT = " // add `ssr: true` for streaming SSR";
+export const SSR_HINT_COMMENT = " // add `ssr: true, start: { node: true }` for streaming SSR";
 /**
  * `--env-file-if-exists` stays: the emitted entry does not read `.env` itself and the
  * templates' local flow (`cp .env.example .env` → `npm start`) relies on it.
