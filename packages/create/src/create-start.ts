@@ -3,6 +3,7 @@ import { writeFileSync } from "fs";
 import { handleTSConversion } from "./utils/ts-conversion";
 import { GIT_IGNORE, StartTemplate, StartTemplateV2 } from "./utils/constants";
 import { downloadTemplate } from "./utils/download";
+import { updatePackageJsonName } from "./utils/package-name";
 export type CreateStartArgs = {
 	template: StartTemplate | StartTemplateV2 | (string & {});
 	destination: string;
@@ -25,9 +26,11 @@ export const createStartJS = async ({ template, destination, path }: CreateStart
 	writeFileSync(join(destination, ".gitignore"), GIT_IGNORE);
 };
 
-export const createStart = (args: CreateStartArgs, transpile?: boolean, v2?: boolean) => {
+export const createStart = async (args: CreateStartArgs, transpile?: boolean, v2?: boolean) => {
 	if (transpile) {
-		return createStartJS(args, v2);
+		await createStartJS(args, v2);
+	} else {
+		await createStartTS(args, v2);
 	}
-	return createStartTS(args, v2);
+	await updatePackageJsonName(args.destination);
 };
