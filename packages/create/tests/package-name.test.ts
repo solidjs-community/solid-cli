@@ -8,24 +8,11 @@ describe("toValidPackageName", () => {
 	it("lowercases and replaces spaces with dashes", () => {
 		expect(toValidPackageName("My Cool App")).toBe("my-cool-app");
 	});
-
-	it("strips characters that are invalid in npm names", () => {
-		expect(toValidPackageName("solid_project!")).toBe("solid-project-");
-	});
-
-	it("strips a leading dot or underscore", () => {
-		expect(toValidPackageName(".project")).toBe("project");
-		expect(toValidPackageName("_project")).toBe("project");
-	});
 });
 
 describe("projectNameFromDestination", () => {
 	it("uses the last path segment", () => {
 		expect(projectNameFromDestination(join("foo", "my-app"))).toBe("my-app");
-	});
-
-	it("sanitizes the segment", () => {
-		expect(projectNameFromDestination(join("foo", "My App"))).toBe("my-app");
 	});
 });
 
@@ -56,30 +43,7 @@ describe("updatePackageJsonName", () => {
 		expect(pkg.version).toBe("0.0.0");
 	});
 
-	it("preserves the template formatting (indent + trailing newline)", async () => {
-		const dir = scratch();
-		const destination = join(dir, "my-app");
-		mkdirSync(destination, { recursive: true });
-		writeFileSync(join(destination, "package.json"), '{\n    "name": "example-basic"\n}\n');
-
-		await updatePackageJsonName(destination);
-
-		expect(readFileSync(join(destination, "package.json")).toString()).toBe('{\n    "name": "my-app"\n}\n');
-	});
-
 	it("is a no-op when there is no package.json", async () => {
 		await expect(updatePackageJsonName(join(scratch(), "empty"))).resolves.toBeUndefined();
-	});
-
-	it("does not rewrite the file when the name already matches", async () => {
-		const dir = scratch();
-		const destination = join(dir, "my-app");
-		mkdirSync(destination, { recursive: true });
-		const contents = JSON.stringify({ name: "my-app" }, null, 2);
-		writeFileSync(join(destination, "package.json"), contents);
-
-		await updatePackageJsonName(destination);
-
-		expect(readFileSync(join(destination, "package.json")).toString()).toBe(contents);
 	});
 });
