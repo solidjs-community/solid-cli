@@ -1,9 +1,9 @@
 import { beforeEach, expect, it } from "vitest";
-import { mkdtempSync, copyFileSync, existsSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdtempSync, copyFileSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { applySsrFlip, SERVER_JS, SSR_HINT_COMMENT, SSR_START_SCRIPT } from "../src/utils/ssr-flip";
+import { applySsrFlip, SSR_ANCHOR_REPLACEMENT, SSR_HINT_COMMENT, SSR_START_SCRIPT } from "../src/utils/ssr-flip";
 
 const fixtures = fileURLToPath(new URL("./fixtures/solid-v2-basic/", import.meta.url));
 
@@ -18,17 +18,21 @@ it("flips the basic template to streaming SSR", async () => {
 	expect(await applySsrFlip(dir)).toBe(true);
 
 	const viteConfig = readFileSync(join(dir, "vite.config.ts")).toString();
-	expect(viteConfig).toContain("solid({ start: true, ssr: true");
+	// `start.node` makes the plugin emit the production Node entry (dist/server/node.js)
+	expect(viteConfig).toContain("solid({ start: { node: true }, ssr: true, extensions: ['.jsx', '.tsx']");
+	expect(viteConfig).toContain(SSR_ANCHOR_REPLACEMENT);
+	expect(viteConfig).not.toContain("start: true");
 	expect(viteConfig).not.toContain(SSR_HINT_COMMENT);
-
-	// The production server is a verbatim copy of solid-v2/fullstack/server.js
-	expect(readFileSync(join(dir, "server.js")).toString()).toBe(SERVER_JS);
 
 	const packageJson = JSON.parse(readFileSync(join(dir, "package.json")).toString());
 	expect(packageJson.scripts.start).toBe(SSR_START_SCRIPT);
+	expect(packageJson.scripts.start).toBe("node --env-file-if-exists=.env dist/server/node.js");
 	// The other scripts are untouched
 	expect(packageJson.scripts.dev).toBe("vite");
 	expect(packageJson.scripts.build).toBe("vite build");
+
+	// The flip only edits the two existing files — no hand-written server.js any more
+	expect(readdirSync(dir).sort()).toEqual(["package.json", "vite.config.ts"]);
 });
 
 it("aborts without writing anything when the vite config anchor is missing", async () => {
@@ -39,7 +43,7 @@ it("aborts without writing anything when the vite config anchor is missing", asy
 	expect(await applySsrFlip(dir)).toBe(false);
 
 	expect(readFileSync(join(dir, "vite.config.ts")).toString()).toBe(drifted);
-	expect(existsSync(join(dir, "server.js"))).toBe(false);
+	expect(readdirSync(dir).sort()).toEqual(["package.json", "vite.config.ts"]);
 	expect(readFileSync(join(dir, "package.json")).toString()).toBe(packageJsonBefore);
 });
 
