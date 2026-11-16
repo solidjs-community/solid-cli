@@ -1,11 +1,12 @@
 import { runCommand } from "citty";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 
-const { autocomplete } = vi.hoisted(() => ({ autocomplete: vi.fn() }));
+const { autocomplete, select } = vi.hoisted(() => ({ autocomplete: vi.fn(), select: vi.fn() }));
 
 vi.mock("@clack/prompts", async (importOriginal) => ({
 	...(await importOriginal<typeof import("@clack/prompts")>()),
 	autocomplete,
+	select,
 }));
 
 import { createSolid } from "../src";
@@ -53,4 +54,14 @@ it("uses an autocomplete prompt when selecting a template", async () => {
 	// reject that with an error message instead of letting the CLI exit silently.
 	expect(validate(undefined)).toEqual(expect.any(String));
 	expect(validate("with-auth")).toBeUndefined();
+});
+
+it("preselects Solid 2.0 as the project type", async () => {
+	select.mockResolvedValueOnce(undefined);
+
+	await runCommand(createSolid("test"), { rawArgs: ["test-app"] });
+
+	const { initialValue, options } = select.mock.calls[0][0];
+	expect(initialValue).toBe("solid");
+	expect(options[0]).toEqual({ value: "solid", label: "Solid 2.0" });
 });
