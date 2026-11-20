@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import { handleTSConversion } from "./utils/ts-conversion";
 import { GIT_IGNORE, VanillaTemplate } from "./utils/constants";
 import { downloadTemplate } from "./utils/download";
+import { updatePackageJsonName } from "./utils/package-name";
 
 export type CreateVanillaArgs = {
 	template: VanillaTemplate | (string & {});
@@ -11,11 +12,13 @@ export type CreateVanillaArgs = {
 	/** Subdir prefix inside the templates repo (from templates.json), defaults to "vanilla" */
 	path?: string;
 };
-export const createVanilla = (args: CreateVanillaArgs, transpile?: boolean) => {
+export const createVanilla = async (args: CreateVanillaArgs, transpile?: boolean) => {
 	if (transpile) {
-		return createVanillaJS(args);
+		await createVanillaJS(args);
+	} else {
+		await createVanillaTS(args);
 	}
-	return createVanillaTS(args);
+	await updatePackageJsonName(args.destination);
 };
 
 export const createVanillaTS = async ({ template, destination, path = "vanilla" }: CreateVanillaArgs) => {

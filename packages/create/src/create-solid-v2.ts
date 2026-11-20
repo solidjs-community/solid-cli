@@ -5,6 +5,7 @@ import { handleTSConversion } from "./utils/ts-conversion";
 import { GIT_IGNORE, JS_CONFIG_SOLID_V2, SolidV2Template } from "./utils/constants";
 import { downloadTemplate } from "./utils/download";
 import { applySsrFlip } from "./utils/ssr-flip";
+import { updatePackageJsonName } from "./utils/package-name";
 
 export type CreateSolidV2Args = {
 	template: SolidV2Template | (string & {});
@@ -13,14 +14,19 @@ export type CreateSolidV2Args = {
 	path?: string;
 };
 
-export const createSolidV2 = (args: CreateSolidV2Args, transpile?: boolean, ssr?: boolean) => {
+export const createSolidV2 = async (args: CreateSolidV2Args, transpile?: boolean, ssr?: boolean) => {
 	if (transpile) {
-		return createSolidV2JS(args, ssr);
+		await createSolidV2JS(args, ssr);
+	} else {
+		await createSolidV2TS(args, ssr);
 	}
-	return createSolidV2TS(args, ssr);
+	await updatePackageJsonName(args.destination);
 };
 
-export const createSolidV2TS = async ({ template, destination, path = "solid-v2" }: CreateSolidV2Args, ssr?: boolean) => {
+export const createSolidV2TS = async (
+	{ template, destination, path = "solid-v2" }: CreateSolidV2Args,
+	ssr?: boolean,
+) => {
 	await downloadTemplate(`${path}/${template}`, destination);
 	if (ssr) await applySsrFlip(destination);
 };
@@ -37,7 +43,14 @@ export const retargetTSFilenames = (text: string) =>
 		// The blanket `.tsx` rewrite leaves duplicates behind when an array lists
 		// both (`extensions: ['.jsx', '.tsx']` → `['.jsx', '.jsx']`) — dedupe.
 		.replace(/extensions:\s*\[([^\]]*)\]/g, (_match, entries: string) => {
-			const deduped = [...new Set(entries.split(",").map((entry) => entry.trim()).filter(Boolean))];
+			const deduped = [
+				...new Set(
+					entries
+						.split(",")
+						.map((entry) => entry.trim())
+						.filter(Boolean),
+				),
+			];
 			return `extensions: [${deduped.join(", ")}]`;
 		});
 

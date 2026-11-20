@@ -33,12 +33,12 @@ afterEach(() => {
 	for (const destination of destinations.splice(0)) rmSync(destination, { recursive: true, force: true });
 });
 
-const expectScaffold = (destination: string) => {
+const expectScaffold = (destination: string, expectedName: string) => {
 	const packageJsonPath = join(destination, "package.json");
 	expect(existsSync(packageJsonPath)).toBe(true);
 
 	const packageJson = JSON.parse(readFileSync(packageJsonPath).toString());
-	expect(typeof packageJson.name).toBe("string");
+	expect(packageJson.name).toBe(expectedName);
 	expect(Object.keys(packageJson.scripts ?? {}).length).toBeGreaterThan(0);
 	expect(Object.keys(packageJson.dependencies ?? {}).length).toBeGreaterThan(0);
 
@@ -58,7 +58,7 @@ it(
 
 		await createVanilla({ template, destination, path }, false);
 
-		expectScaffold(destination);
+		expectScaffold(destination, "vanilla");
 	},
 	DOWNLOAD_TIMEOUT_MS,
 );
@@ -71,7 +71,7 @@ it(
 
 		await createSolidV2({ template, destination, path }, false);
 
-		expectScaffold(destination);
+		expectScaffold(destination, "solid-v2");
 	},
 	DOWNLOAD_TIMEOUT_MS,
 );
