@@ -7,14 +7,14 @@ import { log } from "@clack/prompts";
  * Flips a client-mode Solid 2.0 template (e.g. `solid-v2/basic`) into streaming SSR.
  * The delta to the `solid-v2/fullstack` template's server posture is exactly two files:
  * 1. `vite.config.ts` — turn `solid({ start: true, ... })` into
- *    `solid({ start: { node: true }, ssr: true, ... })`. `start.node` makes the plugin
+ *    `solid({ start: { nodeServer: true }, ssr: true, ... })`. `start.nodeServer` makes the plugin
  *    emit a production Node entry at `dist/server/node.js` (static assets + `handleRequest`),
  *    so no hand-written server file is needed.
  * 2. `package.json` — point the `start` script at that emitted entry
  */
 
 export const SSR_ANCHOR = "solid({ start: true";
-export const SSR_ANCHOR_REPLACEMENT = "solid({ start: { node: true }, ssr: true";
+export const SSR_ANCHOR_REPLACEMENT = "solid({ start: { nodeServer: true }, ssr: true";
 /** The template documents the flip with this hint; drop it once the flip is applied */
 export const SSR_HINT_COMMENT = " // add `ssr: true` for streaming SSR";
 /**

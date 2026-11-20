@@ -18,10 +18,11 @@ it("flips the basic template to streaming SSR", async () => {
 	expect(await applySsrFlip(dir)).toBe(true);
 
 	const viteConfig = readFileSync(join(dir, "vite.config.ts")).toString();
-	// `start.node` makes the plugin emit the production Node entry (dist/server/node.js)
-	expect(viteConfig).toContain("solid({ start: { node: true }, ssr: true, extensions: ['.jsx', '.tsx']");
+	// `start.nodeServer` makes the plugin emit the production Node entry (dist/server/node.js)
+	expect(viteConfig).toContain("solid({ start: { nodeServer: true }, ssr: true, extensions: ['.jsx', '.tsx']");
 	expect(viteConfig).toContain(SSR_ANCHOR_REPLACEMENT);
 	expect(viteConfig).not.toContain("start: true");
+	expect(viteConfig).not.toContain("node: true");
 	expect(viteConfig).not.toContain(SSR_HINT_COMMENT);
 
 	const packageJson = JSON.parse(readFileSync(join(dir, "package.json")).toString());
